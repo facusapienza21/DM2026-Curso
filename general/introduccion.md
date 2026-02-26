@@ -1,3 +1,0 @@
-El curso introduce métodos de aprendizaje automático (machine learning) aplicado a sistemas dinámicos.
-Dicho curso incluirá el modelado de datos con ecuaciones diferenciales, programación diferencial para calibrar dichos modelos y el desarrollo de modelos híbridos (lo que se suele llamar _physics-informed machine learning_).
-El curso va a consistir en una parte teórica basada en teoría de ecuaciones diferenciales, análisis numérico, y teoría de probabilidad aplicado a aprendizaje automático (50%) y una parte aplicada donde los estudiantes van a poder trabajar en un corto proyecto (50%).

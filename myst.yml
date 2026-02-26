@@ -13,11 +13,13 @@ project:
     - file: index.md
     - title: General
       children:
+        - file: general/informacion.md
         - file: general/agenda.md
         - file: general/requisitos.md
     - title: Projecto Final
       children:
         - file: proyecto/general_info.md
+    - file: referencias.md
     - file: preguntas_frecuentes.md
 site:
   template: book-theme
@@ -25,3 +27,5 @@ site:
   #   favicon: favicon.ico
     logo: images/dm.png
     title: "Datos, Ecuaciones Diferenciales e Inteligencia Artificial"
+bibliography:
+  - bibliography.bib
