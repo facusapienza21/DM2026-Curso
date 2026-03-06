@@ -4,7 +4,7 @@ Los siguientes requeriminetos son necesarios para poder tomar el curso.
 En caso de tener dudas, por favor contactarme!
 
 :::{warning} Materias obligatorias
-Análisis 1, Algebra Lineal.
+Análisis 1 (o materia equivalente: Matemática 1), Álgebra Lineal (o materia equivalente: Álgebra Lineal Computacional, Matemática 4).
 :::
 
 :::{tip} Materias recomendadas
