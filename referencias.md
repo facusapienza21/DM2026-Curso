@@ -11,7 +11,7 @@
 - Programación diferencial
     - {cite}`Sapienza_2024`
 
-- Aplicaciones en geofisica
+- Aplicaciones en geofísica
     - Glaciología: {cite}`Bolibar_Sapienza_2023`
     - Paleomagnetismo y tecnónica de placas: {cite}`Sapienza_Gallo_Bolibar_Pérez_Taylor_2025`
 

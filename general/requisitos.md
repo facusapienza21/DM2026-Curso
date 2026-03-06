@@ -1,6 +1,6 @@
 # Requisitos
 
-Los siguientes requeriminetos son necesarios para poder tomar el curso. 
+Los siguientes requerimientos son necesarios para poder tomar el curso. 
 En caso de tener dudas, por favor contactarme!
 
 :::{warning} Materias obligatorias

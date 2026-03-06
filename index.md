@@ -18,11 +18,11 @@ Materia optativa para la Lic., Prof. y Doc en Cs. Matemáticas, Lic. y Doc. en C
 En tal caso, esta clase puede ser de tu interés.
 
 El curso va a basarse en los siguientes tres ejes:
-- **Teoría**: Vamos a cubrir elementos de estadistica, ecuaciones diferenciales, optimización y análisis numérico. La idea es poder dar una base teórica a todos los elementos y metodologia introducida.
-- **Metodologia**: El curso va a introducir distintos algortmos y métodos orientados a combinar ecuaciones difeenciales con aprendizaje automático y estadística.
-- **Aplicaciones**: Es clave entender como las necesidades de cada ciencia y de cada aplicación impactan (y en parte, dictan) el desarrollo de nueva metodologia. Durante el curso, nos vamos a concentrar en como dichas técnicas son utilizadas hoy en dia en distintos campos de la geofísica.
+- **Teoría**: Vamos a cubrir elementos de estadística, ecuaciones diferenciales, optimización y análisis numérico. La idea es poder dar una base teórica a todos los elementos y metodología introducida.
+- **Metodología**: El curso va a introducir distintos algoritmos y métodos orientados a combinar ecuaciones diferenciales con aprendizaje automático y estadística.
+- **Aplicaciones**: Es clave entender como las necesidades de cada ciencia y de cada aplicación impactan (y en parte, dictan) el desarrollo de nueva metodología. Durante el curso, nos vamos a concentrar en como dichas técnicas son utilizadas hoy en dia en distintos campos de la geofísica.
 
-El curso esta diseñado para balancear estos tres elementos, de manera tal que estudiantes e investigadores que estén interesados en matemática pura, matemática aplicada, estadística, computación, fisica, y/o ciencias de datos puedan aprender algo intersante, motivador, y con un poco de suerte, inspirador.
+El curso esta diseñado para balancear estos tres elementos, de manera tal que estudiantes e investigadores que estén interesados en matemática pura, matemática aplicada, estadística, computación, física, y/o ciencias de datos puedan aprender algo interesante, motivador, y con un poco de suerte, inspirador.
 
 
 <!-- 

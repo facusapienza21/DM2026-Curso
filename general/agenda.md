@@ -13,5 +13,5 @@ El curso se encuentra en desarrollo y el siguiente programa tentativo puede camb
 | 3-4 | Inferencia estadística en el caso de ecuaciones diferenciales: gradient and trajectory matching. Casos frecuentistas y Bayesianos. Modelado de ruido. |
 | 4-5 | Programación diferencial. Automatic differentiation.  Método del adjunto continuo y discreto. Optimización en el caso de sistemas dinámicos |
 | 6 | Asimilación de datos. Consideraciones numéricas. |
-| 7 | Aplicaciones a geofisica: glaciologia y paleomagnetismo |
+| 7 | Aplicaciones a geofísica: glaciología y paleomagnetismo |
 | 8 | Presentación de proyectos finales |
