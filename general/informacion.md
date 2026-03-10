@@ -6,8 +6,8 @@
 | Cuatrimestre | Primer Cuatrimestre 2026 |
 | Inicio de clases | Fines de marzo / inicios de abril |
 | Puntaje sugerido (pendiente de aprobación) | 2 puntos |
-| Horario | A ser determinado |
-| Aula | A ser determinada |
+| Horario | Lunes y miércoles 12-14hrs |
+| Aula | 1205, Edificio $0 + \infty$ |
 | Modalidad de enseñanza | Teórico-práctica  |
 | Duración | 8 semanas  |
 | Cantidad de clases semanales | 2 |
