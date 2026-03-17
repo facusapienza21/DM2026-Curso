@@ -2,7 +2,7 @@
 
 El curso se encuentra en desarrollo y el siguiente programa tentativo puede cambiar a medida que se desarrolla el cuatrimestre.
 
-:::{warning}
+:::{warning} Inicio de clases
 Las clases están previstas arrancar para el ***miércoles 25 de marzo***.
 Puede que la fecha del inicio de clases se vea afectada si el paro se extiende.
 En caso de haber cambios en el inicio de clases, el mismo se comunicara por email a todos los estudintes que hayan completado la encuesnta inicial del curso y también se actializara la información en este sitio web.
