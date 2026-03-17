@@ -4,7 +4,7 @@
 | | |
 | --- | --- |
 | Cuatrimestre | Primer Cuatrimestre 2026 |
-| Inicio de clases | Fines de marzo / inicios de abril |
+| Inicio de clases | Miércoles 25 de Marzo |
 | Puntaje sugerido (pendiente de aprobación) | 2 puntos |
 | Horario | Lunes y miércoles 12-14hrs |
 | Aula | 1205, Edificio $0 + \infty$ |

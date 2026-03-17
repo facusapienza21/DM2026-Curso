@@ -1,8 +1,14 @@
 # Preguntas Frequentes
 
+:::{dropdown} ¿Se ve el inicio de clases afectado por el paro?
+:class: dropdown
+Es muy probable que si.
+Revisar información al respecto en `General > Información`.
+:::
+
 :::{dropdown} ¿Puedo tomar el curso si soy estudiante de doctorado?
 :class: dropdown
-Si!
+Si! En tal caso la materia deberia figurar como *Inteligencia Artificial, Datos y Ecuaciones Diferenciales* (en vez de *Datos, Ecuaciones Diferenciales e Inteligencia Artificial*).
 :::
 
 :::{dropdown} ¿Puedo cursar la materia independientemente de mi carrera?
@@ -19,8 +25,3 @@ No. La única instancia de evaluación de la materia va a ser el proyecto final,
 :class: dropdown
 Si. Las inscripciones a las materias deberian re-abrir pronto (puede que ahora mismo estén cerradas).
 :::
-
-<!-- :::{dropdown} 
-:class: dropdown
-Si!
-::: -->
