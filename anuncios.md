@@ -1,6 +1,6 @@
 # Anuncios
 
-:::{important} 07/04/2026 - Inicio de clases postergado
+:::{important} 07/04/2026 - Primer encuentro
 :class: dropdown
 Queridos estudiantes,
 
