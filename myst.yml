@@ -20,6 +20,7 @@ project:
     - title: Clases
       children:
         - file: clases/clase1.md
+        - file: clases/clase2.md
     - title: Projecto Final
       children:
         - file: proyecto/general_info.md
