@@ -30,39 +30,49 @@ Las {term}`ODE`s describen la evolución de un sistema en función de una única
 
 Estas soluciones no siempre son analíticas, de hecho, casi nunca son analíticas, pero no nos importa, en este curso vamos a intentar de encontrar herramientas para resolverlas numéricamente.
 
-## El oscilador armonico no es una ODE
+### Ejemplos de aplicación y transformación
 
-La ecuacion del oscilador armonico forzado no es una ODE
-$$\frac{d^2x}{dt^2}+\omega^2 x = f(x,t)$$
-ya que tiene dos derivadas temporales. Pero podemos definir la velocidad $v=\frac{dx}{dt}$ y obtenemos
-$$\frac{dv}{dt}+\omega^2x=f$$
-entonces $$\frac{d}{dt}\begin{pmatrix}
+#### Reducción de Orden: El Oscilador Armónico
+
+Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado:
+$$\frac{d^2x}{dt^2} + \omega^2x = f(x,t)$$
+no se presenta inicialmente en la forma estándar de una ODE de primer orden ($\dot{x} = f(x,t)$). Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales.
+
+**Conversión a sistema de primer orden**
+Definimos la velocidad como una nueva variable de estado $v = \frac{dx}{dt}$. Esto nos permite descomponer la ecuación original en un sistema de dos ecuaciones de primer orden:
+1. $\frac{dx}{dt} = v$
+2. $\frac{dv}{dt} = -\omega^2x + f(x,t)$
+
+**Representación matricial**
+Para el vector de estado $\mathbf{u}(t) = \begin{pmatrix} x \\ v \end{pmatrix}$, el sistema se expresa de forma compacta:
+$$\frac{d}{dt}\begin{pmatrix}
 x \\ v
 \end{pmatrix} = \begin{pmatrix}
 v \\ -\omega^2x+f
-\end{pmatrix}=\begin{pmatrix} 0 & 1 \\ -\omega^2 & 0\end{pmatrix}\begin{pmatrix}x \\ v \end{pmatrix}+\begin{pmatrix}0 \\ f \end{pmatrix}$$.
-La idea es que siempre podemos llevar una ecuacion de orden mas alto a un sistema de ODEs.
+\end{pmatrix}=\begin{pmatrix} 0 & 1 \\ -\omega^2 & 0\end{pmatrix}\begin{pmatrix}x \\ v \end{pmatrix}+\begin{pmatrix}0 \\ f \end{pmatrix}$$
 
-:::{note} Ecuaciones diferenciales con derivadas de mayor orden
-...
-:::
+La idea central es que siempre podemos llevar una ecuación de orden más alto a un sistema de ODEs de primer orden aumentando la dimensionalidad del vector de estado.
 
-## Ecuaciones diferenciales con derivadas de mayor orden
+#### Ecuaciones Diferenciales Parciales (PDEs) y el Método de Líneas
 
-Tambien podemos aplicar esto a ecs en diferencias parciales con el  metodo de lineas, tenemos que reemplazar las deriavdas espaciales con diferencias finitas
-$$ \frac{\partial u}{\partial t}= D \frac{\partial^2u}{\partial x^2} \simeq D (\frac{u(x+h)-2u(x)+u(x+h)}{h^2})$$
-y ahora esto solo tiene una derivada temporal, osea es una ODE aproximadamente. Tambien tenemos condiciones iniciales y de borde que habra que especificar.
-Entonces nos queda un vector con $u$ discretizado, y tenemos una ecuacion matricial 
-$$\frac{d}{dt}\begin{pmatrix}
-u_{0}\\ u_{1} \\ \vdots \\ u_{n} 
-\end{pmatrix} =  \frac{D}{h^2} \bar{\bar{M}} \begin{pmatrix}
-u_{0}\\ u_{1} \\ \vdots \\ u_{n} 
-\end{pmatrix}$$
-donde $\bar{\bar{M}}$ es una matriz tridiagonal con 1s en la sub y supra diagonal, y -2 en la diagonal.
+El enfoque de reducir problemas a sistemas matriciales también puede aplicarse a Ecuaciones Diferenciales Parciales (PDEs) mediante la discretización espacial, una técnica conocida como el **Método de Líneas**.
 
-:::{note} Ecuaciones diferenciales en derivadas parciales
-...
-:::
+**Ejemplo: Ecuación de Difusión**
+Consideremos un campo $u(x,t)$ que evoluciona según la ecuación de difusión:
+$$\frac{\partial u}{\partial t} = D \frac{\partial^2 u}{\partial x^2}$$
+Para resolver este sistema, también debemos especificar condiciones iniciales y de borde (por ejemplo, $u(0,t)=0$ y $u(1,t)=1$).
+
+**Discretización espacial**
+Para transformar esta PDE en un sistema de {term}`ODE`s, aproximamos la segunda derivada espacial utilizando diferencias finitas centradas con un paso espacial $h$:
+$$\frac{\partial^2 u}{\partial x^2} \approx \frac{u(x+h) - 2u(x) + u(x-h)}{h^2}$$
+Al aplicar esto, la derivada espacial desaparece y nos queda una ecuación que depende únicamente de una derivada temporal, convirtiéndose efectivamente en una ODE.
+
+**Representación matricial**
+Definiendo un vector de estado $\mathbf{u}$ con los valores discretizados en los nodos espaciales interiores, obtenemos el siguiente sistema matricial:
+
+$$\frac{d}{dt} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix} = \frac{D}{h^2} \begin{pmatrix} -2 & 1 & 0 & \dots \\ 1 & -2 & 1 & \dots \\ 0 & 1 & -2 & \dots \\ \vdots & \vdots & \vdots & \ddots \end{pmatrix} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix}$$
+
+Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal. Las condiciones de borde se incorporarían modificando las primeras y últimas ecuaciones del sistema (típicamente añadiendo un vector constante).
 
 ### Ejemplos
 
