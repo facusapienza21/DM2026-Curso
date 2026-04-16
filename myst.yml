@@ -21,6 +21,7 @@ project:
       children:
         - file: clases/clase1.md
         - file: clases/clase2.md
+        - file: clases/clase3.md
         - file: clases/clase_template.md
     - title: Projecto Final
       children:
