@@ -68,93 +68,117 @@ $$\frac{\partial^2 u}{\partial x^2} \approx \frac{u(x+h) - 2u(x) + u(x-h)}{h^2}$
 Al aplicar esto, la derivada espacial desaparece y nos queda una ecuación que depende únicamente de una derivada temporal, convirtiéndose efectivamente en una ODE.
 
 **Representación matricial**
-Definiendo un vector de estado $\mathbf{u}$ con los valores discretizados en los nodos espaciales interiores, obtenemos el siguiente sistema matricial:
+Definiendo un vector de estado $\mathbf{u}$ con los valores discretizados, obtenemos el siguiente sistema matricial:
 
 $$\frac{d}{dt} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix} = \frac{D}{h^2} \begin{pmatrix} -2 & 1 & 0 & \dots \\ 1 & -2 & 1 & \dots \\ 0 & 1 & -2 & \dots \\ \vdots & \vdots & \vdots & \ddots \end{pmatrix} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix}$$
 
-Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal. Las condiciones de borde se incorporarían modificando las primeras y últimas ecuaciones del sistema (típicamente añadiendo un vector constante).
+Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal.
 
-### Ejemplos
+## 1. El Modelo Dinámico: Lotka-Volterra (Depredador-Presa)
 
+Este modelo describe la dinámica temporal del estado de un sistema compuesto por dos poblaciones: conejos ($x$) y lobos ($y$).
 
-$\frac{du}{dt}=f(u,t,\theta)$
-tenemos $x$ la poblacion de conejos e $y$ la poblacion de lobos.
-Si los conejos estan solos se reporucen exponencialmente $\frac{dx}{dt}= \alpha x$. Si los lobos se quedan solos, se mueren exponencialmente $\frac{dy}{dt}=-\beta y$
-Si lo dejamos aca no hay interaccion, asi que agregamos un termino $xy$ para notar que los lobos se comen a los conejos, entonces tenemos
-$$\frac{dx}{dt}=\alpha x - \gamma x y$$
-$$\frac{dy}{dt}=-\beta x + \eta x y$$
-y una condicion inicial $x(t_0)=x_0$ e $y(t_0)=y_0$.
-Este es el caballito de batalla de los ecologistas, para probar cosas. El oscilador armonico...
-Tenemos 4 parametros, lo cual hace que esto sea altamente no lineal. 
-insert grafico de poblaciones
-- Esto es un modelo para el estado de un sistema. Si tuviera conocimiento absoluto de la dinamica de algo, que es ese algo.
-- El estado del sistema vamos a asumir que es el vector $(x,y)$ que depende del tiempo, pero tambien de los parametros.
-- Vamos a usar notacion, el vector $\begin{pmatrix}x \\ y\end{pmatrix}(t ;\theta)$ depende de $t$, y tambien depende de los parametros $\theta$. Lo que viene despues del ; son parametros
-- Las trayectorias dependen del tiempo, obvio. Pero tambien estas curvas van a estar parametrizadas por los valores de $\theta$. Por cada conjunto de parametros, las curvas temporales van a lucir diferentes. El estado del sistema es la parte temporal digamos
-- La segunda parte de esto, es un modelo observacional que lo que te dice es que vos nunca observas estas trayectorias. Uno observa cosas parecidas, datos que se asemejan a la trayectoria, pero con una componente de ruido aleatorio. Ademas los datos no son continuos en el tiempo. 
-- El modelo mas simple que uno puede pensar es que en el fondo, uno lo que tiene es un $x_{i}^{obs}=x(t_{i};\theta)+\epsilon_{i}$ donde el $\epsilon_{i}$ es un ruido estadistico observacional, y el $x(t_i;\theta)$ seria la realizacion perfecta, la senial perfecta.
-El caso mas simple de un modelo observacional es, uno tiene una trayectoria, evalua en ciertos tiempos, que puede estar perfectamente sampleados o no, en este caso, uno simplemente observa la serie de tiempo en determinados puntos, y le agrega el ruido observacional.
+**Intuición de la dinámica:**
+* Si los conejos están solos, se reproducen exponencialmente: $\frac{dx}{dt}=\alpha x$.
+* Si los lobos están solos, mueren exponencialmente: $\frac{dy}{dt}=-\beta y$.
+* Para modelar la interacción (los lobos se comen a los conejos), se agrega un término no lineal $xy$.
 
-$\epsilon_1, \cdots,\epsilon_N$ los ruidos observacionales. Normalmente asumimos que estos estan distribuidos de manera normal con un valor medio nulo, y con una varianza que puede o no ser constante. 
+**Ecuaciones del modelo:**
+$$\frac{dx}{dt} = \alpha x - \gamma xy$$
+$$\frac{dy}{dt} = -\beta y + \eta xy$$
 
-Para cada punto del sampleo tenemos el ruido estadistico $\epsilon_i$ que tiene una distribucion normal: $\epsilon_i \sim N(0,\sigma)$ independientemente para cada sitio.
+**Componentes del sistema:**
+* **Vector de estado:** $\begin{pmatrix} x \\ y \end{pmatrix}(t; \theta)$. Depende del tiempo $t$ y está parametrizado por $\theta$. Para cada conjunto de parámetros, las curvas temporales (trayectorias) lucirán diferentes. Suelen ser oscilatorias.
+* **Condición inicial:** $x(t_0)=x_0$ e $y(t_0)=y_0$.
+* **Vector de parámetros:** $\theta = \begin{pmatrix} \alpha \\ \gamma \\ \beta \\ \eta \end{pmatrix} \in \mathbb{R}^4$. Como hay 4 parámetros y términos cruzados, el sistema es altamente no lineal.
+    * $\alpha > 0$: tasa de crecimiento de conejos.
+    * $\gamma > 0$: tasa de depredación.
+    * $\beta > 0$: tasa de mortalidad de lobos.
+    * $\eta > 0$: tasa de crecimiento de lobos por interacción.
 
-Una suposicion es que los ruidos observacionales no dependen de $x$, que tampoco tiene que ser cierto necesariamente. 
+## 2. Modelo Observacional y Ruido
 
-Uno aca puede hacer lo que quiera dependiendo de lo que se quiera modelar.
+En la realidad, si uno tuviera conocimiento absoluto de la dinámica, conocería la trayectoria perfecta. Sin embargo, nunca se observan estas trayectorias puras. Uno observa datos (no continuos en el tiempo) que se asemejan a la trayectoria, pero contaminados con ruido aleatorio.
 
-Tambien puede pasar que la correlacion entre dos epsilons sea distinta de cero 
-$\mathbb{E}[\epsilon_i,\epsilon_j]\neq0$ para $i\neq j$. Esto significa que estan correlacionados. 
-- Si dos distribuciones GAUSSIANAS tiene correlacion 0, entonces son independientes.
-- Si la distribucion no es gaussiana, entonces independencia no implica correlacion 0.
-Puede ser que las distribuciones no sean gaussianas...
-La pregunta es, cual es la dinamica que mejor describe estos casos.
+**Ecuación del modelo observacional:**
+$$x_i^{\text{obs}} = x(t_i; \theta) + \varepsilon_i$$
+* $x_i^{\text{obs}}$: Observación en el tiempo $t_i$.
+* $x(t_i; \theta)$: Señal o realización perfecta del modelo dinámico.
+* $\varepsilon_i$: Ruido estadístico observacional.
 
-## Inferencia estadística
+**Características del ruido estadístico ($\varepsilon_i$):**
+* **Caso estándar:** Se asume que los ruidos son independientes e idénticamente distribuidos (i.i.d.) de forma Gaussiana: $\varepsilon_i \sim N(0, \sigma^2)$, con valor medio nulo y varianza constante para cada sitio muestreado. Generalmente se supone que este ruido no depende del valor de $x$ (aunque no siempre es cierto).
+* **Ruido correlacionado:** Común en series de tiempo, donde la correlación entre dos errores es distinta de cero: $\mathbb{E}[\varepsilon_i, \varepsilon_j] \neq 0$ para $i \neq j$.
+    * *Nota estadística:* Si dos distribuciones son Gaussianas y tienen correlación $0$, son independientes. Si no son Gaussianas, tener correlación $0$ no implica independencia.
 
-Ahora si tenemos observaciones, y tenemos el estado del sistema. Lo mas simple es intentar de encontrar los parametros que mejor reproducen las observaciones.
-Agarramos las observaciones, y compararlo con los $x(t)$ que observaria con el modelo dinamico
-$$\min_{\theta}\sum_{i=1}^N(x_{i}^{obs}-x(t_{i};\theta))^2$$
-y minimizo esta cantidad, me deberia dar la mejor combinacion de parametros $\theta$.
-cuando minimizo el cuadrado asumo ruido gaussiano
-cuando minimizo la norma asumo ruido poissoniano (H que sea poisson)
-insert grafico 
-Esto no es cuadrados minimos en el sentido de fitear una recta, estamos comparando con una funcion que depende de $\theta$ de una manera potencialmente muy no trivial. Esto le llamamos CUADRADOS MINIMOS NO-LINEAL. Vamos a requerir herramientas no lineales para resolver el problema.
-La idea en el fondo es convertir este problema en un problema de optimizacion, donde tenemos una funcion de costo L que depende de los parametros del $\theta$ y los DATOS. AL final del dia queremos conseguir una funcion de costos 
-$$\min_{\theta}\mathcal{L}(\theta;DATOS)$$
-A esto le llamamos fiteo de trayectorias (o _trajectory matching_).
-Uno tiene un set de datos, y nosotros queremos fitearle a esos puntos una treyectoria. Un poco en el nombre esta la intuicion fisica que atras tenemos un problema dinamico, entonces le decimos trayectoria, pero matematicamente se reduce a cuadrados minimos no lineales.
+## 3. Inferencia Estadística y Ajuste de Trayectorias
 
-### Ejemplo (continuado)
+El problema central es: dadas las observaciones $x_i^{\text{obs}}$ e $y_i^{\text{obs}}$, ¿cómo estimamos los parámetros $\theta$ que mejor describen la dinámica subyacente?
 
-Dadas las OBSERVACIONES $x_i^{obs}$ y $y_i^{obs}$ queremos encontrar los 4 parametros $\vec\theta= (\alpha,\beta,\gamma,\eta)$. Este es un sistema simple de solo 4 dimensiones, casi lo pordiamos hacer por fuerza bruta. 
-Pero podriamos tenes un problea mas complicado que no sabemos resolver, por ejemplo si desconocemos la interaccion entre los lobos y los conejos
+**Trajectory Matching (Fiteo de Trayectorias):**
+El objetivo es convertir esto en un problema de optimización, buscando minimizar una función de costo $\mathcal{L}(\theta; \text{DATOS})$ que compare las observaciones reales con las trayectorias generadas por el modelo $x(t; \theta)$.
 
-$$\frac{dx}{dt}=\alpha x-f(x,y)$$
-$$\frac{dy}{dt}=-\beta y+g(x,y)$$
-Aca el problema se hace mas complicado, y queremos optimizar las funciones. En el caso mas practico vamos a parametrizar las funciones de alguna manera. Formalmente pensamos que estamos minimizando sobre el espacio de funciones.
-PARAMETRIZAMOS: $f(x,y)=\sum_j c_j f_j(x,y)$ donde las funciones $f_j$ estan prescriptas, son nuestra base de funciones. Base esta mal dicho porque no es formalmente una base, pero es nuestro DICCIONARIO de funciones. Queremos una familia de funciones que sean lo mas grandes posibles para poder cubrir lo mayor posible el espacio de funciones (ver E3 xd).
+**Mínimos Cuadrados No Lineales:**
+A diferencia del fiteo lineal de una recta, acá se compara con una función que depende de $\theta$ de manera muy no trivial.
+$$\min_{\theta} \sum_{i=1}^{N} (x_i^{\text{obs}} - x(t_i; \theta))^2$$
+* Minimizar el **cuadrado de los errores** asume inherentemente un ruido de naturaleza Gaussiana.
+* Minimizar la **norma** asume un ruido de naturaleza Laplaciana.
 
-Aca entonces usamos nuestro caballito de batalla de redes neuronales.
-En el fondo las NN son 
-Matematicamente agarramos nuestras observaciones 2D, y la mapeamos a un espacio de mayor dimension
-$h_1=G_{1}(M_{1}\begin{pmatrix}x \\ y\end{pmatrix})$
-donde G es una fucion no lineal y tenemos una matriz $M_1$ que va a ser de $m_1 \times 2$ y nos mapea el vector x,y a un vector _hidden_ de mayor dimension. Mientras mas capas tiene la NN, tenemos mas funciones $G_j$ y matrices $M_j$ que paso a paso nos van mapeando vectores en vectores con diferentes pesos y qcyo.
-Tambien podriamos olvidarnos de los conejos y los lobos, y tenemos una NEURAL ODE (NODE)
+---
 
-$$u\in \mathbb{R}^n$$ $$\frac{du}{dt}=NN(u;\theta)$$
-Uno de los problemas es que es muy facil caer en regiones del espacio donde no existen soluciones al problema.
+## 4. Generalización de Interacciones (Redes Neuronales)
 
+¿Qué ocurre si la dinámica es más compleja y desconocemos la forma exacta de la interacción entre especies? Podemos parametrizar y generalizar las funciones de interacción en lugar de usar formas fijas:
 
-## Ecuaciones diferenciales ordinarias neuronales (NODEs)
+$$\frac{dx}{dt} = \alpha x - f(x,y)$$
+$$\frac{dy}{dt} = -\beta y + g(x,y)$$
 
-Las {term}`NODE`s fueron introducidas por {cite}`chen2018neural` ...
+**Enfoque por Diccionario de Funciones:**
+Podemos parametrizar $f(x,y)$ y $g(x,y)$ como combinaciones lineales de una "base" o diccionario de funciones prescritas ($f_j, g_j$), buscando cubrir lo mejor posible el espacio de funciones:
+$$f(x,y) = \sum_{j=1}^k c_j \cdot f_j(x,y)$$
+El problema de estimación ahora se amplía para inferir los coeficientes $c_j$ junto a $\alpha$ y $\beta$.
 
-### Ejemplo (implementación computacional)
+**Enfoque de Redes Neuronales (Neural ODEs):**
+Matemáticamente, agarramos nuestras observaciones en 2D y las mapeamos a un espacio "oculto" de mayor dimensión. 
+Por ejemplo: 
+$$h_1 = G_1\left(M_1 \begin{pmatrix} x \\ y \end{pmatrix}\right)$$
+Donde $G_1$ es una función no lineal y $M_1$ es una matriz de pesos. A medida que sumamos capas en la red, mapeamos vectores iterativamente.
+
+Si generalizamos por completo (sin suponer un término de crecimiento o muerte específico), obtenemos una **Neural ODE (NODE)**:
+$$u \in \mathbb{R}^n$$
+$$\frac{du}{dt} = \text{NN}(u; \theta)$$
+*Advertencia:* Al llevar el modelo a este nivel de complejidad no lineal, un problema frecuente en la optimización es que es muy fácil caer en regiones del espacio de parámetros donde matemáticamente no existen soluciones al problema.
+
+## Ecuaciones Diferenciales Ordinarias Neuronales (NODEs)
+
+Las **Neural Ordinary Differential Equations (NODEs)**, introducidas formalmente por {cite}`chen2018neural`, representan un cambio de paradigma al fusionar el aprendizaje profundo con los sistemas dinámicos continuos. 
+
+### 1. Generalización de Modelos Clásicos
+Una forma intuitiva de entender las NODEs es viéndolas como una generalización de modelos dinámicos preexistentes. Por ejemplo, en el **modelo de Lotka-Volterra**, en lugar de imponer una forma matemática rígida para las interacciones biológicas, podemos reemplazar o aumentar esos términos utilizando redes neuronales:
+
+$$\frac{dX}{dt} = \alpha X - \text{NN}_1(X, Y)$$
+$$\frac{dY}{dt} = -\beta Y + \text{NN}_2(X, Y)$$
+
+En este caso, $\text{NN}_1$ y $\text{NN}_2$ son redes neuronales. Sus parámetros internos (pesos y sesgos) pasan a formar parte del vector global de parámetros a estimar, $\theta$.
+
+### 2. Definición Formal
+En su forma más general y abstracta, una NODE parametriza la derivada del estado continuo de un sistema directamente a través de una red neuronal. Se define como:
+
+$$\frac{du}{dt} = \text{NN}(u; v)$$
+
+Donde:
+* $u$ representa el estado del sistema en un tiempo dado.
+* $v$ engloba los parámetros (pesos y sesgos) de la red neuronal.
+
+### 3. Propiedades y Consideraciones Clave
+* **Aproximación universal:** Al estar basadas en redes neuronales, las NODEs heredan la capacidad de ser aproximadores universales. Esto significa que tienen la flexibilidad necesaria para aprender y representar una gama casi ilimitada de dinámicas continuas a partir de datos empíricos.
+* **Estabilidad y regularización:** Al entrenar una NODE, es fundamental incorporar técnicas de regularización. Esto no solo ayuda a prevenir el sobreajuste (*overfitting*), sino que es vital para asegurar la estabilidad de las soluciones y evitar que las trayectorias se vuelvan computacionalmente intratables para los *solvers* de las ecuaciones diferenciales.
+
+<!-- ### Ejemplo (implementación computacional)
 
 En Myst, podemos incluir codigo!
 
 ```julia
 using DifferentialEquations
 using Plots
-```
+``` -->
