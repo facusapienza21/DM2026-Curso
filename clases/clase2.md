@@ -2,7 +2,6 @@
 title: Clase No2 - ODEs y NODEs
 ---
 
-# ODEs y NODEs
 
 **Fecha:** 13/04/2026
 
@@ -16,11 +15,11 @@ Estas notas cubren la definición de Ecuaciones Diferenciales Ordinarias (ODEs),
 
 
 
-## Ecuaciones diferenciales ordinarias (ODEs)
+# Ecuaciones diferenciales ordinarias (ODEs)
 
 Las {term}`ODE`s describen la evolución de un sistema en función de una única variable independiente, típicamente el tiempo ($t$).
 
-### Definición y Parámetros
+## Definición y Parámetros
 
 * **Variable de estado:** $x(t) \in \mathbb{R}^n$ representa el estado del sistema en el instante $t$.
 * **Dinámica:** Está determinada por una función $f$, conocida como {term}`campo vectorial <Campo vectorial>`, y un conjunto de {term}`parámetros <Parámetro>` del modelo $\theta \in \mathbb{R}^p$.
@@ -30,9 +29,7 @@ Las {term}`ODE`s describen la evolución de un sistema en función de una única
 
 Estas soluciones no siempre son analíticas, de hecho, casi nunca son analíticas, pero no nos importa, en este curso vamos a intentar de encontrar herramientas para resolverlas numéricamente.
 
-### Ejemplos de aplicación y transformación
-
-#### Reducción de Orden: El Oscilador Armónico
+:::{note} Reducción de Orden: El Oscilador Armónico
 
 Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado:
 $$\frac{d^2x}{dt^2} + \omega^2x = f(x,t)$$
@@ -52,8 +49,8 @@ v \\ -\omega^2x+f
 \end{pmatrix}=\begin{pmatrix} 0 & 1 \\ -\omega^2 & 0\end{pmatrix}\begin{pmatrix}x \\ v \end{pmatrix}+\begin{pmatrix}0 \\ f \end{pmatrix}$$
 
 La idea central es que siempre podemos llevar una ecuación de orden más alto a un sistema de ODEs de primer orden aumentando la dimensionalidad del vector de estado.
-
-#### Ecuaciones Diferenciales Parciales (PDEs) y el Método de Líneas
+:::
+:::{note} Ecuaciones Diferenciales Parciales (PDEs) y el Método de Líneas
 
 El enfoque de reducir problemas a sistemas matriciales también puede aplicarse a Ecuaciones Diferenciales Parciales (PDEs) mediante la discretización espacial, una técnica conocida como el **Método de Líneas**.
 
@@ -73,8 +70,10 @@ Definiendo un vector de estado $\mathbf{u}$ con los valores discretizados, obten
 $$\frac{d}{dt} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix} = \frac{D}{h^2} \begin{pmatrix} -2 & 1 & 0 & \dots \\ 1 & -2 & 1 & \dots \\ 0 & 1 & -2 & \dots \\ \vdots & \vdots & \vdots & \ddots \end{pmatrix} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix}$$
 
 Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal.
+:::
+## Ejemplos
 
-## 1. El Modelo Dinámico: Lotka-Volterra (Depredador-Presa)
+**El Modelo Dinámico: Lotka-Volterra (Depredador-Presa)**
 
 Este modelo describe la dinámica temporal del estado de un sistema compuesto por dos poblaciones: conejos ($x$) y lobos ($y$).
 
@@ -96,7 +95,7 @@ $$\frac{dy}{dt} = -\beta y + \eta xy$$
     * $\beta > 0$: tasa de mortalidad de lobos.
     * $\eta > 0$: tasa de crecimiento de lobos por interacción.
 
-## 2. Modelo Observacional y Ruido
+## Inferencia estadística
 
 En la realidad, si uno tuviera conocimiento absoluto de la dinámica, conocería la trayectoria perfecta. Sin embargo, nunca se observan estas trayectorias puras. Uno observa datos (no continuos en el tiempo) que se asemejan a la trayectoria, pero contaminados con ruido aleatorio.
 
@@ -111,11 +110,10 @@ $$x_i^{\text{obs}} = x(t_i; \theta) + \varepsilon_i$$
 * **Ruido correlacionado:** Común en series de tiempo, donde la correlación entre dos errores es distinta de cero: $\mathbb{E}[\varepsilon_i, \varepsilon_j] \neq 0$ para $i \neq j$.
     * *Nota estadística:* Si dos distribuciones son Gaussianas y tienen correlación $0$, son independientes. Si no son Gaussianas, tener correlación $0$ no implica independencia.
 
-## 3. Inferencia Estadística y Ajuste de Trayectorias
+**Ajuste de Trayectorias**
 
 El problema central es: dadas las observaciones $x_i^{\text{obs}}$ e $y_i^{\text{obs}}$, ¿cómo estimamos los parámetros $\theta$ que mejor describen la dinámica subyacente?
 
-**Trajectory Matching (Fiteo de Trayectorias):**
 El objetivo es convertir esto en un problema de optimización, buscando minimizar una función de costo $\mathcal{L}(\theta; \text{DATOS})$ que compare las observaciones reales con las trayectorias generadas por el modelo $x(t; \theta)$.
 
 **Mínimos Cuadrados No Lineales:**
@@ -124,55 +122,62 @@ $$\min_{\theta} \sum_{i=1}^{N} (x_i^{\text{obs}} - x(t_i; \theta))^2$$
 * Minimizar el **cuadrado de los errores** asume inherentemente un ruido de naturaleza Gaussiana.
 * Minimizar la **norma** asume un ruido de naturaleza Laplaciana.
 
----
+### Ejemplo (continuado)
 
-## 4. Generalización de Interacciones (Redes Neuronales)
+**Inferencia en el sistema Lotka-Volterra:**
+Si salimos al campo y medimos las poblaciones de presas ($x_i^{\text{obs}}$) y depredadores ($y_i^{\text{obs}}$) a lo largo del tiempo, nuestra función de costo (o pérdida) a minimizar será:
 
-¿Qué ocurre si la dinámica es más compleja y desconocemos la forma exacta de la interacción entre especies? Podemos parametrizar y generalizar las funciones de interacción en lugar de usar formas fijas:
+$$
+\min_{\theta} \mathcal{L}(\theta) = \sum_{i=1}^{N} \left[ (x_i^{\text{obs}} - x(t_i; \theta))^2 + (y_i^{\text{obs}} - y(t_i; \theta))^2 \right]
+$$
 
-$$\frac{dx}{dt} = \alpha x - f(x,y)$$
-$$\frac{dy}{dt} = -\beta y + g(x,y)$$
+Un optimizador resolverá numéricamente las {term}`ODE`s de Lotka-Volterra en cada iteración, ajustando sistemáticamente el vector $\theta = (\alpha, \gamma, \beta, \eta)^\top$ hasta que la trayectoria predicha pase lo más cerca posible de nuestros datos ruidosos.
 
-**Enfoque por Diccionario de Funciones:**
-Podemos parametrizar $f(x,y)$ y $g(x,y)$ como combinaciones lineales de una "base" o diccionario de funciones prescritas ($f_j, g_j$), buscando cubrir lo mejor posible el espacio de funciones:
-$$f(x,y) = \sum_{j=1}^k c_j \cdot f_j(x,y)$$
-El problema de estimación ahora se amplía para inferir los coeficientes $c_j$ junto a $\alpha$ y $\beta$.
+## Ecuaciones diferenciales ordinarias neuronales (NODEs)
 
-**Enfoque de Redes Neuronales (Neural ODEs):**
-Matemáticamente, agarramos nuestras observaciones en 2D y las mapeamos a un espacio "oculto" de mayor dimensión. 
-Por ejemplo: 
-$$h_1 = G_1\left(M_1 \begin{pmatrix} x \\ y \end{pmatrix}\right)$$
-Donde $G_1$ es una función no lineal y $M_1$ es una matriz de pesos. A medida que sumamos capas en la red, mapeamos vectores iterativamente.
+Las **Neural Ordinary Differential Equations (NODEs)**, introducidas formalmente por {cite}`chen2018neural`, representan un cambio de paradigma al fusionar el aprendizaje profundo con los sistemas dinámicos continuos.
 
-Si generalizamos por completo (sin suponer un término de crecimiento o muerte específico), obtenemos una **Neural ODE (NODE)**:
-$$u \in \mathbb{R}^n$$
-$$\frac{du}{dt} = \text{NN}(u; \theta)$$
-*Advertencia:* Al llevar el modelo a este nivel de complejidad no lineal, un problema frecuente en la optimización es que es muy fácil caer en regiones del espacio de parámetros donde matemáticamente no existen soluciones al problema.
+:::{note} Motivación: Generalización de Interacciones
+¿Qué ocurre si la dinámica es más compleja y desconocemos la forma exacta de la interacción entre especies? Tradicionalmente, se puede usar un diccionario de funciones para parametrizar las interacciones como combinaciones lineales. Sin embargo, el **enfoque de Redes Neuronales** nos permite ir más allá: mapeamos nuestras observaciones a un espacio "oculto" de mayor dimensión de forma iterativa.
 
-## Ecuaciones Diferenciales Ordinarias Neuronales (NODEs)
+Por ejemplo, asumiendo un modelo parcial:
+$$
+\frac{dx}{dt} = \alpha x - f(x,y)
+$$
+$$
+\frac{dy}{dt} = -\beta y + g(x,y)
+$$
 
-Las **Neural Ordinary Differential Equations (NODEs)**, introducidas formalmente por {cite}`chen2018neural`, representan un cambio de paradigma al fusionar el aprendizaje profundo con los sistemas dinámicos continuos. 
+Podemos reemplazar las funciones desconocidas $f(x,y)$ y $g(x,y)$ por transformaciones no lineales parametrizadas por matrices de pesos, buscando cubrir el espacio de funciones sin imponer una forma matemática rígida.
+:::
 
 ### 1. Generalización de Modelos Clásicos
-Una forma intuitiva de entender las NODEs es viéndolas como una generalización de modelos dinámicos preexistentes. Por ejemplo, en el **modelo de Lotka-Volterra**, en lugar de imponer una forma matemática rígida para las interacciones biológicas, podemos reemplazar o aumentar esos términos utilizando redes neuronales:
 
-$$\frac{dX}{dt} = \alpha X - \text{NN}_1(X, Y)$$
-$$\frac{dY}{dt} = -\beta Y + \text{NN}_2(X, Y)$$
+Una forma intuitiva de entender las NODEs es viéndolas como una generalización de modelos dinámicos preexistentes. Por ejemplo, en el **modelo de Lotka-Volterra**, podemos reemplazar o aumentar los términos de interacción utilizando redes neuronales:
 
-En este caso, $\text{NN}_1$ y $\text{NN}_2$ son redes neuronales. Sus parámetros internos (pesos y sesgos) pasan a formar parte del vector global de parámetros a estimar, $\theta$.
+$$
+\frac{dx}{dt} = \alpha x - \text{NN}_1(x, y)
+$$
+$$
+\frac{dy}{dt} = -\beta y + \text{NN}_2(x, y)
+$$
+
+En este caso, los parámetros internos de $\text{NN}_1$ y $\text{NN}_2$ (pesos y sesgos) pasan a formar parte del vector global de parámetros a estimar, $\theta$, junto con $\alpha$ y $\beta$.
 
 ### 2. Definición Formal
-En su forma más general y abstracta, una NODE parametriza la derivada del estado continuo de un sistema directamente a través de una red neuronal. Se define como:
 
-$$\frac{du}{dt} = \text{NN}(u; v)$$
+Si generalizamos por completo (sin suponer ningún término de crecimiento o muerte específico predefinido), obtenemos una NODE. En su forma más abstracta, una NODE parametriza la derivada del estado continuo de un sistema directamente a través de una red neuronal:
 
-Donde:
-* $u$ representa el estado del sistema en un tiempo dado.
-* $v$ engloba los parámetros (pesos y sesgos) de la red neuronal.
+$$
+\frac{du}{dt} = \text{NN}(u; \theta)
+$$
+
+Donde $u \in \mathbb{R}^n$ representa el estado del sistema en un tiempo dado, y $\theta$ engloba todos los parámetros entrenables de la red neuronal.
 
 ### 3. Propiedades y Consideraciones Clave
-* **Aproximación universal:** Al estar basadas en redes neuronales, las NODEs heredan la capacidad de ser aproximadores universales. Esto significa que tienen la flexibilidad necesaria para aprender y representar una gama casi ilimitada de dinámicas continuas a partir de datos empíricos.
-* **Estabilidad y regularización:** Al entrenar una NODE, es fundamental incorporar técnicas de regularización. Esto no solo ayuda a prevenir el sobreajuste (*overfitting*), sino que es vital para asegurar la estabilidad de las soluciones y evitar que las trayectorias se vuelvan computacionalmente intratables para los *solvers* de las ecuaciones diferenciales.
+
+* **Aproximación universal:** Al estar basadas en redes neuronales, las NODEs heredan la capacidad de ser aproximadores universales. Tienen la flexibilidad necesaria para aprender y representar una gama casi ilimitada de dinámicas continuas a partir de datos empíricos.
+* **Intratabilidad numérica:** *Advertencia:* Al llevar el modelo a este nivel de complejidad no lineal, un problema frecuente en la optimización es caer en regiones del espacio de parámetros donde el sistema se vuelve matemáticamente inestable o demasiado costoso de resolver para los *solvers* de las ecuaciones diferenciales.
 
 <!-- ### Ejemplo (implementación computacional)
 
