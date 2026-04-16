@@ -2,6 +2,8 @@
 title: Clase No2 - ODEs y NODEs
 ---
 
+Algunos comentarios...
+
 # ODEs y NODEs
 
 **Fecha:** 13/04/2026
