@@ -2,8 +2,6 @@
 title: Clase No2 - ODEs y NODEs
 ---
 
-Algunos comentarios...
-
 # ODEs y NODEs
 
 **Fecha:** 13/04/2026
@@ -14,16 +12,23 @@ Algunos comentarios...
 
 % Incluir espacio
 
+Estas notas cubren la definición de Ecuaciones Diferenciales Ordinarias (ODEs), su aplicación en modelado dinámico, la conversión de otros tipos de ecuaciones a ODEs, y cómo se utilizan para la estimación de parámetros a partir de datos observacionales, culminando con la introducción a las Neural ODEs.
+
+
+
 ## Ecuaciones diferenciales ordinarias (ODEs)
 
-Un ejemplo de como escribir una {term}`ODE`:
+Las {term}`ODE`s describen la evolución de un sistema en función de una única variable independiente, típicamente el tiempo ($t$).
 
-$$
-\frac{du}{dt} = f(u, t, \theta), \quad u(t_0) = u_0
-$$
+### Definición y Parámetros
 
-donde $u(t) \in \mathbb{R}^n$ es el estado del sistema, $\theta$ son los {term}`parámetros <Parámetro>` del modelo, y $u_0$ es la {term}`condición inicial <Condición inicial>`. La función $f$ es el {term}`campo vectorial <Campo vectorial>` $f:\mathbb{R}^n\times\mathbb{R}\times\mathbb{R}^p\to\mathbb{R}^n$. Esto nos define una curva que es solucion.
-Estas soluciones no siempre son analiticas, de hecho, casi nunca son analiticas, pero no nos importa, en este curso vamos a intentar de encontrar herramientas para resolverlas numericamente.
+* **Variable de estado:** $x(t) \in \mathbb{R}^n$ representa el estado del sistema en el instante $t$.
+* **Dinámica:** Está determinada por una función $f$, conocida como {term}`campo vectorial <Campo vectorial>`, y un conjunto de {term}`parámetros <Parámetro>` del modelo $\theta \in \mathbb{R}^p$.
+* **Forma general:** $$\frac{dx}{dt} = f(x, t, \theta)$$
+  donde $f: \mathbb{R}^n \times \mathbb{R} \times \mathbb{R}^p \rightarrow \mathbb{R}^n$.
+* **Condición inicial:** $x(t_0) = x_0$. Define el estado de partida del sistema ({term}`condición inicial <Condición inicial>`) en el tiempo inicial $t_0$.
+
+Estas soluciones no siempre son analíticas, de hecho, casi nunca son analíticas, pero no nos importa, en este curso vamos a intentar de encontrar herramientas para resolverlas numéricamente.
 
 ## El oscilador armonico no es una ODE
 
