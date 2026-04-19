@@ -52,8 +52,7 @@ $$
 
 Porque las redes neuronales son aproximadores universales. Entonces, dados ciertos datos observacionales, la red puede aproximar el comportamiento del sistema incluso sin conocer explícitamente la ecuación que rige el fenómeno.
 
-:::{admonition} Obs. 1: Sistemas autónomos
-:class: note
+:::{note} Obs. 1: Sistemas autónomos
 Un sistema autónomo es aquel en el que el tiempo no aparece explícitamente en las ecuaciones:
 
 $$
@@ -100,8 +99,8 @@ $$
 
 En nuestro caso, la red recibe como entrada el vector de estado $u$ y devuelve una aproximación de la función dinámica $f(u;\theta)$.
 
-:::{admonition} Obs. 2: Construcción de NODEs
-:class: note
+:::{note} Obs. 2: Construcción de NODEs
+
 En las NODEs, los parámetros $\theta$ pasan a ser los pesos y sesgos de la red neuronal:
 
 $$
