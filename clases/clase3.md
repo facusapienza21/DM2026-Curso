@@ -52,7 +52,8 @@ $$
 
 Porque las redes neuronales son aproximadores universales. Entonces, dados ciertos datos observacionales, la red puede aproximar el comportamiento del sistema incluso sin conocer explícitamente la ecuación que rige el fenómeno.
 
-```{admonition} Obs. 1: Sistemas autónomos
+:::{admonition} Obs. 1: Sistemas autónomos
+:class: note
 Un sistema autónomo es aquel en el que el tiempo no aparece explícitamente en las ecuaciones:
 
 $$
@@ -81,7 +82,7 @@ f(u,t;\theta) \\
 1
 \end{pmatrix}.
 $$
-```
+:::
 
 Una red neuronal está compuesta, en general, por tres partes: una capa de entrada, una o más capas ocultas y una capa de salida. Cada capa tiene una cierta cantidad de neuronas, que depende del problema que se quiera resolver.
 
@@ -99,13 +100,14 @@ $$
 
 En nuestro caso, la red recibe como entrada el vector de estado $u$ y devuelve una aproximación de la función dinámica $f(u;\theta)$.
 
-```{admonition} Obs. 2: Construcción de NODEs
+:::{admonition} Obs. 2: Construcción de NODEs
+:class: note
 En las NODEs, los parámetros $\theta$ pasan a ser los pesos y sesgos de la red neuronal:
 
 $$
 \theta = \{W_i,b_i\}.
 $$
-```
+:::
 
 
 Volviendo al ejemplo de Lotka-Volterra, supongamos que conocemos una parte de la dinámica: sabemos que, en ausencia de interacción, la población de conejos crece y la de lobos decrece. Sin embargo, no sabemos exactamente cómo interactúan ambas poblaciones.
