@@ -19,7 +19,7 @@ project:
     - file: anuncios.md
     - title: Clases
       children:
-        - pattern: 'clases/clase[0-9]*.md'
+        - pattern: 'clases/*.md'
     - title: Projecto Final
       children:
         - file: proyecto/general_info.md
