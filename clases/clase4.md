@@ -78,3 +78,21 @@ Euler explicito es un metodo de [Runge-Kutta](#metodos-runge-kutta) con $s=1$, o
 $$
 u^{m+1} = u^m + \Delta t f(u^m, t^m)
 $$
+
+## Motivacion de las NODEs
+
+En {cite}`chen2018neural`, se presenta la idea de usar una red neuronal para parametrizar la funcion $f$ de una EDO dada su similitud con el metodo de [Euler explicito](#euler-explicito).:
+
+Si $g(h_i) = \sigma(W_i h_i + b)$ es una red neuronal con parametros $\theta = (W, b)$, entonces
+
+$$
+h_{i+1} = h_i + g(h_i) 	\rightsquigarrow  h_{i+1} + \Delta t \tilde{g}(h_i)
+$$
+
+Y aqui se observa la similitud con el metodo de [Euler explicito](#euler-explicito), lo que motiva la idea de "pasar al continuo" y definir una NODE como la solucion de la siguiente EDO:
+$$
+\dfrac{dh}{dt} = \tilde{g}(h(t))
+$$
+
+:::{bibliography}
+:::
