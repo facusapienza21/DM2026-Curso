@@ -33,7 +33,8 @@ Salvo casos muy particulares, las soluciones a ODEs no son analiticias. En la ma
 
 Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado:
 $$\frac{d^2x}{dt^2} + \omega^2x = f(x,t)$$
-no se presenta inicialmente en la forma estándar de una ODE de primer orden ($\dot{x} = f(x,t)$). Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales.
+no se presenta inicialmente en la forma estándar de una ODE de primer orden ($\dot{x} = f(x,t)$). 
+Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales.
 
 **Conversión a sistema de primer orden**
 Definimos la velocidad como una nueva variable de estado $v = \frac{dx}{dt}$. Esto nos permite descomponer la ecuación original en un sistema de dos ecuaciones de primer orden:
@@ -52,7 +53,7 @@ La idea central es que siempre podemos llevar una ecuación de orden más alto a
 :::
 :::{note} Ecuaciones Diferenciales Parciales (PDEs) y el Método de Líneas
 
-El enfoque de reducir problemas a sistemas matriciales también puede aplicarse a Ecuaciones Diferenciales Parciales (PDEs) mediante la discretización espacial, una técnica conocida como el **Método de Líneas**.
+El enfoque de reducir problemas a sistemas matriciales también puede aplicarse a Ecuaciones Diferenciales Parciales (PDEs) mediante la discretización espacial, una técnica conocida como el **Método de Líneas** ({cite}`ascher2008numerical`).
 
 **Ejemplo: Ecuación de Difusión**
 Consideremos un campo $u(x,t)$ que evoluciona según la ecuación de difusión:
