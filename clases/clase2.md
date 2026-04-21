@@ -134,7 +134,7 @@ $$
 \min_{\theta} \mathcal{L}(\theta) = \sum_{i=1}^{N} \left[ (x_i^{\text{obs}} - x(t_i; \theta))^2 + (y_i^{\text{obs}} - y(t_i; \theta))^2 \right]
 $$
 
-Un optimizador resolverá numéricamente las {term}`ODE`s de Lotka-Volterra en cada iteración, ajustando sistemáticamente el vector $\theta = (\alpha, \gamma, \beta, \eta)^\top$ hasta que la trayectoria predicha pase lo más cerca posible de nuestros datos ruidosos.
+Un optimizador resolverá numéricamente las {term}`ODE`s de Lotka-Volterra en cada iteración, ajustando sistemáticamente el vector $\theta = (\alpha, \gamma, \beta, \eta)^\top \in \mathbb{R}^4$ hasta que la trayectoria predicha pase lo más cerca posible de nuestros datos ruidosos.
 
 ## Ecuaciones diferenciales ordinarias neuronales (NODEs)
 
