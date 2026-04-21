@@ -56,7 +56,7 @@ La idea central es que siempre podemos llevar una ecuación de orden más alto a
 El enfoque de reducir problemas a sistemas matriciales también puede aplicarse a Ecuaciones Diferenciales Parciales (PDEs) mediante la discretización espacial, una técnica conocida como el **Método de Líneas** ({cite}`ascher2008numerical`).
 
 **Ejemplo: Ecuación de Difusión**
-Consideremos un campo $u(x,t)$ que evoluciona según la ecuación de difusión:
+Consideremos un campo $u(x,t)$, con $x \in \mathbb{R}$, que evoluciona según la ecuación de difusión:
 $$\frac{\partial u}{\partial t} = D \frac{\partial^2 u}{\partial x^2}$$
 Para resolver este sistema, también debemos especificar condiciones iniciales y de borde (por ejemplo, $u(0,t)=0$ y $u(1,t)=1$).
 
@@ -98,7 +98,9 @@ $$\frac{dy}{dt} = -\beta y + \eta xy$$
 
 ## Inferencia estadística
 
-En la realidad, si uno tuviera conocimiento absoluto de la dinámica, conocería la trayectoria perfecta. Sin embargo, nunca se observan estas trayectorias puras. Uno observa datos (no continuos en el tiempo) que se asemejan a la trayectoria, pero contaminados con ruido aleatorio.
+En la realidad, si uno tuviera conocimiento absoluto de la dinámica, conocería la trayectoria perfecta. 
+Sin embargo, nunca se observan estas trayectorias puras. 
+En su lugar, se observan datos, usualmente en tiempos discretos, que se asemejan a la trayectoria subyacente, pero posiblemente contaminados con ruido aleatorio.
 
 **Ecuación del modelo observacional:**
 $$x_i^{\text{obs}} = x(t_i; \theta) + \varepsilon_i$$
