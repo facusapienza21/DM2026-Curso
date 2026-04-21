@@ -4,6 +4,21 @@
 
 @article{Bolibar_Sapienza_2023, title={Universal differential equations for glacier ice flow modelling}, volume={16}, DOI={10.5194/gmd-16-6671-2023}, abstractNote={Geoscientific models are facing increasing challenges to exploit growing datasets coming from remote sensing. Universal differential equations (UDEs), aided by differentiable programming, provide a new scientific modelling paradigm enabling both complex functional inversions to potentially discover new physical laws and data assimilation from heterogeneous and sparse observations. We demonstrate an application of UDEs as a proof of concept to learn the creep component of ice flow, i.e. a nonlinear diffusivity differential equation, of a glacier evolution model. By combining a mechanistic model based on a two-dimensional shallow-ice approximation partial differential equation with an embedded neural network, i.e. a UDE, we can learn parts of an equation as nonlinear functions that then can be translated into mathematical expressions. We implemented this modelling framework as ODINN.jl, a package in the Julia programming language, providing high performance, source-to-source automatic differentiation (AD) and seamless integration with tools and global datasets from the Open Global Glacier Model in Python. We demonstrate this concept for 17 different glaciers around the world, for which we successfully recover a prescribed artificial law describing ice creep variability by solving ∼ 500 000 ordinary differential equations in parallel. Furthermore, we investigate which are the best tools in the scientific machine learning ecosystem in Julia to differentiate and optimize large nonlinear diffusivity UDEs. This study represents a proof of concept for a new modelling framework aiming at discovering empirical laws for large-scale glacier processes, such as the variability in ice creep and basal sliding for ice flow, and new hybrid surface mass balance models.}, number={22}, journal={Geoscientific Model Development}, author={Bolibar, Jordi and Sapienza, Facundo and Maussion, Fabien and Lguensat, Redouane and Wouters, Bert and Pérez, Fernando}, year={2023}, pages={6671–6687} }
 
+@misc{hastie2009elements,
+  title={The elements of statistical learning},
+  author={Hastie, Trevor and Tibshirani, Robert and Friedman, Jerome and others},
+  year={2009},
+  publisher={Springer series in statistics New-York}
+}
+
+@book{pml1Book,
+  author = "Kevin P. Murphy",
+  title = "Probabilistic Machine Learning: An introduction",
+  publisher = "MIT Press",
+  year = 2022,
+  url = "http://probml.github.io/book1"
+}
+
 @article{ramsay2017dynamic,
   title={Dynamic data analysis},
   author={Ramsay, James and Hooker, Giles},
