@@ -11,7 +11,7 @@ title: Clase No2 - ODEs y NODEs
 
 % Incluir espacio
 
-Estas notas cubren la definición de Ecuaciones Diferenciales Ordinarias (ODEs), su aplicación en modelado dinámico, la conversión de otros tipos de ecuaciones a ODEs, y cómo se utilizan para la estimación de parámetros a partir de datos observacionales, culminando con la introducción a las Neural ODEs.
+Estas notas cubren la definición de Ecuaciones Diferenciales Ordinarias (ODEs), su aplicación en modelado dinámico, la conversión de otros tipos de ecuaciones a ODEs, y cómo se utilizan para la estimación de parámetros a partir de datos observacionales, culminando con la introducción a las Neural ODEs (NODEs).
 
 
 
@@ -27,7 +27,7 @@ Las {term}`ODE`s describen la evolución de un sistema en función de una única
   donde $f: \mathbb{R}^n \times \mathbb{R} \times \mathbb{R}^p \rightarrow \mathbb{R}^n$.
 * **Condición inicial:** $x(t_0) = x_0$. Define el estado de partida del sistema ({term}`condición inicial <Condición inicial>`) en el tiempo inicial $t_0$.
 
-Estas soluciones no siempre son analíticas, de hecho, casi nunca son analíticas, pero no nos importa, en este curso vamos a intentar de encontrar herramientas para resolverlas numéricamente.
+Salvo casos muy particulares, las soluciones a ODEs no son analiticias. En la mayoria de los casos, vamos a recurrir a métodos numéricos para resolver dichas ecuaciones.
 
 :::{note} Reducción de Orden: El Oscilador Armónico
 
