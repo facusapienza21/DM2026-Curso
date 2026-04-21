@@ -136,7 +136,7 @@ $$
 
 Un optimizador resolverá numéricamente las {term}`ODE`s de Lotka-Volterra en cada iteración, ajustando sistemáticamente el vector $\theta = (\alpha, \gamma, \beta, \eta)^\top \in \mathbb{R}^4$ hasta que la trayectoria predicha pase lo más cerca posible de nuestros datos ruidosos.
 
-## Ecuaciones diferenciales ordinarias neuronales (NODEs)
+# Ecuaciones diferenciales ordinarias neuronales (NODEs)
 
 Las **Neural Ordinary Differential Equations (NODEs)**, introducidas formalmente por {cite}`chen2018neural`, representan un cambio de paradigma al fusionar el aprendizaje profundo con los sistemas dinámicos continuos.
 
@@ -182,11 +182,49 @@ Donde $u \in \mathbb{R}^n$ representa el estado del sistema en un tiempo dado, y
 * **Aproximación universal:** Al estar basadas en redes neuronales, las NODEs heredan la capacidad de ser aproximadores universales. Tienen la flexibilidad necesaria para aprender y representar una gama casi ilimitada de dinámicas continuas a partir de datos empíricos.
 * **Intratabilidad numérica:** *Advertencia:* Al llevar el modelo a este nivel de complejidad no lineal, un problema frecuente en la optimización es caer en regiones del espacio de parámetros donde el sistema se vuelve matemáticamente inestable o demasiado costoso de resolver para los *solvers* de las ecuaciones diferenciales.
 
-<!-- ### Ejemplo (implementación computacional)
+# Implementación Computacional
 
-En Myst, podemos incluir codigo!
+A continuación, implementamos el modelo Lotka-Volterra en Julia. 
+
+> **Nota:** El código completo de este ejemplo se puede referenciar acá: [01_LV_forward](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/01_LV_forward). Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con ruido y vemos cómo cambia el paisaje de la función de pérdida (*Loss Landscape*). Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
+
+Nosotros vamos a contar brevemente los componentes principales de la resolución numérica.
+
+En Julia, usamos `!` en el nombre de la función para indicar que modifica sus argumentos in-place (es decir, no tenemos un `return`)
 
 ```julia
 using DifferentialEquations
 using Plots
-``` -->
+using Statistics
+using Random
+
+# Definición del sistema de Ecuaciones Diferenciales Ordinarias
+function lotka_volterra!(du, u, p, t)
+    x, y = u            # x = presas, y = depredadores (esto es lo mismo que hacer u[1], u[2])
+    α, β, δ, γ = p      # Desempaquetamos el vector p
+    du[1] = α * x - β * x * y
+    du[2] = δ * x * y - γ * y
+end
+
+# Definimos los parámetros de la ecuación
+α = 1.0     # Nacimiento de presas
+β = 0.1     # Tasa de depredación
+δ = 0.075   # Reproducción del depredador
+γ = 1.5     # Muerte del depredador
+p_true = [α, β, δ, γ]
+
+# Condiciones iniciales y tiempo
+u0 = [10.0, 5.0]
+tspan = (0.0, 30.0)
+
+# ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, 
+# por eso le mandamos la función, la condición inicial y un tiempo para resolver.
+prob = ODEProblem(lotka_volterra!, u0, tspan, p_true) # Acá definimos el problema matemático
+
+# Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5) y cada 
+# cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
+sol = solve(prob, Tsit5(), saveat=0.1) 
+
+# En sol está la solución al problema
+print(sol)
+```
