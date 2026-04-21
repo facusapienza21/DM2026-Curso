@@ -10,7 +10,7 @@ title: Clase No4 - Metodos Numericos
 
 ## Video de la clase
 
-:::{iframe} https://www.youtube.com/watch?v=Rdvz8KRA1JQ 
+:::{iframe} https://www.youtube.com/embed/Rdvz8KRA1JQ 
 :width: 100%
 :::
 
@@ -99,14 +99,16 @@ $$
 
 A veces resulta necesario pre-entrenar la red neuronal que define la funcion $f$ de la EDO, para "acercar" la solucion a un espacio donde la solucion tiene sentido (fisico).
 
-Si tenemos una idea de la fisica subyacente dada por $\tilde{F}$, entonces podemos usar esta informacion para guiar el entrenamiento de la red neuronal optimizando primero la siguiente funcion de perdida:
+Si tenemos una idea de la fisica subyacente dada por $\tilde{F}_\theta$, entonces podemos usar esta informacion para guiar el entrenamiento de la red neuronal optimizando primero la siguiente funcion de perdida:
 
 $$
-\mathcal{L}_{pre}(\theta) = \sum_{i=1}^{N} \|\tilde{F}(X) - NN_\theta(X)\|^2
+\mathcal{L}_{pre}(\theta) = \sum_{i=1}^{N} \|\tilde{F}_\theta(X) - NN_\theta(X)\|^2
 $$
 
 Esto es mucho menos costoso que optimizar la funcion de perdida que se obtiene al comparar la solucion de la EDO con los datos.
-Observemos que no hay datos en esta etapa, solo la informacion fisica dada por $\tilde{F}$.
+Observemos que no hay datos en esta etapa, solo la informacion fisica dada por $\tilde{F}_\theta$.
+
+Revisar [este codigo](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/03_LV_forward_UDE) para ver un ejemplo de pre-entrenamiento aplicado a el modelo de Lotka-Volterra.
 
 :::{bibliography}
 :::
