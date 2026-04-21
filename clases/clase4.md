@@ -30,7 +30,7 @@ Hay dos metodos generales que engloban al resto:
 - [Runge Kutta](#metodos-runge-kutta)
 
 :::{note}
-Se debe discretizar el eje temporal, y asi obtener $t^0, t^1, \ldots, t^M$, donde $\Delta t = t^{m+1} - t^m$ se puede fijar o determinar dinamicamente por un algoritmo, pero ninguno de los metodos siguientes definen formas de discretizacion temporal.
+Se debe discretizar el eje temporal, y asi obtener $t^0, t^1, \ldots, t^M$, donde $\Delta t$ se puede fijar o determinar dinamicamente por un algoritmo, pero ninguno de los metodos siguientes definen formas de discretizacion temporal.
 :::
 
 :::{note}
@@ -91,12 +91,22 @@ $$
 
 Y aqui se observa la similitud con el metodo de [Euler explicito](#euler-explicito), lo que motiva la idea de "pasar al continuo" y definir una NODE como la solucion de la siguiente EDO:
 $$
-\dfrac{dh}{dt} = \tilde{g}(h(t))
+\dfrac{dh}{dt} = \tilde{g}(h(t)) \\
+\dfrac{dh}{dt} = NN_\theta(h(t))
 $$
 
 ## Pre-Entrenamiento
 
+A veces resulta necesario pre-entrenar la red neuronal que define la funcion $f$ de la EDO, para "acercar" la solucion a un espacio donde la solucion tiene sentido (fisico).
 
+Si tenemos una idea de la fisica subyacente dada por $\tilde{F}$, entonces podemos usar esta informacion para guiar el entrenamiento de la red neuronal optimizando primero la siguiente funcion de perdida:
+
+$$
+\mathcal{L}_{pre}(\theta) = \sum_{i=1}^{N} \|\tilde{F}(X) - NN_\theta(X)\|^2
+$$
+
+Esto es mucho menos costoso que optimizar la funcion de perdida que se obtiene al comparar la solucion de la EDO con los datos.
+Observemos que no hay datos en esta etapa, solo la informacion fisica dada por $\tilde{F}$.
 
 :::{bibliography}
 :::
