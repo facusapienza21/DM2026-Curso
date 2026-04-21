@@ -1,8 +1,8 @@
 ---
-title: Clase No4 - NODEs y Solvers Numericos para ODEs
+title: Clase No4 - Metodos Numericos
 ---
 
-# NODEs y Solvers Numericos para ODEs
+# Metodos Numericos
 
 **Fecha:** 20/04/2026
 
@@ -10,7 +10,7 @@ title: Clase No4 - NODEs y Solvers Numericos para ODEs
 
 ## Video de la clase
 
-:::{iframe} https://www.youtube.com/embed/VIDEO_ID
+:::{iframe} https://www.youtube.com/watch?v=Rdvz8KRA1JQ 
 :width: 100%
 :::
 
@@ -30,7 +30,7 @@ Hay dos metodos generales que engloban al resto:
 - [Runge Kutta](#metodos-runge-kutta)
 
 :::{note}
-Se debe discretizar el eje temporal, $\Delta t$ se puede fijar o determinar dinamicamente por un algoritmo, pero ninguno de los metodos siguientes definen formas de discretizacion temporal.
+Se debe discretizar el eje temporal, y asi obtener $t^0, t^1, \ldots, t^M$, donde $\Delta t = t^{m+1} - t^m$ se puede fijar o determinar dinamicamente por un algoritmo, pero ninguno de los metodos siguientes definen formas de discretizacion temporal.
 :::
 
 :::{note}
@@ -93,6 +93,10 @@ Y aqui se observa la similitud con el metodo de [Euler explicito](#euler-explici
 $$
 \dfrac{dh}{dt} = \tilde{g}(h(t))
 $$
+
+## Pre-Entrenamiento
+
+
 
 :::{bibliography}
 :::
