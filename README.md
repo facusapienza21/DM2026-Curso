@@ -12,7 +12,7 @@ De esta manera, completamos los apuntes de las clases juntos y al mismo tiempo s
 
 A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 
-| Clase         | Second Header |
+| Clase         | Alumnos/as |
 | ------------- | ------------- |
 | No1           | ...  |
 | No2           | ...  |
