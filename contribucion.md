@@ -1,6 +1,6 @@
 # Contribución
 
-El material de esta materia es **abierto**, lo cual quiere decir que cualquier persona puede usarlo para sus propios fines pedagógicos, y **colaborativo**, con lo cual contribuciones de alunnos son bienvenidas.
+El material de esta materia es **abierto**, lo cual quiere decir que cualquier persona puede usarlo para sus propios fines pedagógicos, y **colaborativo**, con lo cual contribuciones de alumnos son bienvenidas.
 Eso significa que los estudiantes también pueden ayudar a mejorarlo.
 
 Te invitamos a contribuir en cualquiera de los siguientes casos:
@@ -29,7 +29,7 @@ Un issue sirve para reportar errores, proponer mejoras, hacer preguntas sobre el
 
 :::{note} Cómo abrir un _issue_
 Podes encontrar información paso a paso sobre como abrir un issue en el siguiente [link](https://docs.github.com/es/issues/tracking-your-work-with-issues/creating-an-issue
-). Los issues se deben abrir en el repositorio asociado a la página web de este curso. Para abrir un isuee nuevo, podes ir al siguiente [link](https://github.com/facusapienza21/DM2026-Curso/issues/new).
+). Los issues se deben abrir en el repositorio asociado a la página web de este curso. Para abrir un issue nuevo, podes ir al siguiente [link](https://github.com/facusapienza21/DM2026-Curso/issues/new).
 :::
 
 :::{attention} Atención
