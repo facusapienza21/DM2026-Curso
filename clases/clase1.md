@@ -1,5 +1,5 @@
 ---
-title: Clase No1 - Introducción
+title: No1 - Introducción
 ---
 
 ## Introducción
