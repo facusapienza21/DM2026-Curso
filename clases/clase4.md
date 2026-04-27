@@ -96,6 +96,20 @@ $$
 $$
 :::
 
+:::{important} Runge-Kutta de cuarto orden (RK4)
+El método de Runge-Kutta de cuarto orden (RK4) es uno de los más populares debido a su equilibrio entre precisión y costo computacional. Para $s=4$, los coeficientes específicos son:
+$$
+\begin{aligned}
+\boldsymbol{k}_1 &= \boldsymbol{f}(\boldsymbol{u}^m, t^m) \\
+\boldsymbol{k}_2 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \boldsymbol{k}_1, t^m + \dfrac{\Delta t}{2} \right) \\
+\boldsymbol{k}_3 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \bold{k}_2, t^m + \dfrac{\Delta t}{2} \right) \\
+\boldsymbol{k}_4 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \Delta t \boldsymbol{k}_3, t^m + \Delta t \right) \\
+\boldsymbol{u}^{m+1} &= \boldsymbol{u}^m + \dfrac{\Delta t}{6} (\boldsymbol{k}_1 + 2\boldsymbol{k}_2 + 2\boldsymbol{k}_3 + \boldsymbol{k}_4)
+\end{aligned}
+$$
+Este método es de orden 4, lo que significa que el error local por paso es proporcional a $\Delta t^5$, y el error global es proporcional a $\Delta t^4$. RK4 es ampliamente utilizado en la práctica dada su convergencia en $O(\Delta t^4)$.
+:::
+
 ### Euler explícito
 
 El método numérico más conocido para la resolución de ODEs es el Euler explícito. Este método es el de orden 1 (el más simple dentro de los métodos consistentes) y puede reobtenerse como un método de [Runge-Kutta](#metodos-runge-kutta) de primer orden ($s=1$), o como un método [Multi-Step](#metodos-multi-step) con $d_1=1$ y $d_2=0$:
@@ -124,7 +138,7 @@ $$
 h_{i+1} = h_i + \tilde{g}(h_i)\Delta t_i
 $$
 
-De aquí se observa una fuerte similitud con el método de [Euler explícito](#euler-explicito), lo que motiva la idea de "pasar al continuo" y definir una NODE como la solución de la siguiente ODE:
+De aquí se observa una discretizacion de un sistema dinamico (Ver: [Euler explícito](#euler-explicito)), lo que motiva la idea de "pasar al continuo" y definir una NODE como la solución de la siguiente ODE:
 
 $$
 \dfrac{dh}{dt} = \tilde{g}(h(t))
@@ -257,9 +271,9 @@ Luego, comienza la etapa de entrenamiento. Se usa el optimizador Adam con una ta
 - `Optimisers.update` aplica el paso de Adam, devolviendo el nuevo estado del optimizador y los parámetros actualizados.
 - Se registra el valor de la pérdida en `history` para visualizar la convergencia.
 
-> **Obs:**  
+:::{note}  
 Este bloque `let` crea una copia local mutable de `nn_ps`. En Pluto, las variables son reactivas y globalmente inmutables; el bloque `let` permite modificar `nn_ps` localmente dentro del loop sin afectar el estado global del notebook.
-
+:::
 
 
 :::{bibliography}
