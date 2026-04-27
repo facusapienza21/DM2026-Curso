@@ -16,3 +16,5 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | ------------- | ------------- |
 | No1           | ...  |
 | No2           | ...  |
+| No3           | ...  |
+| No4           | [@FrCastillo](https://github.com/FrCastilloM), [@LucasGrasso](https://github.com/LucasGrasso)  |
