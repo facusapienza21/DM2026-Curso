@@ -6,6 +6,6 @@ title: No5 - Optimización
 
 **Fecha:** 22/04/2026
 
-:::{iframe} https://www.youtube.com/watch?v=SKOspQoy9N4
+:::{iframe} https://www.youtube.com/embed/SKOspQoy9N4
 :width: 100%
 :::

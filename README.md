@@ -15,6 +15,6 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | Clase         | Alumnos/as |
 | ------------- | ------------- |
 | No1           | ...  |
-| No2           | ...  |
+| No2           | Ali Martín Zynda (@alimartinza), Cecilia Bolaños (@ceciliabolanos)|
 | No3           | ...  |
 | No4           | [@FrCastillo](https://github.com/FrCastilloM), [@LucasGrasso](https://github.com/LucasGrasso)  |
