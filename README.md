@@ -15,4 +15,4 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | Clase         | Alumnos/as |
 | ------------- | ------------- |
 | No1           | ...  |
-| No2           | Ali Martín Zynda, Cecilia Bolaños |
+| No2           | Ali Martín Zynda (@alimartinza) \n Cecilia Bolaños (@ceciliabolanos)|
