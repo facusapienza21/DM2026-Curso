@@ -29,7 +29,7 @@ $$
 \dfrac{d\boldsymbol{u}}{dt} = \boldsymbol{f}_\theta(\boldsymbol{u},t)
 $$
 
-donde $\boldsymbol{f}_\theta : \mathbb{R}^N \times \R \to \mathbb{R}^N$ es una función parametrizada por un conjunto de parametros $\theta$ fijo, y $\boldsymbol{u}(t) \in \mathbb{R}^N$ es la trayectoria buscada.
+donde $\boldsymbol{f}_\theta : \mathbb{R}^N \times \mathbb{R} \to \mathbb{R}^N$ es una función parametrizada por un conjunto de parametros $\theta$ fijo, y $\boldsymbol{u}(t) \in \mathbb{R}^N$ es la trayectoria buscada.
 
 
 Existen dos grandes familias de métodos que engloban al resto:
@@ -102,7 +102,7 @@ $$
 \begin{aligned}
 \boldsymbol{k}_1 &= \boldsymbol{f}(\boldsymbol{u}^m, t^m) \\
 \boldsymbol{k}_2 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \boldsymbol{k}_1, t^m + \dfrac{\Delta t}{2} \right) \\
-\boldsymbol{k}_3 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \bold{k}_2, t^m + \dfrac{\Delta t}{2} \right) \\
+\boldsymbol{k}_3 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \boldsymbol{k}_2, t^m + \dfrac{\Delta t}{2} \right) \\
 \boldsymbol{k}_4 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \Delta t \boldsymbol{k}_3, t^m + \Delta t \right) \\
 \boldsymbol{u}^{m+1} &= \boldsymbol{u}^m + \dfrac{\Delta t}{6} (\boldsymbol{k}_1 + 2\boldsymbol{k}_2 + 2\boldsymbol{k}_3 + \boldsymbol{k}_4)
 \end{aligned}
@@ -157,7 +157,7 @@ A veces resulta necesario pre-entrenar la red neuronal que reemplaza la función
 Si tenemos una idea de la física subyacente dada por $\tilde{F}_\theta$, entonces podemos usar esta información para guiar el entrenamiento de la red neuronal optimizando primero la siguiente función de pérdida:
 
 $$
-\mathcal{L}_{pre}(\theta) = \sum_{i=1}^{N} \|\tilde{F}_\theta(X_i) - \mathrm{NN}_\theta(X_i)\|^2
+\mathcal{L}_{pre}(\theta) = \frac{1}{N} \sum_{i=1}^{N} \|\tilde{F}_\theta(X_i) - \mathrm{NN}_\theta(X_i)\|^2
 $$
 
 Esto es mucho menos costoso que optimizar la función de pérdida que se obtiene al comparar la solución de la ODE con datos observados, ya que no requiere resolver la ecuación diferencial en cada iteración del entrenamiento.
