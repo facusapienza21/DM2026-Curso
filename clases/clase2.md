@@ -99,13 +99,13 @@ $$\frac{dy}{dt} = -\beta y + \eta xy$$
 
 Para un mismo estado inicial, distintos valores de $\theta$ producen trayectorias muy distintas, así que estimar $\theta$ es parte central del problema.
 
-:::{figure} ./figuras/lv_trayectorias_tiempo.png
+:::{figure} ./figures/lv_trayectorias_tiempo.png
 :width: 100%
 :align: center
 Trayectorias temporales de conejos \(x(t)\) y lobos \(y(t)\) para un mismo estado inicial y distintos valores de \(\theta\).
 :::
 
-:::{figure} ./figuras/lv_retratos_fase.png
+:::{figure} ./figures/lv_retratos_fase.png
 :width: 75%
 :align: center
 Retratos de fase del sistema de Lotka--Volterra para distintos valores de \(\theta\).
