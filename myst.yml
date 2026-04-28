@@ -24,10 +24,12 @@ project:
         - file: clases/clase3.md
         - file: clases/clase4.md
         - file: clases/clase5.md
+        - file: clases/clase6.md
         - file: clases/clase_template.md
     - title: Projecto Final
       children:
         - file: proyecto/general_info.md
+        - file: proyecto/proyectos.md
     - file: glossario.md
     - file: referencias.md
     - file: contribucion.md

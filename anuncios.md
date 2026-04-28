@@ -1,5 +1,17 @@
 # Anuncios
 
+:::{important} 27/04/2026 - Proyecto final
+:class: dropdown
+Queridos estudiantes,
+
+Ya está disponible la información sobre el [proyecto final](proyecto/general_info.md) de la materia.
+Les recomiendo leerla con atención, especialmente las fechas límite para la asignación y validación del proyecto.
+
+Saludos,
+
+Facu
+:::
+
 :::{important} 11/04/2026 - Segunda semana
 :class: dropdown
 Queridos estudiates, 
