@@ -31,10 +31,20 @@ Salvo casos muy particulares, las soluciones a ODEs no suelen admitir soluciones
 
 :::{note} Reducción de Orden: El Oscilador Armónico
 
-Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado dada por
+Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado, puede escribirse como
+
 $$\frac{d^2x}{dt^2} + \omega^2x = F(x,t),$$
-no se presenta inicialmente en la forma estándar de una ODE de primer orden ($\dot{x} = f(x,t)$).
-Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales. La ecuación de segundo orden con condición inicial para $x$ y su derivada queda reescrita como un sistema de primer orden con condición inicial para $(x,v)$.
+
+donde $x=x(t)$ representa la posición del sistema en el tiempo $t$, $\omega > 0$ es su frecuencia natural y $F(x,t)$ representa un término de forzamiento externo.
+No se presenta inicialmente en la forma estándar de una ODE de primer orden.
+Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales. 
+Para reescribirla como un sistema de primer orden, introducimos la variable adicional
+
+$$
+v(t) = \frac{dx}{dt},
+$$
+
+que representa la velocidad. la ecuación de segundo orden con condición inicial para $x$ y su derivada queda entonces reescrita como un sistema de primer orden con condición inicial para $(x,v)$.
 
 **Conversión a sistema de primer orden.**
 Definimos la velocidad como una nueva variable de estado $v = \frac{dx}{dt}$. Esto nos permite descomponer la ecuación original en un sistema de dos ecuaciones de primer orden:
@@ -126,9 +136,13 @@ Donde:
 * $x(t_i; \theta)$: Estado del modelo dinámico.
 * $\varepsilon_i$: Ruido observacional.
 
-Una generalización muy útil: $$ z_i^{\mathrm{obs}} = h(u(t_i;\theta)) + \varepsilon_i,$$ esto permite modelar situaciones en las que no observamos directamente todo el estado del sistema, sino sólo algunas de sus componentes o combinaciones.
-
-
+> **Tip:** Observación parcial del estado:
+Una generalización muy útil del modelo observacional es
+$z_i^{\mathrm{obs}} = h(u(t_i;\theta)) + \varepsilon_i$,
+donde $h$ es una función de observación.
+Esto permite modelar situaciones en las que no observamos directamente todo el estado del sistema, sino sólo algunas de sus componentes o combinaciones.
+> 
+ 
 **Características del ruido observacional $\varepsilon_i$.**
 Ejemplos comununes incluyen:
 * **Caso estándar:** Se asume que los ruidos son independientes e idénticamente distribuidos (i.i.d.) de forma Gaussiana $\varepsilon_i \sim N(0, \sigma^2)$, con valor medio nulo y varianza constante para cada sitio muestreado. Se supone que este ruido no depende del valor de $x$, aunque no siempre es cierto.
@@ -212,28 +226,27 @@ A continuación, implementamos el modelo Lotka-Volterra en Julia.
 Nosotros vamos a contar brevemente los componentes principales de la resolución numérica.
 
 En Julia, usamos `!` en el nombre de la función para indicar que modifica sus argumentos in-place (es decir, no tenemos un `return`)
+Usamos `DifferentialEquations.jl` para definir y resolver la ODE, y `Plots.jl` para visualizar la solución.
 
 ```julia
-
-# Importación de paquetes
 using DifferentialEquations
 using Plots
 using Statistics
 using Random
-
-# Definición del sistema dinámico de Ecuaciones Diferenciales Ordinarias. La siguiente función implementa el
-# lado derecho del sistema de Lotka-Volterra. Dado el estado actual u=(x,y), el tiempo t y el vector de
-# parámetros p, calcula la derivada du/dt.
+```
+Introducimos la definición del sistema dinámico de Ecuaciones Diferenciales Ordinarias. La siguiente función implementa el lado derecho del sistema de Lotka-Volterra. Dado el estado actual u=(x,y), el tiempo t y el vector de parámetros p, calcula la derivada du/dt.
+```
 function lotka_volterra!(du, u, p, t)
     x, y = u            # x = presas, y = depredadores (esto es lo mismo que hacer u[1], u[2])
     α, γ, β, η = p      # Desempaquetamos el vector p
     du[1] = α * x - γ * x * y
     du[2] = -β * y + η * x * y
 end
-# Notar que esta función no resuelve todavía la ecuación: sólo define el campo vectorial del sistema.
+```
+Notar que esta función no resuelve todavía la ecuación: sólo define el campo vectorial del sistema.
 
-# Ahora fijamos un conjunto de parámetros, el estado inicial y el intervalo temporal en el que queremos
-# resolver la dinámica.
+Ahora fijamos un conjunto de parámetros, el estado inicial y el intervalo temporal en el que queremos resolver la dinámica.
+```
 α = 1.0     # Nacimiento de presas
 β = 0.1     # Tasa de depredación
 δ = 0.075   # Reproducción del depredador
@@ -243,26 +256,26 @@ p_true = [α, β, δ, γ]
 # (condiciones iniciales y horizonte temporal)
 u0 = [10.0, 5.0]
 tspan = (0.0, 30.0)
-
-# ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, 
-# por eso le mandamos la función, la condición inicial y un tiempo para resolver.
-prob = ODEProblem(lotka_volterra!, u0, tspan, p_true) # Acá definimos el problema matemático
-
-# Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5 -método Runge-Kutta explícito de orden 5 con estimador de orden 4- ) y cada 
-# cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
-sol = solve(prob, Tsit5(), saveat=0.1)
-# El argumento saveat=0.1 indica cada cuánto queremos guardar la solución para inspeccionarla o graficarla.
-# No necesariamente coincide con el paso interno que usa el solver para integrar la ecuación.
-
-# En sol está la solución al problema
-print(sol)
-
-# El objeto sol contiene una representación numérica de la trayectoria. Por ejemplo, sol.t guarda los tiempos
-# y sol.u los estados aproximados en esos tiempos. También podemos visualizar ambas poblaciones:
-plot(sol, xlabel="t", ylabel="Población", label=["Conejos" "Lobos"])
-
-# La figura resultante muestra las oscilaciones típicas del modelo: primero crece la población de
-# presas, luego aumenta la de depredadores, y ese aumento termina reduciendo a las presas. Más tarde, al
-# disminuir las presas, también cae la población de depredadores y el ciclo vuelve a empezar.
 ```
+ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, por eso le mandamos la función, la condición inicial y un tiempo para resolver.
+```
+prob = ODEProblem(lotka_volterra!, u0, tspan, p_true) # Acá definimos el problema matemático
+```
+Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5 -método Runge-Kutta explícito de orden 5 con estimador de orden 4-) y cada cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
+```
+sol = solve(prob, Tsit5(), saveat=0.1)
+```
+El argumento saveat=0.1 indica cada cuánto queremos guardar la solución para inspeccionarla o graficarla. No necesariamente coincide con el paso interno que usa el solver para integrar la ecuación.
+
+En sol está la solución al problema
+```
+print(sol)
+```
+> **Nota:** El objeto sol contiene una representación numérica de la trayectoria. Por ejemplo, sol.t guarda los tiempos y sol.u los estados aproximados en esos tiempos. También podemos visualizar ambas poblaciones:
+> ```
+> plot(sol, xlabel="t", ylabel="Población", label=["Conejos" "Lobos"])
+> ```
+> La figura resultante muestra las oscilaciones típicas del modelo: primero crece la población de presas, luego aumenta la de depredadores, y ese aumento termina reduciendo a las presas. Más tarde, al disminuir las presas, también cae la población de depredadores y el ciclo vuelve a empezar.
+>
+
 Este ejemplo computacional resume la lógica general de la clase: partimos de una dinámica continua escrita como ODE, la resolvemos numéricamente a partir de una condición inicial y obtenemos trayectorias que luego pueden compararse con datos observados. En un problema de inferencia, este cálculo hacia adelante se repite muchas veces dentro de un algoritmo de optimización para estimar \(\theta\). En una NODE, la diferencia es que parte o todo el campo vectorial deja de fijarse manualmente y pasa a ser aprendido a partir de los datos.
