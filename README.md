@@ -15,4 +15,4 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | Clase         | Alumnos/as |
 | ------------- | ------------- |
 | No1           | ...  |
-| No2           | Ali Martín Zynda ([@alimartinza](https://github.com/alimartinza)), Cecilia Bolaños ([@ceciliabolanos](https://github.com/ceciliabolanos))|
+| No2           | Ali Martín Zynda ([@alimartinza](https://github.com/alimartinza)), Cecilia Bolaños ([@ceciliabolanos](https://github.com/ceciliabolanos)), Manuel Matías Drescher ([@ManuDrescher](https://github.com/ManuDrescher))|
