@@ -44,15 +44,15 @@ El contenido del issue puede ser modificado por los autores en cualquier momento
 
 El proceso de creación del proyecto tiene dos fases:
 
-**Fase 1 — Aprobación del estudiante/grupo** (`Project: assigned`) — fecha límite: **06/05/2026**
+**Fase 1 — Aprobación del estudiante/grupo** (`Proyecto: asignado`) — fecha límite: **06/05/2026**
 Una vez abierto el issue, el instructor verificará que los integrantes del grupo estén correctamente registrados.
-Al aprobar el grupo, el issue recibirá la etiqueta `Project: assigned`.
+Al aprobar el grupo, el issue recibirá la etiqueta `Proyecto: asignado`.
 Esto **no** implica que el contenido del proyecto haya sido aprobado.
 
-**Fase 2 — Aprobación del contenido** (`Project: validado`) — fecha límite: **12/05/2026**
+**Fase 2 — Aprobación del contenido** (`Proyecto: validado`) — fecha límite: **12/05/2026**
 El instructor revisará la descripción del proyecto, el dataset y el método propuesto.
 En caso de ser necesario, se pedirán cambios o aclaraciones a través de comentarios en el issue.
-Una vez que el contenido sea satisfactorio, el issue recibirá la etiqueta `Project: validado`, lo que indica que el proyecto está oficialmente aprobado y los estudiantes pueden comenzar a trabajar.
+Una vez que el contenido sea satisfactorio, el issue recibirá la etiqueta `Proyecto: validado`, lo que indica que el proyecto está oficialmente aprobado y los estudiantes pueden comenzar a trabajar.
 
 ## Entrega
 
