@@ -14,7 +14,7 @@ title: No4 - Métodos numéricos
 :width: 100%
 :::
 
-Hasta ahora hablamos de NODEs y ODEs. Sabemos que hay una ecuación diferencial, pero no discutimos cómo se calculan sus soluciones en la práctica. A lo largo de esta clase abordaremos cómo se resuelven numéricamente las trayectorias $\boldsymbol{u}(t)$.
+Hasta ahora hablamos de {term}`NODE`s y {term}`ODE`s. Sabemos que hay una ecuación diferencial, pero no discutimos cómo se calculan sus soluciones en la práctica. A lo largo de esta clase abordaremos cómo se resuelven numéricamente las trayectorias $\boldsymbol{u}(t)$.
 
 Muchas de las ideas que veremos se extienden naturalmente a ecuaciones más complejas, como ecuaciones en derivadas parciales, ecuaciones estocásticas, etc., dondedonde los métodos numéricos son mas adaptados al tipo de ecuación diferencial a resolver.
 
@@ -150,7 +150,7 @@ Observemos que en esta etapa no utilizamos datos experimentales, sino datos sint
 
 > El siguiente código [03_LV_forward_UDE](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/03_LV_forward_UDE) presenta un ejemplo concreto de pre-entrenamiento aplicado al modelo de Lotka-Volterra.
 
-Una **Ecuación Diferencial Universal** o **UDE** (*Universal Differential Equation*) es una técnica que combina modelos físicos mecánicos con redes neuronales. La idea central es conservar las leyes físicas conocidas y usar una red neuronal para aprender los componentes del sistema que son desconocidos o difíciles de modelar.
+Una **Ecuación Diferencial Universal** o **{term}`UDE`** (*Universal Differential Equation*) es una técnica que combina modelos físicos mecánicos con redes neuronales. La idea central es conservar las leyes físicas conocidas y usar una red neuronal para aprender los componentes del sistema que son desconocidos o difíciles de modelar.
 
 En este ejemplo se aplica una UDE al sistema de **Lotka-Volterra** (presa-depredador). El sistema verdadero es:
 $$
