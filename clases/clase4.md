@@ -34,8 +34,8 @@ Existen dos familias de metodos numéricos para ODEs:
 - Metodos [Multi-step](#metodos-multi-step)
 - Metodos  [Runge Kutta](#metodos-runge-kutta)
 
-:::{note}
-En cualquiera de los casos, tendremos algún tipo de discretización del eje temporal. De modo que la trayectoria $\boldsymbol{u}(t)$ no estará evaluada de manera continua a cada tiempo $t$, sino que será evaluada en una grilla temporal $t_0, t_1, \ldots, t_m$. Esto da lugar a $\boldsymbol{u}_0, \boldsymbol{u}_1, \ldots, \boldsymbol{u}_m$, donde $\boldsymbol{u}(t_0) = \boldsymbol{u}_0$ es la condición inicial y $\boldsymbol{u}(t_m) = \boldsymbol{u}_m$ es la solución dada por el solver en los puntos de la grilla.
+:::{important} Discretización temporal y Soluciones
+En cualquiera de los casos, tendremos algún tipo de discretización del eje temporal. De modo que la trayectoria $\boldsymbol{u}(t)$ no estará evaluada de manera continua a cada tiempo $t$, sino que será evaluada en una grilla temporal $t_0, t_1, \ldots, t_m$. Esto da lugar a $\boldsymbol{u}_0, \boldsymbol{u}_1, \ldots, \boldsymbol{u}_m$, donde $\boldsymbol{u}(t_0) = \boldsymbol{u}_0$ es la condición inicial y $\boldsymbol{u}(t_m) = \boldsymbol{u}_m$ o bien son la solución dada por el solver en los puntos de la grilla o bien son las evaluaciones de un interpolador (solución densa), que permite ser evaluado en cualquier tiempo deseado.
 
 El paso temporal $\Delta t$ se puede fijar o determinar dinámicamente por un algoritmo, pero los métodos descritos a continuación no dependen de una forma específica de discretización temporal (pueden aplicarse tanto a pasos fijos como variables).
 :::
@@ -107,9 +107,9 @@ $$
 \boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \boldsymbol{f}(\boldsymbol{u}^m, t^m)\Delta t
 $$
 
-> **Obs 1:** Los puntos donde el solver devuelve la solución $\boldsymbol{u}^m$ no necesariamente coinciden con los tiempos donde el solver evalúa la función. Una opción es devolver un interpolador (solución densa) y evaluarlo en cualquier tiempo deseado.
-
-> **Obs 2:** Estos métodos son conocidos como *forward*: dada la ecuación, devuelven la trayectoria $\boldsymbol{u}^m$. Los métodos inversos (inverse problems) buscan, dada la solución, determinar los parámetros $\theta$. Esto es parte de lo que nos interesará resolver más adelante.
+:::{note} Metodos forward e inverse
+Estos métodos son conocidos como *forward*: dada la ecuación, devuelven la trayectoria $\boldsymbol{u}^m$. Los métodos inversos (inverse problems) buscan, dada la solución, determinar los parámetros $\theta$. Esto es parte de lo que nos interesará resolver más adelante.
+:::
 
 ## Segunda Motivación de las NODEs
 
@@ -248,7 +248,7 @@ Luego, comienza la etapa de entrenamiento. Se usa el optimizador Adam con una ta
 - `Optimisers.update` aplica el paso de Adam, devolviendo el nuevo estado del optimizador y los parámetros actualizados.
 - Se registra el valor de la pérdida en `history` para visualizar la convergencia.
 
-:::{note}  
+:::{note} Bloque `let` 
 Este bloque `let` crea una copia local mutable de `nn_ps`. En Pluto, las variables son reactivas y globalmente inmutables; el bloque `let` permite modificar `nn_ps` localmente dentro del loop sin afectar el estado global del notebook.
 :::
 
