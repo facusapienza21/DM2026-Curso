@@ -24,9 +24,9 @@ Muchas de las ideas que veremos se extienden naturalmente a ecuaciones más comp
 
 Estamos pensando que queremos resolver,
 $$
-\dfrac{du}{dt} = f_\theta(u,t)
+\dfrac{du}{dt} = f(u,t, \theta)
 $$
-donde $f_\theta : \mathbb{R}^N \times \mathbb{R} \to \mathbb{R}^N$ es una función parametrizada por un conjunto de parametros $\theta$ fijo, y $u(t) \in \mathbb{R}^N$ es la trayectoria buscada.
+donde $f_\theta : \mathbb{R}^N \times \mathbb{R} \times \mathbb{R}^p \to \mathbb{R}^N$ es una función parametrizada por un conjunto de parametros $\theta$, y $u(t) \in \mathbb{R}^N$ es la trayectoria buscada. De ahora en adelante, se considerará que $\theta$ es fijo, por lo que omitiremos su dependencia para simplificar la notación.
 
 
 Existen dos familias de metodos numéricos para ODEs:
