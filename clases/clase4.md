@@ -35,7 +35,7 @@ Existen dos familias de metodos numéricos para ODEs:
 - Metodos  [Runge Kutta](#metodos-runge-kutta)
 
 :::{important} Discretización temporal y Soluciones
-En cualquiera de los casos, tendremos algún tipo de discretización del eje temporal. De modo que la trayectoria $\boldsymbol{u}(t)$ no estará evaluada de manera continua a cada tiempo $t$, sino que será evaluada en una grilla temporal $t_0, t_1, \ldots, t_m$. Esto da lugar a $\boldsymbol{u}_0, \boldsymbol{u}_1, \ldots, \boldsymbol{u}_m$, donde $\boldsymbol{u}(t_0) = \boldsymbol{u}_0$ es la condición inicial y $\boldsymbol{u}(t_m) = \boldsymbol{u}_m$ o bien son la solución dada por el solver en los puntos de la grilla o bien son las evaluaciones de un interpolador (solución densa), que permite ser evaluado en cualquier tiempo deseado.
+En cualquiera de los casos, tendremos algún tipo de discretización del eje temporal. De modo que la trayectoria $\boldsymbol{u}(t)$ no estará evaluada de manera continua a cada tiempo $t$, sino que será evaluada en una grilla temporal $t_0, t_1, \ldots, t_m$. Esto da lugar a $\boldsymbol{u}_0, \boldsymbol{u}_1, \ldots, \boldsymbol{u}_m$, donde $\boldsymbol{u}(t_0) = \boldsymbol{u}_0$ es la condición inicial y $\boldsymbol{u}(t_m) = \boldsymbol{u}_m$ o bien son la solución dada por el solver en los puntos de la grilla o las evaluaciones de un interpolador (solución densa), que permite ser evaluado en cualquier tiempo deseado.
 
 El paso temporal $\Delta t$ se puede fijar o determinar dinámicamente por un algoritmo, pero los métodos descritos a continuación no dependen de una forma específica de discretización temporal (pueden aplicarse tanto a pasos fijos como variables).
 :::
@@ -45,17 +45,21 @@ El paso temporal $\Delta t$ se puede fijar o determinar dinámicamente por un al
 
 Los métodos Multi-Step se posicionan en un tiempo $t^m$ y calculan la solución del paso siguiente basándose en una historia de pasos anteriores, siguiendo la siguiente relación de recurrencia:
 $$
-\sum_{i=1}^{d_1} \alpha_{i} \boldsymbol{u}^{m+i} = \sum_{j=1}^{d_2} \beta_{j} \boldsymbol{f}(\boldsymbol{u}^{m-j}, t^{m-j})
+\sum_{i=0}^{d_1} \alpha_{i} \boldsymbol{u}^{m+i} = \Delta t_m \sum_{j=0}^{d_2} \beta_{j} \boldsymbol{f}(\boldsymbol{u}^{m-j}, t^{m-j})
 $$
 con $d_1, d_2 \in \mathbb{N}$ hiperparámetros del solver que determinarán la precisión del método con respecto a la resolución temporal $\Delta t$, es decir, indexan el orden del solver. El lado izquierdo de la ecuación representa la evolución hacia el futuro, mientras que el lado derecho utiliza la pendiente calculada en puntos del pasado.
 
-:::{note} Ejemplo: Adams-Bashforth
+Con $\alpha_{d_1} = 1$, los coeficientes $\alpha_0, \ldots, \alpha_{d_1-1}$ y $\beta_0, \ldots, \beta_{d_2}$ determinan el metodo.
+Si $\beta_{d_2} = 0$, el método es explícito, ya que no requiere resolver una ecuación implícita para obtener $\boldsymbol{u}^{m+1}$. En cambio, si $\beta_{d_2} \neq 0$, el método es implícito, lo que implica que para obtener $\boldsymbol{u}^{m+1}$ se debe resolver una ecuación que depende del valor de $f(\boldsymbol{u}^{m+1}, t^{m+1})$.
 
-Un caso muy simple y conocido de este tipo de métodos es el descrito por Adams-Bashforth de segundo orden:
+:::{note} Ejemplo: Adams-Bashforth (Orden 2)
+
+Un caso muy simple y conocido de este tipo de métodos es el descrito por Adams-Bashforth de segundo orden, donde $d_1, d_2 = 1$, lo que da lugar a la siguiente relación de recurrencia:
 $$
-\boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \dfrac{\Delta t}{2} \left(3 \boldsymbol{f}(\boldsymbol{u}^m, t^m) - \boldsymbol{f}(\boldsymbol{u}^{m-1}, t^{m-1}) \right)
+\boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \Delta t_m \left(\frac{3}{2} \boldsymbol{f}(\boldsymbol{u}^m, t^m) - \frac{1}{2} \boldsymbol{f}(\boldsymbol{u}^{m-1}, t^{m-1}) \right)
 $$
 Este algoritmo determina el siguiente paso $\boldsymbol{u}^{m+1}$ utilizando la información de los dos pasos anteriores. Las ventajas de este método son su bajo costo computacional, ya que solo requiere una nueva evaluación de la función $\boldsymbol{f}$ por cada paso temporal (reutilizando las evaluaciones ya calculadas de pasos previos).
+Es un método explícito.
 :::
 
 ### Métodos Runge-Kutta
