@@ -10,6 +10,7 @@
     - Neural ODEs: {cite}`chen2018neural`
     - Physics-Informed Neural Networs (PINNs): {cite}`Raissi_Perdikaris_Karniadakis_2019`
     - Universal Differential Equations (UDEs): {cite}`rackauckas2020universal`
+    - Stiff neural ordinary differential equations: {cite}`Kim_Ji_Deng_Ma_Rackauckas_2021`
 
 - Programación diferenciable
     - {cite}`Sapienza_2024`
