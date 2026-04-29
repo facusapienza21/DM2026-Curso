@@ -112,13 +112,13 @@ Para un mismo estado inicial, distintos valores de $\theta$ producen trayectoria
 :::{figure} ./figures/no2_lv_trayectorias_tiempo.png
 :width: 100%
 :align: center
-Trayectorias temporales de conejos \(x(t)\) y lobos \(y(t)\) para un mismo estado inicial y distintos valores de \(\theta\).
+Trayectorias temporales de conejos \(x(t)\) y lobos \(y(t)\) para un mismo estado inicial y distintos valores de $\theta$f.
 :::
 
 :::{figure} ./figures/no2_lv_retratos_fase.png
 :width: 75%
 :align: center
-Retratos de fase del sistema de Lotka--Volterra para distintos valores de \(\theta\).
+Retratos de fase del sistema de Lotka--Volterra para distintos valores de $\theta$.
 :::
 
 ## Inferencia estadística
@@ -140,7 +140,8 @@ Donde:
 Una generalización muy útil del modelo observacional es
 $z_i^{\mathrm{obs}} = h(u(t_i;\theta)) + \varepsilon_i$,
 donde $h$ es una función de observación.
-Esto permite modelar situaciones en las que no observamos directamente todo el estado del sistema, sino sólo algunas de sus componentes o combinaciones.:::
+Esto permite modelar situaciones en las que no observamos directamente todo el estado del sistema, sino sólo algunas de sus componentes o combinaciones.
+:::
 
 **Características del ruido observacional $\varepsilon_i$.**
 Ejemplos comununes incluyen:
@@ -234,7 +235,7 @@ using Statistics
 using Random
 ```
 Introducimos la definición del sistema dinámico de Ecuaciones Diferenciales Ordinarias. La siguiente función implementa el lado derecho del sistema de Lotka-Volterra. Dado el estado actual u=(x,y), el tiempo t y el vector de parámetros p, calcula la derivada du/dt.
-```
+```julia
 function lotka_volterra!(du, u, p, t)
     x, y = u            # x = presas, y = depredadores (esto es lo mismo que hacer u[1], u[2])
     α, γ, β, η = p      # Desempaquetamos el vector p
@@ -245,7 +246,7 @@ end
 Notar que esta función no resuelve todavía la ecuación: sólo define el campo vectorial del sistema.
 
 Ahora fijamos un conjunto de parámetros, el estado inicial y el intervalo temporal en el que queremos resolver la dinámica.
-```
+```julia
 α = 1.0     # Nacimiento de presas
 β = 0.1     # Tasa de depredación
 δ = 0.075   # Reproducción del depredador
@@ -257,24 +258,30 @@ u0 = [10.0, 5.0]
 tspan = (0.0, 30.0)
 ```
 ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, por eso le mandamos la función, la condición inicial y un tiempo para resolver.
-```
-prob = ODEProblem(lotka_volterra!, u0, tspan, p_true) # Acá definimos el problema matemático
+```julia
+prob = ODEProblem(lotka_volterra!, u0, tspan, p_true)
 ```
 Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5 -método Runge-Kutta explícito de orden 5 con estimador de orden 4-) y cada cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
-```
+```julia
 sol = solve(prob, Tsit5(), saveat=0.1)
 ```
 El argumento saveat=0.1 indica cada cuánto queremos guardar la solución para inspeccionarla o graficarla. No necesariamente coincide con el paso interno que usa el solver para integrar la ecuación.
 
 En sol está la solución al problema
-```
+```julia
 print(sol)
 ```
-> **Nota:** El objeto sol contiene una representación numérica de la trayectoria. Por ejemplo, sol.t guarda los tiempos y sol.u los estados aproximados en esos tiempos. También podemos visualizar ambas poblaciones:
-> ```
-> plot(sol, xlabel="t", ylabel="Población", label=["Conejos" "Lobos"])
-> ```
-> La figura resultante muestra las oscilaciones típicas del modelo: primero crece la población de presas, luego aumenta la de depredadores, y ese aumento termina reduciendo a las presas. Más tarde, al disminuir las presas, también cae la población de depredadores y el ciclo vuelve a empezar.
->
 
-Este ejemplo computacional resume la lógica general de la clase: partimos de una dinámica continua escrita como ODE, la resolvemos numéricamente a partir de una condición inicial y obtenemos trayectorias que luego pueden compararse con datos observados. En un problema de inferencia, este cálculo hacia adelante se repite muchas veces dentro de un algoritmo de optimización para estimar \(\theta\). En una NODE, la diferencia es que parte o todo el campo vectorial deja de fijarse manualmente y pasa a ser aprendido a partir de los datos.
+:::{tip}
+El objeto sol contiene una representación numérica de la trayectoria. Por ejemplo, sol.t guarda los tiempos y sol.u los estados aproximados en esos tiempos. También podemos visualizar ambas poblaciones:
+```julia
+plot(sol, xlabel="t", ylabel="Población", label=["Conejos" "Lobos"])
+```
+La figura resultante muestra las oscilaciones típicas del modelo: primero crece la población de presas, luego aumenta la de depredadores, y ese aumento termina reduciendo a las presas.
+Más tarde, al disminuir las presas, también cae la población de depredadores y el ciclo vuelve a empezar.
+:::
+
+
+Este ejemplo computacional resume la lógica general de la clase: partimos de una dinámica continua escrita como ODE, la resolvemos numéricamente a partir de una condición inicial y obtenemos trayectorias que luego pueden compararse con datos observados.
+En un problema de inferencia, este cálculo hacia adelante se repite muchas veces dentro de un algoritmo de optimización para estimar $\theta$.
+En una NODE, la diferencia es que parte o todo el campo vectorial deja de fijarse manualmente y pasa a ser aprendido a partir de los datos.
