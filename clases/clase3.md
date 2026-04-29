@@ -1,5 +1,5 @@
 ---
-title: Clase No3 - UDEs
+title: No3 - UDEs
 ---
 
 # Universal Differential Equations (UDEs)

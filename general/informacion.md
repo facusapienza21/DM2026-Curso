@@ -12,5 +12,6 @@
 | Duración | 8 semanas  |
 | Cantidad de clases semanales | 2 |
 | Carga horaria total | 4 horas semanales |
+| Horas de oficina | Martes 16-17hrs, Cuarto 19 DM |
 | | |
 <!-- ::: -->

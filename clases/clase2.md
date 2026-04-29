@@ -1,10 +1,7 @@
 ---
-title: Clase No2 - ODEs y NODEs
+title: No2 - ODEs y NODEs
 ---
 
-Algunos comentarios...
-
-# ODEs y NODEs
 
 **Fecha:** 13/04/2026
 
@@ -14,48 +11,288 @@ Algunos comentarios...
 
 % Incluir espacio
 
-## Ecuaciones diferenciales ordinarias (ODEs)
+Estas notas cubren la definición de Ecuaciones Diferenciales Ordinarias (ODEs), su aplicación en modelado dinámico, la conversión de otros tipos de ecuaciones a ODEs, y cómo se utilizan para la estimación de parámetros a partir de datos observacionales, culminando con la introducción a las Neural ODEs (NODEs).
 
-Un ejemplo de como escribir una {term}`ODE`:
+# Ecuaciones diferenciales ordinarias (ODEs)
+
+Las {term}`ODE`s describen la evolución de un sistema en función de una única variable independiente, típicamente el tiempo $t$.
+
+## Definición y Parámetros
+
+Una ODE queda definida de la siguiente manera:
+
+* **Variable de estado:** $x(t) \in \mathbb{R}^n$ representa el estado del sistema en el instante $t$.
+* **Dinámica:** Está determinada por una función $f$, conocida como {term}`campo vectorial <Campo vectorial>`, y un conjunto de {term}`parámetros <Parámetro>` del modelo $\theta \in \mathbb{R}^p$.
+* **Forma general:** $$\frac{dx}{dt} = f(x, t, \theta)$$
+  donde $f: \mathbb{R}^n \times \mathbb{R} \times \mathbb{R}^p \rightarrow \mathbb{R}^n$.
+* **Condición inicial:** $x(t_0) = x_0$. Define el estado de partida del sistema ({term}`condición inicial <Condición inicial>`) en el tiempo inicial $t_0$.
+
+Salvo casos muy particulares, las soluciones a ODEs no suelen admitir soluciones en forma cerrada. Por lo tanto, en la mayoria de los casos, vamos a recurrir a métodos numéricos para resolver dichas ecuaciones (ver [Clase 4](clase4.md)).
+
+:::{note} Reducción de Orden: El Oscilador Armónico
+
+Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado, puede escribirse como
+
+$$\frac{d^2x}{dt^2} + \omega^2x = F(x,t),$$
+
+donde $x=x(t)$ representa la posición del sistema en el tiempo $t$, $\omega > 0$ es su frecuencia natural y $F(x,t)$ representa un término de forzamiento externo.
+No se presenta inicialmente en la forma estándar de una ODE de primer orden.
+Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales. 
+Para reescribirla como un sistema de primer orden, introducimos la variable adicional
 
 $$
-\frac{du}{dt} = f(u, t, \theta), \quad u(t_0) = u_0
+v(t) = \frac{dx}{dt},
 $$
 
-donde $u(t) \in \mathbb{R}^n$ es el estado del sistema, $\theta$ son los {term}`parámetros <Parámetro>` del modelo, y $u_0$ es la {term}`condición inicial <Condición inicial>`. La función $f$ es el {term}`campo vectorial <Campo vectorial>`.
+que representa la velocidad. la ecuación de segundo orden con condición inicial para $x$ y su derivada queda entonces reescrita como un sistema de primer orden con condición inicial para $(x,v)$.
 
-:::{note} Ecuaciones diferenciales con derivadas de mayor orden
-...
+**Conversión a sistema de primer orden.**
+Definimos la velocidad como una nueva variable de estado $v = \frac{dx}{dt}$. Esto nos permite descomponer la ecuación original en un sistema de dos ecuaciones de primer orden:
+1. $\frac{dx}{dt} = v$
+2. $\frac{dv}{dt} = -\omega^2x + f(x,t)$
+con sus respectivas condiciones iniciales.
+
+**Representación matricial.**
+Para el vector de estado $\mathbf{u}(t) = \begin{pmatrix} x \\ v \end{pmatrix}$, el sistema se expresa de forma compacta:
+$$\frac{d}{dt}\begin{pmatrix}
+x \\ v
+\end{pmatrix} = \begin{pmatrix}
+v \\ -\omega^2x+f
+\end{pmatrix}=\begin{pmatrix} 0 & 1 \\ -\omega^2 & 0\end{pmatrix}\begin{pmatrix}x \\ v \end{pmatrix}+\begin{pmatrix}0 \\ f \end{pmatrix}$$
+
+La idea central es que siempre podemos llevar una ecuación de orden más alto a un sistema de ODEs de primer orden aumentando la dimensionalidad del vector de estado.
+:::
+:::{note} Ecuaciones Diferenciales Parciales (PDEs) y el Método de Líneas
+
+El enfoque de reducir problemas a sistemas matriciales también puede aplicarse a Ecuaciones Diferenciales Parciales (PDEs) mediante la discretización espacial, una técnica conocida como el **Método de Líneas** ({cite}`ascher2008numerical`).
+
+**Ejemplo: Ecuación de Difusión.**
+Consideremos un campo $u(x,t)$, con $x \in \mathbb{R}$, que evoluciona según la ecuación de difusión:
+$$\frac{\partial u}{\partial t} = D \frac{\partial^2 u}{\partial x^2}$$
+Para resolver este sistema, también debemos especificar condiciones iniciales ($u(x,t)=u_0(x)$) y de borde (por ejemplo, $u(0,t)=0$ y $u(1,t)=1$).
+
+**Discretización espacial.**
+Para transformar esta PDE en un sistema de {term}`ODE`s, aproximamos la segunda derivada espacial utilizando diferencias finitas centradas con un paso espacial $h$:
+$$\frac{\partial^2 u}{\partial x^2} \approx \frac{u(x+h) - 2u(x) + u(x-h)}{h^2}$$
+Al aplicar esto, la derivada espacial desaparece y nos queda una ecuación que depende únicamente de una derivada temporal, convirtiéndose efectivamente en una ODE.
+
+**Representación matricial.**
+Definiendo un vector de estado $\mathbf{u}$ con los valores discretizados, obtenemos el siguiente sistema matricial:
+
+$$\frac{d}{dt} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix} = \frac{D}{h^2} \begin{pmatrix} -2 & 1 & 0 & \dots \\ 1 & -2 & 1 & \dots \\ 0 & 1 & -2 & \dots \\ \vdots & \vdots & \vdots & \ddots \end{pmatrix} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix}$$
+
+Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal. Esta forma matricial corresponde a los nodos interiores; las condiciones de borde modifican las primeras y últimas ecuaciones, o bien se incorporan al término independiente.
+:::
+## Ejemplos
+
+**El Modelo Dinámico: Lotka-Volterra (Depredador-Presa)**
+
+Este modelo describe la dinámica temporal del estado de un sistema compuesto por dos poblaciones: conejos ($x$) y lobos ($y$).
+
+**Intuición de la dinámica:**
+* Si los conejos están solos, se reproducen exponencialmente: $\frac{dx}{dt}=\alpha x$.
+* Si los lobos están solos, mueren exponencialmente: $\frac{dy}{dt}=-\beta y$.
+* Para modelar la interacción (los lobos se comen a los conejos), se agrega un término no lineal $xy$.
+
+Las ecuaciones del modelo estan entonces dadas por
+$$\frac{dx}{dt} = \alpha x - \gamma xy$$
+$$\frac{dy}{dt} = -\beta y + \eta xy$$
+
+**Componentes del sistema:**
+* **Vector de estado:** $\begin{pmatrix} x \\ y \end{pmatrix}(t; \theta)$. Depende del tiempo $t$ y está parametrizado por $\theta$. Para cada conjunto de parámetros, las curvas temporales (trayectorias) serán diferentes. Suelen ser oscilatorias.
+* **Condición inicial:** $x(t_0)=x_0$ e $y(t_0)=y_0$.
+* **Vector de parámetros:** $\theta = \begin{pmatrix} \alpha \\ \gamma \\ \beta \\ \eta \end{pmatrix} \in \mathbb{R}^4$. El sistema es no lineal por la presencia de términos de interacción bilineales $xy$.
+    * $\alpha > 0$: tasa de crecimiento de conejos.
+    * $\gamma > 0$: tasa de depredación.
+    * $\beta > 0$: tasa de mortalidad de lobos.
+    * $\eta > 0$: tasa de crecimiento de lobos por interacción.
+
+Para un mismo estado inicial, distintos valores de $\theta$ producen trayectorias muy distintas, así que estimar $\theta$ es parte central del problema.
+
+:::{figure} ./figures/no2_lv_trayectorias_tiempo.png
+:width: 100%
+:align: center
+Trayectorias temporales de conejos \(x(t)\) y lobos \(y(t)\) para un mismo estado inicial y distintos valores de $\theta$f.
 :::
 
-:::{note} Ecuaciones diferenciales en derivadas parciales
-...
+:::{figure} ./figures/no2_lv_retratos_fase.png
+:width: 75%
+:align: center
+Retratos de fase del sistema de Lotka--Volterra para distintos valores de $\theta$.
 :::
-
-### Ejemplos
-
-% Lotka-Volterra
 
 ## Inferencia estadística
 
-% Modelo para el estado, modelo para el ruido
-% Errores gaussianos
-% Ajuste de trayectorias (trajectory matching)
+En la realidad, si uno tuviera conocimiento absoluto de la dinámica, conocería la trayectoria perfecta.
+Sin embargo, nunca se observan estas trayectorias puras.
+En su lugar, se observan datos, usualmente en tiempos discretos, que se asemejan a la trayectoria subyacente, pero posiblemente contaminados con ruido aleatorio.
+
+**Ecuación del modelo observacional.**
+Vamos a considerar un modelo para los datos de la forma
+$$x_i^{\text{obs}} = x(t_i; \theta) + \varepsilon_i$$
+
+Donde:
+* $x_i^{\text{obs}}$: Observación en el tiempo $t_i$.
+* $x(t_i; \theta)$: Estado del modelo dinámico.
+* $\varepsilon_i$: Ruido observacional.
+
+:::{tip} Observación parcial del estado
+Una generalización muy útil del modelo observacional es
+$z_i^{\mathrm{obs}} = h(u(t_i;\theta)) + \varepsilon_i$,
+donde $h$ es una función de observación.
+Esto permite modelar situaciones en las que no observamos directamente todo el estado del sistema, sino sólo algunas de sus componentes o combinaciones.
+:::
+
+**Características del ruido observacional $\varepsilon_i$.**
+Ejemplos comununes incluyen:
+* **Caso estándar:** Se asume que los ruidos son independientes e idénticamente distribuidos (i.i.d.) de forma Gaussiana $\varepsilon_i \sim N(0, \sigma^2)$, con valor medio nulo y varianza constante para cada sitio muestreado. Se supone que este ruido no depende del valor de $x$, aunque no siempre es cierto.
+* **Ruido correlacionado:** Común en series de tiempo, donde la correlación entre dos errores es distinta de cero: $\mathbb{E}[\varepsilon_i \varepsilon_j] \neq 0$ para $i \neq j$.
+    * *Nota estadística:* Si dos distribuciones son Gaussianas y tienen correlación $0$, son independientes. Si no son Gaussianas, tener correlación $0$ no implica independencia.
+
+**Ajuste de Trayectorias**
+
+El problema central es: dadas las observaciones $x_i^{\text{obs}}$ e $y_i^{\text{obs}}$, ¿cómo estimamos los parámetros $\theta$ que mejor describen la dinámica subyacente?
+El objetivo es convertir esto en un problema de optimización, buscando minimizar una función de costo $\mathcal{L}(\theta; \text{DATOS})$ que compare las observaciones reales con las trayectorias generadas por el modelo $x(t; \theta)$.
+Esto se va a realizar mediante el método de cuadrádos mínimos no lineales, el cual en el contexto de este curso llamaremos {term}`ajuste de trayectorias <Ajuste de trayectorias>` (_trajectory matching_) {cite}`ramsay2017dynamic`:
+
+**Ajuste de Trayectorias:**
+A diferencia del fiteo lineal de una recta, acá se compara con una función que depende de $\theta$ de manera no trivial.
+$$\min_{\theta} \sum_{i=1}^{N} (x_i^{\text{obs}} - x(t_i; \theta))^2$$
+Más adelante veremos que minimizar el cuadrado de los errores asume inherentemente un ruido de naturaleza Gaussiana.
 
 ### Ejemplo (continuado)
 
-% Como se ve esto en el caso del sistema Lotka-Volterra?
+**Inferencia en el sistema Lotka-Volterra:**
+Si salimos al campo y medimos las poblaciones de presas ($x_i^{\text{obs}}$) y depredadores ($y_i^{\text{obs}}$) a lo largo del tiempo, nuestra función de costo (o pérdida) a minimizar será:
 
+$$
+\min_{\theta} \mathcal{L}(\theta) = \sum_{i=1}^{N} \left[ (x_i^{\text{obs}} - x(t_i; \theta))^2 + (y_i^{\text{obs}} - y(t_i; \theta))^2 \right]
+$$
 
-## Ecuaciones diferenciales ordinarias neuronales (NODEs)
+Un optimizador resolverá numéricamente las {term}`ODE`s de Lotka-Volterra en cada iteración, ajustando sistemáticamente el vector $\theta = (\alpha, \gamma, \beta, \eta)^\top \in \mathbb{R}^4$ hasta que la trayectoria predicha pase lo más cerca posible de nuestros datos ruidosos.
 
-Las {term}`NODE`s fueron introducidas por {cite}`chen2018neural` ...
+# Ecuaciones diferenciales ordinarias neuronales (NODEs)
 
-### Ejemplo (implementación computacional)
+Las **Neural Ordinary Differential Equations (NODEs)**, introducidas formalmente por {cite}`chen2018neural`, representan un cambio de paradigma al fusionar el aprendizaje profundo con los sistemas dinámicos continuos.
 
-En Myst, podemos incluir codigo!
+:::{note} Motivación: Generalización de Interacciones
+¿Qué ocurre si la dinámica es más compleja y desconocemos la forma exacta de la interacción entre especies? Tradicionalmente, se puede usar un diccionario de funciones para parametrizar las interacciones como combinaciones lineales. Sin embargo, el _enfoque de redes neuronales profundas_ nos permite ir más allá. Por ejemplo, asumiendo un modelo parcial:
+$$
+\frac{dx}{dt} = \alpha x - f(x,y)
+$$
+$$
+\frac{dy}{dt} = -\beta y + g(x,y)
+$$
+
+Podemos reemplazar las funciones desconocidas $f(x,y)$ y $g(x,y)$ por transformaciones no lineales parametrizadas por matrices de pesos, buscando cubrir el espacio de funciones sin imponer una forma matemática rígida.
+:::
+
+### 1. Generalización de Modelos Clásicos
+
+Una forma intuitiva de entender las NODEs es viéndolas como una generalización de modelos dinámicos preexistentes.
+Por ejemplo, en el modelo de Lotka-Volterra, podemos reemplazar o aumentar los términos de interacción utilizando redes neuronales:
+
+$$
+\frac{dx}{dt} = \alpha x - \text{NN}_1(x, y)
+$$
+$$
+\frac{dy}{dt} = -\beta y + \text{NN}_2(x, y)
+$$
+
+En este caso, los parámetros internos de $\text{NN}_1$ y $\text{NN}_2$ (pesos y sesgos) pasan a formar parte del vector global de parámetros a estimar, $\theta$, potencialmente junto con $\alpha$ y $\beta$.
+
+### 2. Definición Formal
+
+Si generalizamos por completo (sin suponer ningún término de crecimiento o muerte específico predefinido), obtenemos una NODE.
+En su forma más abstracta, una NODE parametriza la derivada del estado continuo de un sistema directamente a través de una red neuronal:
+
+$$
+\frac{du}{dt} = \text{NN}(u; \theta)
+$$
+
+Donde $u \in \mathbb{R}^n$ representa el estado del sistema en un tiempo dado, y $\theta$ engloba todos los parámetros entrenables de la red neuronal.
+
+### 3. Propiedades y Consideraciones Clave
+
+* **Aproximación universal:** Al estar basadas en redes neuronales, las NODEs heredan la capacidad de ser aproximadores universales {cite}`goodfellow2016deep`. Tienen la flexibilidad necesaria para aprender y representar una gama casi ilimitada de dinámicas continuas a partir de datos empíricos.
+* **Intratabilidad numérica:** *Advertencia:* Al llevar el modelo a este nivel de complejidad no lineal, un problema frecuente en la optimización es caer en regiones del espacio de parámetros donde el sistema se vuelve matemáticamente inestable o demasiado costoso de resolver para los *solvers* de las ecuaciones diferenciales.
+
+# Implementación Computacional en Julia
+
+A continuación, implementamos el modelo Lotka-Volterra en Julia.
+
+:::{note}
+El código completo de este ejemplo se puede referenciar acá: [01_LV_forward](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/01_LV_forward).
+Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con ruido y vemos cómo cambia el paisaje de la función de pérdida (*Loss Landscape*).
+Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
+:::
+
+:::{tip} Ecuaciones diferenciales en Julia
+Julia cuenta con un gran ecosistema para la resolución de ecuaciones diferenciales: `DifferentialEquations.jl` {cite}`Rackauckas_Nie_2016`.
+Incluye solvers para ODEs, SDEs, PDEs, ecuaciones con retardo, y mucho más, con una interfaz unificada y altísimo rendimiento.
+La documentación completa está disponible en [docs.sciml.ai](https://docs.sciml.ai/DiffEqDocs/stable/).
+Los métodos numéricos detrás de estos solvers se introducen en la [Clase 4](clase4.md).
+:::
+
+Nosotros vamos a contar brevemente los componentes principales de la resolución numérica.
+
+En Julia, usamos `!` en el nombre de la función para indicar que modifica sus argumentos in-place (es decir, no tenemos un `return`)
+Usamos `DifferentialEquations.jl` para definir y resolver la ODE, y `Plots.jl` para visualizar la solución.
 
 ```julia
 using DifferentialEquations
 using Plots
+using Statistics
+using Random
 ```
+Introducimos la definición del sistema dinámico de Ecuaciones Diferenciales Ordinarias. La siguiente función implementa el lado derecho del sistema de Lotka-Volterra. Dado el estado actual u=(x,y), el tiempo t y el vector de parámetros p, calcula la derivada du/dt.
+```julia
+function lotka_volterra!(du, u, p, t)
+    x, y = u            # x = presas, y = depredadores (esto es lo mismo que hacer u[1], u[2])
+    α, γ, β, η = p      # Desempaquetamos el vector p
+    du[1] = α * x - γ * x * y
+    du[2] = -β * y + η * x * y
+end
+```
+Notar que esta función no resuelve todavía la ecuación: sólo define el campo vectorial del sistema.
+
+Ahora fijamos un conjunto de parámetros, el estado inicial y el intervalo temporal en el que queremos resolver la dinámica.
+```julia
+α = 1.0     # Nacimiento de presas
+β = 0.1     # Tasa de depredación
+δ = 0.075   # Reproducción del depredador
+γ = 1.5     # Muerte del depredador
+p_true = [α, β, δ, γ]
+
+# (condiciones iniciales y horizonte temporal)
+u0 = [10.0, 5.0]
+tspan = (0.0, 30.0)
+```
+ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, por eso le mandamos la función, la condición inicial y un tiempo para resolver.
+```julia
+prob = ODEProblem(lotka_volterra!, u0, tspan, p_true)
+```
+Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5 -método Runge-Kutta explícito de orden 5 con estimador de orden 4-) y cada cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
+```julia
+sol = solve(prob, Tsit5(), saveat=0.1)
+```
+El argumento saveat=0.1 indica cada cuánto queremos guardar la solución para inspeccionarla o graficarla. No necesariamente coincide con el paso interno que usa el solver para integrar la ecuación.
+
+En sol está la solución al problema
+```julia
+print(sol)
+```
+
+:::{tip}
+El objeto sol contiene una representación numérica de la trayectoria. Por ejemplo, sol.t guarda los tiempos y sol.u los estados aproximados en esos tiempos. También podemos visualizar ambas poblaciones:
+```julia
+plot(sol, xlabel="t", ylabel="Población", label=["Conejos" "Lobos"])
+```
+La figura resultante muestra las oscilaciones típicas del modelo: primero crece la población de presas, luego aumenta la de depredadores, y ese aumento termina reduciendo a las presas.
+Más tarde, al disminuir las presas, también cae la población de depredadores y el ciclo vuelve a empezar.
+:::
+
+
+Este ejemplo computacional resume la lógica general de la clase: partimos de una dinámica continua escrita como ODE, la resolvemos numéricamente a partir de una condición inicial y obtenemos trayectorias que luego pueden compararse con datos observados.
+En un problema de inferencia, este cálculo hacia adelante se repite muchas veces dentro de un algoritmo de optimización para estimar $\theta$.
+En una NODE, la diferencia es que parte o todo el campo vectorial deja de fijarse manualmente y pasa a ser aprendido a partir de los datos.

@@ -1,8 +1,8 @@
 ---
-title: Clase No1 - Introducción y Motivación
+title: No1 - Introducción
 ---
 
-## Introducción y Motivación
+## Introducción
 
 **Fecha:** 08/04/2026
 
