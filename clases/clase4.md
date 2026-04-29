@@ -14,7 +14,7 @@ title: No4 - Métodos numéricos
 :width: 100%
 :::
 
-Hasta ahora hablamos de {term}`NODE`s y {term}`ODE`s. Sabemos que hay una ecuación diferencial, pero no discutimos cómo se calculan sus soluciones en la práctica. A lo largo de esta clase abordaremos cómo se resuelven numéricamente las trayectorias $\boldsymbol{u}(t)$.
+Hasta ahora hablamos de {term}`NODE`s y {term}`ODE`s. Sabemos que hay una ecuación diferencial, pero no discutimos cómo se calculan sus soluciones en la práctica. A lo largo de esta clase abordaremos cómo se resuelven numéricamente las trayectorias $u(t)$.
 
 Muchas de las ideas que veremos se extienden naturalmente a ecuaciones más complejas, como ecuaciones en derivadas parciales, ecuaciones estocásticas, etc., dondedonde los métodos numéricos son mas adaptados al tipo de ecuación diferencial a resolver.
 
@@ -24,9 +24,9 @@ Muchas de las ideas que veremos se extienden naturalmente a ecuaciones más comp
 
 Estamos pensando que queremos resolver,
 $$
-\dfrac{d\boldsymbol{u}}{dt} = \boldsymbol{f}_\theta(\boldsymbol{u},t)
+\dfrac{du}{dt} = f_\theta(u,t)
 $$
-donde $\boldsymbol{f}_\theta : \mathbb{R}^N \times \mathbb{R} \to \mathbb{R}^N$ es una función parametrizada por un conjunto de parametros $\theta$ fijo, y $\boldsymbol{u}(t) \in \mathbb{R}^N$ es la trayectoria buscada.
+donde $f_\theta : \mathbb{R}^N \times \mathbb{R} \to \mathbb{R}^N$ es una función parametrizada por un conjunto de parametros $\theta$ fijo, y $u(t) \in \mathbb{R}^N$ es la trayectoria buscada.
 
 
 Existen dos familias de metodos numéricos para ODEs:
@@ -35,7 +35,7 @@ Existen dos familias de metodos numéricos para ODEs:
 - Metodos  [Runge Kutta](#metodos-runge-kutta)
 
 :::{important} Discretización temporal y Soluciones
-En cualquiera de los casos, tendremos algún tipo de discretización del eje temporal. De modo que la trayectoria $\boldsymbol{u}(t)$ no estará evaluada de manera continua a cada tiempo $t$, sino que será evaluada en una grilla temporal $t_0, t_1, \ldots, t_m$. Esto da lugar a $\boldsymbol{u}_0, \boldsymbol{u}_1, \ldots, \boldsymbol{u}_m$, donde $\boldsymbol{u}(t_0) = \boldsymbol{u}_0$ es la condición inicial y $\boldsymbol{u}(t_m) = \boldsymbol{u}_m$ o bien son la solución dada por el solver en los puntos de la grilla o las evaluaciones de un interpolador (solución densa), que permite ser evaluado en cualquier tiempo deseado.
+En cualquiera de los casos, tendremos algún tipo de discretización del eje temporal. De modo que la trayectoria $u(t)$ no estará evaluada de manera continua a cada tiempo $t$, sino que será evaluada en una grilla temporal $t_0, t_1, \ldots, t_m$. Esto da lugar a $u_0, u_1, \ldots, u_m$, donde $u(t_0) = u_0$ es la condición inicial y $u(t_m) = u_m$ o bien son la solución dada por el solver en los puntos de la grilla o las evaluaciones de un interpolador (solución densa), que permite ser evaluado en cualquier tiempo deseado.
 
 El paso temporal $\Delta t$ se puede fijar o determinar dinámicamente por un algoritmo, pero los métodos descritos a continuación no dependen de una forma específica de discretización temporal (pueden aplicarse tanto a pasos fijos como variables).
 :::
@@ -45,47 +45,47 @@ El paso temporal $\Delta t$ se puede fijar o determinar dinámicamente por un al
 
 Los métodos Multi-Step se posicionan en un tiempo $t^m$ y calculan la solución del paso siguiente basándose en una historia de pasos anteriores, siguiendo la siguiente relación de recurrencia:
 $$
-\sum_{i=0}^{d_1} \alpha_{i} \boldsymbol{u}^{m+i} = \Delta t_m \sum_{j=0}^{d_2} \beta_{j} \boldsymbol{f}(\boldsymbol{u}^{m-j}, t^{m-j})
+\sum_{i=0}^{d_1} \alpha_{i} u^{m+i} = \Delta t_m \sum_{j=0}^{d_2} \beta_{j} f(u^{m-j}, t^{m-j})
 $$
 con $d_1, d_2 \in \mathbb{N}$ hiperparámetros del solver que determinarán la precisión del método con respecto a la resolución temporal $\Delta t$, es decir, indexan el orden del solver. El lado izquierdo de la ecuación representa la evolución hacia el futuro, mientras que el lado derecho utiliza la pendiente calculada en puntos del pasado.
 
 Con $\alpha_{d_1} = 1$, los coeficientes $\alpha_0, \ldots, \alpha_{d_1-1}$ y $\beta_0, \ldots, \beta_{d_2}$ determinan el metodo.
-Si $\beta_{d_2} = 0$, el método es explícito, ya que no requiere resolver una ecuación implícita para obtener $\boldsymbol{u}^{m+1}$. En cambio, si $\beta_{d_2} \neq 0$, el método es implícito, lo que implica que para obtener $\boldsymbol{u}^{m+1}$ se debe resolver una ecuación que depende del valor de $f(\boldsymbol{u}^{m+1}, t^{m+1})$.
+Si $\beta_{d_2} = 0$, el método es explícito, ya que no requiere resolver una ecuación implícita para obtener $u^{m+1}$. En cambio, si $\beta_{d_2} \neq 0$, el método es implícito, lo que implica que para obtener $u^{m+1}$ se debe resolver una ecuación que depende del valor de $f(u^{m+1}, t^{m+1})$.
 
 :::{note} Ejemplo: Adams-Bashforth (Orden 2)
 
 Un caso muy simple y conocido de este tipo de métodos es el descrito por Adams-Bashforth de segundo orden, donde $d_1, d_2 = 1$, lo que da lugar a la siguiente relación de recurrencia:
 $$
-\boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \Delta t_m \left(\frac{3}{2} \boldsymbol{f}(\boldsymbol{u}^m, t^m) - \frac{1}{2} \boldsymbol{f}(\boldsymbol{u}^{m-1}, t^{m-1}) \right)
+u^{m+1} = u^m + \Delta t_m \left(\frac{3}{2} f(u^m, t^m) - \frac{1}{2} f(u^{m-1}, t^{m-1}) \right)
 $$
-Este algoritmo determina el siguiente paso $\boldsymbol{u}^{m+1}$ utilizando la información de los dos pasos anteriores. Las ventajas de este método son su bajo costo computacional, ya que solo requiere una nueva evaluación de la función $\boldsymbol{f}$ por cada paso temporal (reutilizando las evaluaciones ya calculadas de pasos previos).
+Este algoritmo determina el siguiente paso $u^{m+1}$ utilizando la información de los dos pasos anteriores. Las ventajas de este método son su bajo costo computacional, ya que solo requiere una nueva evaluación de la función $f$ por cada paso temporal (reutilizando las evaluaciones ya calculadas de pasos previos).
 Es un método explícito.
 :::
 
 ### Métodos Runge-Kutta
 
-Los métodos de Runge-Kutta se basan en aproximar la solución evaluando la función $\boldsymbol{f}$ en distintos puntos intermedios dentro del paso temporal.
+Los métodos de Runge-Kutta se basan en aproximar la solución evaluando la función $f$ en distintos puntos intermedios dentro del paso temporal.
 $$
-\boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \sum_{i=1}^{s} b_i \boldsymbol{k}_i 
+u^{m+1} = u^m + \sum_{i=1}^{s} b_i k_i 
 $$
 donde $b_i$ son coeficientes, $s \in \mathbb{N}$ son las etapas, y
 $$
-\boldsymbol{k}_i = \boldsymbol{f}\left(\boldsymbol{u}^m + \sum_{j=1}^{s} a_{ij} \boldsymbol{k}_j, t^m + c_i \Delta t \right)
+k_i = f\left(u^m + \sum_{j=1}^{s} a_{ij} k_j, t^m + c_i \Delta t \right)
 $$
-con $a_{ij}$ y $c_i$ hiperparámetros del solver. La idea de este algoritmo es no evaluar $\boldsymbol{f}$ únicamente en $\boldsymbol{u}^m$, sino aproximar mejor la dinámica evaluándola en puntos intermedios dentro del intervalo temporal $[t^m, t^{m+1}]$. Esto se logra construyendo una combinación de pendientes $\boldsymbol{k}_i$ que capturan mejor la curvatura de la trayectoria.
+con $a_{ij}$ y $c_i$ hiperparámetros del solver. La idea de este algoritmo es no evaluar $f$ únicamente en $u^m$, sino aproximar mejor la dinámica evaluándola en puntos intermedios dentro del intervalo temporal $[t^m, t^{m+1}]$. Esto se logra construyendo una combinación de pendientes $k_i$ que capturan mejor la curvatura de la trayectoria.
 
 :::{note} Ejemplo: Método del punto medio
 
 Especificando para $s=2$ se recupera el conocido método de punto medio:
 
 $$
-\boldsymbol{k}_1 = \boldsymbol{f}(\boldsymbol{u}^m, t^m)
+k_1 = f(u^m, t^m)
 $$
 $$
-\boldsymbol{k}_2 = \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \boldsymbol{k}_1, t^m + \dfrac{\Delta t}{2} \right)
+k_2 = f\left(u^m + \dfrac{\Delta t}{2} k_1, t^m + \dfrac{\Delta t}{2} \right)
 $$
 $$
-\boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \Delta t \boldsymbol{k}_2
+u^{m+1} = u^m + \Delta t k_2
 $$
 :::
 
@@ -93,11 +93,11 @@ $$
 El método de Runge-Kutta de cuarto orden (RK4) es uno de los más populares debido a su equilibrio entre precisión y costo computacional. Para $s=4$, los coeficientes específicos son:
 $$
 \begin{aligned}
-\boldsymbol{k}_1 &= \boldsymbol{f}(\boldsymbol{u}^m, t^m) \\
-\boldsymbol{k}_2 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \boldsymbol{k}_1, t^m + \dfrac{\Delta t}{2} \right) \\
-\boldsymbol{k}_3 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \dfrac{\Delta t}{2} \boldsymbol{k}_2, t^m + \dfrac{\Delta t}{2} \right) \\
-\boldsymbol{k}_4 &= \boldsymbol{f}\left(\boldsymbol{u}^m + \Delta t \boldsymbol{k}_3, t^m + \Delta t \right) \\
-\boldsymbol{u}^{m+1} &= \boldsymbol{u}^m + \dfrac{\Delta t}{6} (\boldsymbol{k}_1 + 2\boldsymbol{k}_2 + 2\boldsymbol{k}_3 + \boldsymbol{k}_4)
+k_1 &= f(u^m, t^m) \\
+k_2 &= f\left(u^m + \dfrac{\Delta t}{2} k_1, t^m + \dfrac{\Delta t}{2} \right) \\
+k_3 &= f\left(u^m + \dfrac{\Delta t}{2} k_2, t^m + \dfrac{\Delta t}{2} \right) \\
+k_4 &= f\left(u^m + \Delta t k_3, t^m + \Delta t \right) \\
+u^{m+1} &= u^m + \dfrac{\Delta t}{6} (k_1 + 2k_2 + 2k_3 + k_4)
 \end{aligned}
 $$
 Este método es de orden 4, lo que significa que el error local por paso es proporcional a $\Delta t^5$, y el error global es proporcional a $\Delta t^4$. RK4 es ampliamente utilizado en la práctica dada su convergencia en $O(\Delta t^4)$.
@@ -108,11 +108,11 @@ Este método es de orden 4, lo que significa que el error local por paso es prop
 El método numérico más conocido para la resolución de ODEs es el Euler explícito. Este método es el de orden 1 (el más simple dentro de los métodos consistentes) y puede reobtenerse como un método de [Runge-Kutta](#metodos-runge-kutta) de primer orden ($s=1$), o como un método [Multi-Step](#metodos-multi-step) con $d_1=1$ y $d_2=0$:
 
 $$
-\boldsymbol{u}^{m+1} = \boldsymbol{u}^m + \boldsymbol{f}(\boldsymbol{u}^m, t^m)\Delta t
+u^{m+1} = u^m + f(u^m, t^m)\Delta t
 $$
 
 :::{note} Metodos forward e inverse
-Estos métodos son conocidos como *forward*: dada la ecuación, devuelven la trayectoria $\boldsymbol{u}^m$. Los métodos inversos (inverse problems) buscan, dada la solución, determinar los parámetros $\theta$. Esto es parte de lo que nos interesará resolver más adelante.
+Estos métodos son conocidos como *forward*: dada la ecuación, devuelven la trayectoria $u^m$. Los métodos inversos (inverse problems) buscan, dada la solución, determinar los parámetros $\theta$. Esto es parte de lo que nos interesará resolver más adelante.
 :::
 
 ## Segunda Motivación de las NODEs
