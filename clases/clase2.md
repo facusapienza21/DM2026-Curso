@@ -221,7 +221,11 @@ Donde $u \in \mathbb{R}^n$ representa el estado del sistema en un tiempo dado, y
 
 A continuación, implementamos el modelo Lotka-Volterra en Julia.
 
-> **Nota:** El código completo de este ejemplo se puede referenciar acá: [01_LV_forward](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/01_LV_forward). Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con ruido y vemos cómo cambia el paisaje de la función de pérdida (*Loss Landscape*). Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
+:::{note}
+El código completo de este ejemplo se puede referenciar acá: [01_LV_forward](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/01_LV_forward).
+Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con ruido y vemos cómo cambia el paisaje de la función de pérdida (*Loss Landscape*).
+Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
+:::
 
 Nosotros vamos a contar brevemente los componentes principales de la resolución numérica.
 
