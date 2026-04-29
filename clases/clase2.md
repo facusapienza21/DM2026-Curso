@@ -227,6 +227,13 @@ Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con
 Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
 :::
 
+:::{tip} Ecuaciones diferenciales en Julia
+Julia cuenta con un gran ecosistema para la resolución de ecuaciones diferenciales: `DifferentialEquations.jl` {cite}`Rackauckas_Nie_2016`.
+Incluye solvers para ODEs, SDEs, PDEs, ecuaciones con retardo, y mucho más, con una interfaz unificada y altísimo rendimiento.
+La documentación completa está disponible en [docs.sciml.ai](https://docs.sciml.ai/DiffEqDocs/stable/).
+Los métodos numéricos detrás de estos solvers se introducen en la [Clase 4](clase4.md).
+:::
+
 Nosotros vamos a contar brevemente los componentes principales de la resolución numérica.
 
 En Julia, usamos `!` en el nombre de la función para indicar que modifica sus argumentos in-place (es decir, no tenemos un `return`)
