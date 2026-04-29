@@ -27,14 +27,24 @@ Una ODE queda definida de la siguiente manera:
   donde $f: \mathbb{R}^n \times \mathbb{R} \times \mathbb{R}^p \rightarrow \mathbb{R}^n$.
 * **Condición inicial:** $x(t_0) = x_0$. Define el estado de partida del sistema ({term}`condición inicial <Condición inicial>`) en el tiempo inicial $t_0$.
 
-Salvo casos muy particulares, las soluciones a ODEs no son analiticias. En la mayoria de los casos, vamos a recurrir a métodos numéricos para resolver dichas ecuaciones (ver [Clase 4](clase4.md)).
+Salvo casos muy particulares, las soluciones a ODEs no suelen admitir soluciones en forma cerrada. Por lo tanto, en la mayoria de los casos, vamos a recurrir a métodos numéricos para resolver dichas ecuaciones (ver [Clase 4](clase4.md)).
 
 :::{note} Reducción de Orden: El Oscilador Armónico
 
-Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado dada por
-$$\frac{d^2x}{dt^2} + \omega^2x = f(x,t),$$
-no se presenta inicialmente en la forma estándar de una ODE de primer orden ($\dot{x} = f(x,t)$).
-Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales.
+Una ecuación diferencial de segundo orden, como la del oscilador armónico forzado, puede escribirse como
+
+$$\frac{d^2x}{dt^2} + \omega^2x = F(x,t),$$
+
+donde $x=x(t)$ representa la posición del sistema en el tiempo $t$, $\omega > 0$ es su frecuencia natural y $F(x,t)$ representa un término de forzamiento externo.
+No se presenta inicialmente en la forma estándar de una ODE de primer orden.
+Sin embargo, es posible transformar cualquier ecuación de orden superior en un sistema de {term}`ODE`s de primer orden mediante la definición de variables de estado adicionales. 
+Para reescribirla como un sistema de primer orden, introducimos la variable adicional
+
+$$
+v(t) = \frac{dx}{dt},
+$$
+
+que representa la velocidad. la ecuación de segundo orden con condición inicial para $x$ y su derivada queda entonces reescrita como un sistema de primer orden con condición inicial para $(x,v)$.
 
 **Conversión a sistema de primer orden.**
 Definimos la velocidad como una nueva variable de estado $v = \frac{dx}{dt}$. Esto nos permite descomponer la ecuación original en un sistema de dos ecuaciones de primer orden:
@@ -71,7 +81,7 @@ Definiendo un vector de estado $\mathbf{u}$ con los valores discretizados, obten
 
 $$\frac{d}{dt} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix} = \frac{D}{h^2} \begin{pmatrix} -2 & 1 & 0 & \dots \\ 1 & -2 & 1 & \dots \\ 0 & 1 & -2 & \dots \\ \vdots & \vdots & \vdots & \ddots \end{pmatrix} \begin{pmatrix} u_1 \\ u_2 \\ \vdots \\ u_n \end{pmatrix}$$
 
-Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal.
+Donde la matriz de coeficientes es tridiagonal, con $-2$ en la diagonal principal y $1$ en la sub y supra diagonal. Esta forma matricial corresponde a los nodos interiores; las condiciones de borde modifican las primeras y últimas ecuaciones, o bien se incorporan al término independiente.
 :::
 ## Ejemplos
 
@@ -91,11 +101,25 @@ $$\frac{dy}{dt} = -\beta y + \eta xy$$
 **Componentes del sistema:**
 * **Vector de estado:** $\begin{pmatrix} x \\ y \end{pmatrix}(t; \theta)$. Depende del tiempo $t$ y está parametrizado por $\theta$. Para cada conjunto de parámetros, las curvas temporales (trayectorias) serán diferentes. Suelen ser oscilatorias.
 * **Condición inicial:** $x(t_0)=x_0$ e $y(t_0)=y_0$.
-* **Vector de parámetros:** $\theta = \begin{pmatrix} \alpha \\ \gamma \\ \beta \\ \eta \end{pmatrix} \in \mathbb{R}^4$. Como hay 4 parámetros y términos cruzados, el sistema es no lineal.
+* **Vector de parámetros:** $\theta = \begin{pmatrix} \alpha \\ \gamma \\ \beta \\ \eta \end{pmatrix} \in \mathbb{R}^4$. El sistema es no lineal por la presencia de términos de interacción bilineales $xy$.
     * $\alpha > 0$: tasa de crecimiento de conejos.
     * $\gamma > 0$: tasa de depredación.
     * $\beta > 0$: tasa de mortalidad de lobos.
     * $\eta > 0$: tasa de crecimiento de lobos por interacción.
+
+Para un mismo estado inicial, distintos valores de $\theta$ producen trayectorias muy distintas, así que estimar $\theta$ es parte central del problema.
+
+:::{figure} ./figures/no2_lv_trayectorias_tiempo.png
+:width: 100%
+:align: center
+Trayectorias temporales de conejos \(x(t)\) y lobos \(y(t)\) para un mismo estado inicial y distintos valores de $\theta$f.
+:::
+
+:::{figure} ./figures/no2_lv_retratos_fase.png
+:width: 75%
+:align: center
+Retratos de fase del sistema de Lotka--Volterra para distintos valores de $\theta$.
+:::
 
 ## Inferencia estadística
 
@@ -106,15 +130,23 @@ En su lugar, se observan datos, usualmente en tiempos discretos, que se asemejan
 **Ecuación del modelo observacional.**
 Vamos a considerar un modelo para los datos de la forma
 $$x_i^{\text{obs}} = x(t_i; \theta) + \varepsilon_i$$
+
 Donde:
 * $x_i^{\text{obs}}$: Observación en el tiempo $t_i$.
 * $x(t_i; \theta)$: Estado del modelo dinámico.
 * $\varepsilon_i$: Ruido observacional.
 
+:::{tip} Observación parcial del estado
+Una generalización muy útil del modelo observacional es
+$z_i^{\mathrm{obs}} = h(u(t_i;\theta)) + \varepsilon_i$,
+donde $h$ es una función de observación.
+Esto permite modelar situaciones en las que no observamos directamente todo el estado del sistema, sino sólo algunas de sus componentes o combinaciones.
+:::
+
 **Características del ruido observacional $\varepsilon_i$.**
 Ejemplos comununes incluyen:
 * **Caso estándar:** Se asume que los ruidos son independientes e idénticamente distribuidos (i.i.d.) de forma Gaussiana $\varepsilon_i \sim N(0, \sigma^2)$, con valor medio nulo y varianza constante para cada sitio muestreado. Se supone que este ruido no depende del valor de $x$, aunque no siempre es cierto.
-* **Ruido correlacionado:** Común en series de tiempo, donde la correlación entre dos errores es distinta de cero: $\mathbb{E}[\varepsilon_i, \varepsilon_j] \neq 0$ para $i \neq j$.
+* **Ruido correlacionado:** Común en series de tiempo, donde la correlación entre dos errores es distinta de cero: $\mathbb{E}[\varepsilon_i \varepsilon_j] \neq 0$ para $i \neq j$.
     * *Nota estadística:* Si dos distribuciones son Gaussianas y tienen correlación $0$, son independientes. Si no son Gaussianas, tener correlación $0$ no implica independencia.
 
 **Ajuste de Trayectorias**
@@ -189,45 +221,71 @@ Donde $u \in \mathbb{R}^n$ representa el estado del sistema en un tiempo dado, y
 
 A continuación, implementamos el modelo Lotka-Volterra en Julia.
 
-> **Nota:** El código completo de este ejemplo se puede referenciar acá: [01_LV_forward](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/01_LV_forward). Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con ruido y vemos cómo cambia el paisaje de la función de pérdida (*Loss Landscape*). Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
+:::{note}
+El código completo de este ejemplo se puede referenciar acá: [01_LV_forward](https://github.com/facusapienza21/DM2026-Curso/tree/main/code/01_LV_forward).
+Ahí, además de resolver el sistema, simulamos que tenemos datos empíricos con ruido y vemos cómo cambia el paisaje de la función de pérdida (*Loss Landscape*).
+Esos detalles quedan disponibles en el enlace para quienes deseen profundizar.
+:::
 
 Nosotros vamos a contar brevemente los componentes principales de la resolución numérica.
 
 En Julia, usamos `!` en el nombre de la función para indicar que modifica sus argumentos in-place (es decir, no tenemos un `return`)
+Usamos `DifferentialEquations.jl` para definir y resolver la ODE, y `Plots.jl` para visualizar la solución.
 
 ```julia
 using DifferentialEquations
 using Plots
 using Statistics
 using Random
-
-# Definición del sistema de Ecuaciones Diferenciales Ordinarias
+```
+Introducimos la definición del sistema dinámico de Ecuaciones Diferenciales Ordinarias. La siguiente función implementa el lado derecho del sistema de Lotka-Volterra. Dado el estado actual u=(x,y), el tiempo t y el vector de parámetros p, calcula la derivada du/dt.
+```julia
 function lotka_volterra!(du, u, p, t)
     x, y = u            # x = presas, y = depredadores (esto es lo mismo que hacer u[1], u[2])
-    α, β, δ, γ = p      # Desempaquetamos el vector p
-    du[1] = α * x - β * x * y
-    du[2] = δ * x * y - γ * y
+    α, γ, β, η = p      # Desempaquetamos el vector p
+    du[1] = α * x - γ * x * y
+    du[2] = -β * y + η * x * y
 end
+```
+Notar que esta función no resuelve todavía la ecuación: sólo define el campo vectorial del sistema.
 
-# Definimos los parámetros de la ecuación
+Ahora fijamos un conjunto de parámetros, el estado inicial y el intervalo temporal en el que queremos resolver la dinámica.
+```julia
 α = 1.0     # Nacimiento de presas
 β = 0.1     # Tasa de depredación
 δ = 0.075   # Reproducción del depredador
 γ = 1.5     # Muerte del depredador
 p_true = [α, β, δ, γ]
 
-# Condiciones iniciales y tiempo
+# (condiciones iniciales y horizonte temporal)
 u0 = [10.0, 5.0]
 tspan = (0.0, 30.0)
+```
+ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, por eso le mandamos la función, la condición inicial y un tiempo para resolver.
+```julia
+prob = ODEProblem(lotka_volterra!, u0, tspan, p_true)
+```
+Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5 -método Runge-Kutta explícito de orden 5 con estimador de orden 4-) y cada cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
+```julia
+sol = solve(prob, Tsit5(), saveat=0.1)
+```
+El argumento saveat=0.1 indica cada cuánto queremos guardar la solución para inspeccionarla o graficarla. No necesariamente coincide con el paso interno que usa el solver para integrar la ecuación.
 
-# ODEProblem es una función de Julia para resolver una ecuación diferencial ordinaria, 
-# por eso le mandamos la función, la condición inicial y un tiempo para resolver.
-prob = ODEProblem(lotka_volterra!, u0, tspan, p_true) # Acá definimos el problema matemático
-
-# Acá resolvemos el problema, elegimos con qué solver (en nuestro caso Tsit5) y cada 
-# cuánto se va a guardar, nivel de tolerancia, nivel de error. Se define la parte numérica.
-sol = solve(prob, Tsit5(), saveat=0.1) 
-
-# En sol está la solución al problema
+En sol está la solución al problema
+```julia
 print(sol)
 ```
+
+:::{tip}
+El objeto sol contiene una representación numérica de la trayectoria. Por ejemplo, sol.t guarda los tiempos y sol.u los estados aproximados en esos tiempos. También podemos visualizar ambas poblaciones:
+```julia
+plot(sol, xlabel="t", ylabel="Población", label=["Conejos" "Lobos"])
+```
+La figura resultante muestra las oscilaciones típicas del modelo: primero crece la población de presas, luego aumenta la de depredadores, y ese aumento termina reduciendo a las presas.
+Más tarde, al disminuir las presas, también cae la población de depredadores y el ciclo vuelve a empezar.
+:::
+
+
+Este ejemplo computacional resume la lógica general de la clase: partimos de una dinámica continua escrita como ODE, la resolvemos numéricamente a partir de una condición inicial y obtenemos trayectorias que luego pueden compararse con datos observados.
+En un problema de inferencia, este cálculo hacia adelante se repite muchas veces dentro de un algoritmo de optimización para estimar $\theta$.
+En una NODE, la diferencia es que parte o todo el campo vectorial deja de fijarse manualmente y pasa a ser aprendido a partir de los datos.

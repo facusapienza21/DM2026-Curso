@@ -1,5 +1,18 @@
 # Anuncios
 
+:::{important} 28/04/2026 - No hay clases
+:class: dropdown
+Queridos estudiantes,
+
+Dado el llamado de paro docente y no docente mañana miercoles 29/04, no tendremos clase.
+La facultad se encontrara con serivicios mínimos.
+
+Los mantengo al tanto si hay noticias, pero en principio nos vemos el proximo lunes.
+
+Saludos,
+Facu
+:::
+
 :::{important} 27/04/2026 - Proyecto final
 :class: dropdown
 Queridos estudiantes,
