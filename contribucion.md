@@ -102,6 +102,7 @@ Todo el contenido necesario y los links útiles se encuentran ahí!
 
 Al momento de abrir un PR para contribuir a la materia, por favor tener en cuenta los siguientes puntos:
 - 🤝 Los estudiantes encargados de los apuntes de una clase deben coordinar sus PRs. Hay varias maneras de hacer esto, pero debe haber un único PR por clase con commits de todos los estudiantes. Luego de que el PR se abra, Facu va a encargarse de hacer una revisión y posiblemente sugerir cambios y mejoras. Luego de iterar y haber conseguido una buena versión de las notas, los cambios se van a integrar en la página web de la materia.
+- ↩️ Por favor seguir la convención de **una oración por línea** al escribir el texto. Esto facilita enormemente la revisión de cambios en Git, ya que cada línea aparece como una modificación independiente.
 - 📝 En las notas, por favor incluir cuanto detalle sea posible sobre la clase. Piensen que las notas tienen que ser entendibles para alguien que no fue a la clase. Pueden usar las grabaciones de la clase para guiarse!
 - ✨ No es necesario volverse un experto en myst para poder contribuir a la página web, pero recomiendo que vean la planilla de myst en la página web y cómo la misma fue generada. Myst es super elegante para escribir! Pueden usar cuantas herramientas quieran para que la página web quede lo mejor posible.
 - 🖼️ Pueden incluir imágenes o figuras en las notas (de hecho, mucho mejor si lo hacen!). En tal caso, por favor incluir imágenes dentro de la carpeta [`clases/figures`](clases/figures).
