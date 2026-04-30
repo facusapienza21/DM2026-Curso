@@ -144,8 +144,16 @@ $$
 
 ## Calibración con respecto a la condición inicial
 
-También vimos, al observar las curvas de MSE en distintas proyecciones del espacio de parámetros, la presencia de mínimos locales.
-Esto nos indica que incluso en este problema canónico podemos caer en soluciones que no corresponden al mínimo global.
+Hasta ahora planteamos el ajuste del modelo como un problema de optimización en los parámetros $\theta$.
+Sin embargo, la condición inicial $u_0$ también puede ser incierta y, por lo tanto, pensarse como otra variable a estimar.
 
-Si uno fija una condición inicial y aplica únicamente descenso por gradiente, es posible converger a uno de estos mínimos locales.
-Para evitarlo, existen algoritmos de búsqueda global que permiten obtener una buena estimación inicial de los parámetros y así aumentar la probabilidad de alcanzar el mínimo absoluto.
+Esto es relevante porque, aun cuando fijamos la forma del modelo, la función de pérdida puede presentar mínimos locales.
+Por eso, una mala elección de $u_0$ puede dificultar el ajuste y alejarnos de la mejor solución posible.
+
+En ese caso, el problema consiste en minimizar la función de pérdida no solo con respecto a $\theta$, sino también con respecto a $u_0$.
+Es decir, en lugar de buscar únicamente los parámetros del modelo, buscamos conjuntamente los parámetros y la condición inicial que mejor reproducen las observaciones.
+$$
+\min_{\theta,u_0} L(\theta,u_0)=\sum_i \left\| y_i-x(t_i;\theta,u_0)\right\|_2^2.
+$$
+Esto es especialmente útil cuando no conocemos con precisión el estado inicial del sistema.
+En muchos casos, elegir una buena condición inicial sigue siendo un problema más simple que determinar directamente todos los parámetros del modelo.
