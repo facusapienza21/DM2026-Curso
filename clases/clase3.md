@@ -109,7 +109,7 @@ En nuestro caso, la red recibe como entrada el vector de estado $u$ y devuelve u
 :::{note} Obs. 2: Construcción de NODEs
 En las NODEs, los parámetros $\theta$ pasan a ser los pesos y sesgos de la red neuronal:
 $$
-\theta = \{W_i,b_i\}.
+\theta = \{W_i,b_i\}_{i=0}^K.
 $$
 :::
 
