@@ -1,5 +1,5 @@
 ---
-title: No3 - UDEs
+title: Clase No3 - UDEs
 ---
 
 # Universal Differential Equations (UDEs)
@@ -10,8 +10,6 @@ title: No3 - UDEs
 :width: 100%
 :::
 
-
-## Cosas que escribió Fran
 
 Vimos el modelo de Lotka-Volterra, que tiene cuatro parámetros: $\alpha$, $\beta$, $\delta$ y $\gamma$. Según los valores de estos parámetros y dada una condición inicial, el sistema genera distintas trayectorias. A estas trayectorias se les puede agregar ruido gaussiano para representar los datos que observamos en la realidad.
 
@@ -128,19 +126,9 @@ $$
 $$
 
 
-
-% Pequeño comentario sobre NODEs
-
-% Observación sobre sistemas autónomos
-
-## Ejemplo: continuación
-
-% Comentarios y continuación sobre el sistema de lotka-volterra. Minimos locales...
-
-
-## Redes neuronales
-
 ## Calibración con respecto a la condición inicial
 
+También vimos, al observar las curvas de MSE en distintas proyecciones del espacio de parámetros, la presencia de mínimos locales. Esto nos indica que incluso en este problema canónico podemos caer en soluciones que no corresponden al mínimo global.
 
+Si uno fija una condición inicial y aplica únicamente descenso por gradiente, es posible converger a uno de estos mínimos locales. Para evitarlo, existen algoritmos de búsqueda global que permiten obtener una buena estimación inicial de los parámetros y así aumentar la probabilidad de alcanzar el mínimo absoluto.
 
