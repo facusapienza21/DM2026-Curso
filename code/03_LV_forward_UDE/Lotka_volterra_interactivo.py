@@ -4,6 +4,10 @@ Created on Wed Apr 29 19:29:30 2026
 
 @author: Leandro
 """
+# Run with:
+# conda env create -f environment.yml
+# conda activate lv-ude
+# python Lotka_volterra_interactivo.py
 
 import numpy as np
 import matplotlib.pyplot as plt
