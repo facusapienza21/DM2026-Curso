@@ -10,7 +10,7 @@ title: Clase No3 - UDEs
 :width: 100%
 :::
 
-Vimos el modelo de Lotka-Volterra, que tiene cuatro parámetros: $\alpha$, $\beta$, $\delta$ y $\gamma$.
+Vimos el modelo de Lotka-Volterra, que tiene cuatro parámetros representados como $\theta$ = ($\alpha$, $\beta$, $\delta$ y $\gamma$).
 Según los valores de estos parámetros y dada una condición inicial, el sistema genera distintas trayectorias.
 A estas trayectorias se les puede agregar ruido gaussiano para representar los datos que observamos en la realidad.
 
@@ -49,7 +49,9 @@ En este tipo de modelos, la evolución del estado no depende del ruido.
 El ruido aparece únicamente en las observaciones.
 En general, la intensidad del ruido no se conoce y puede terminar siendo otro parámetro a estimar.
 
-Una forma simple de ajustar el sistema a los datos es mediante cuadrados mínimos:
+Una estrategia para ajustar el sistema a los datos consiste en minimizar el cuadrado de los residuos entre las observaciones y la trayectoria predicha por el modelo.
+Este procedimiento se conoce como **ajuste por trayectorias** o **cuadrados mínimos no lineales**.
+Para una discusión más detallada de esta metodología, ver la {doc}`Clase N.º 2 <./clase2>`.
 
 $$
 \min_{\theta} L(\theta) = \sum_i \left\| y_i - x(t_i;\theta) \right\|_2^2 .
