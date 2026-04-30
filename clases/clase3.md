@@ -13,6 +13,18 @@ title: Clase No3 - UDEs
 
 Vimos el modelo de Lotka-Volterra, que tiene cuatro parámetros: $\alpha$, $\beta$, $\delta$ y $\gamma$. Según los valores de estos parámetros y dada una condición inicial, el sistema genera distintas trayectorias. A estas trayectorias se les puede agregar ruido gaussiano para representar los datos que observamos en la realidad.
 
+A continuación tenemos dos implementaciones interactivas del modelo de Lotka-Volterra, una en Python y otra en Julia. En ambos casos se pueden modificar los parámetros y explorar cómo cambian las trayectorias temporales y el retrato de fases.
+
+- [Código interactivo en Python](./code/03_LV_forward_UDE/Lotka_volterra_interactivo.py)
+- [Código interactivo en Julia](./code/03_LV_forward_UDE/lotka_volterra_ude.jl)
+
+:::{figure} ./figures/no3_lv_interactivo_py.png
+:width: 100%
+:align: center
+
+Interfaz interactiva en Python para explorar la dinámica del modelo de Lotka-Volterra variando sus parámetros.
+:::
+
 Acá hacemos una distinción importante:
 
 - El **estado del sistema** es la solución de las ecuaciones diferenciales. En la mayoría de los casos, este estado es desconocido.
