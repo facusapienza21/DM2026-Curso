@@ -94,15 +94,28 @@ $$
 Una red neuronal está compuesta, en general, por tres partes: una capa de entrada, una o más capas ocultas y una capa de salida.
 Cada capa tiene una cierta cantidad de neuronas, que depende del problema que se quiera resolver.
 
-Las neuronas de distintas capas están conectadas mediante pesos y sesgos.
-Sin embargo, el poder de las redes neuronales aparece al introducir no linealidades mediante funciones de activación.
-Algunas de las más comunes son:
+Matemáticamente, una red neuronal feedforward puede escribirse como una composición de transformaciones afines y funciones de activación no lineales.
+Si la entrada es $u \in \mathbb{R}^n$, una red con $L$ capas puede representarse como
 $$
-\text{ReLU}(x) = \max(0,x),
+NN_\theta(u)=h_L \circ h_{L-1} \circ \cdots \circ h_1(u),
+$$
+donde cada capa tiene la forma
+$$
+h_k(z)=\sigma_k(W_k z+b_k).
+$$
+Aquí, $W_k$ y $b_k$ son los pesos y sesgos de la capa $k$, respectivamente.
+Las funciones $\sigma_k$ introducen la no linealidad en cada capa.
+El conjunto de parámetros de la red es entonces
+$$
+\theta=\{W_1,\dots,W_L,b_1,\dots,b_L\}.
+$$
+Algunas de las funciones de activación más comunes son
+$$
+\text{ReLU}(x)=\max(0,x),
 $$
 y
 $$
-\sigma(x) = \frac{1}{1+e^{-x}}.
+\sigma(x)=\frac{1}{1+e^{-x}}.
 $$
 En nuestro caso, la red recibe como entrada el vector de estado $u$ y devuelve una aproximación de la función dinámica $f(u;\theta)$.
 
