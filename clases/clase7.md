@@ -21,6 +21,13 @@ $$\min_{\theta} \mathcal{L}(\theta, y)+\mathcal{R}(\theta)$$
 
 Aquí, $\mathcal{L}(\theta, y)$ es la función de costo, que tiene un término empírico y otro con parámetros, y $\mathcal{R}(\theta)$, el término de regularización. Regularizar es, en términos generales, agregar un bias inductivo, un sesgo para aportar información de manera intencional y condicionar el resultado a conocimientos previos. Por ejemplo, considerando los métodos vistos: obtener un vector esparso o de norma chica. El early stopping también es una forma de regularización. Todas ellas impiden el overfitting y permiten generalizar a datos nuevos.  
 
+:::{figure} ./figures/clase_7_01.JPG 
+:width: 100% 
+:align: center 
+
+Ubicación de $\theta_{MLE}$ respecto de su distribución 
+:::
+
 # Observación: cuantificación de incertidumbre
 
 ## Caso Bayesiano: es información que nos aporta el posterior
@@ -28,6 +35,13 @@ Aquí, $\mathcal{L}(\theta, y)$ es la función de costo, que tiene un término e
 ## Caso frecuentista: Bootstrap
 **Bootstrap paramétrico:** 
 Sabemos que $Y \curvearrowright \theta^*$ a través de la función likelihood. Luego, fijando la curva con $\theta^*$ y agregando ruido, obtenemos $\hat{Y}_1 \curvearrowright \theta^*_1, \hat{Y}_2 \curvearrowright \theta^*_2,...$ Estimadores de $Y$ con sus correspondientes $\theta^*$
+
+:::{figure} ./figures/clase_7_02.JPG 
+:width: 50% 
+:align: center 
+
+Elección de $\hat{\theta}$ entre los valores con ruido 
+:::
 
 **Bootstrap no paramétrico:**
 
@@ -58,6 +72,12 @@ Luego, este algoritmo avanza distintos valores de $\theta$ explorando la densida
 
 $\theta_0 \curvearrowright \theta_1 \curvearrowright ... \curvearrowright \theta_k \curvearrowright \theta_{k+1}$
 
+:::{figure} ./figures/clase_7_03.JPG 
+:width: 50% 
+:align: center 
+
+Así exploran el espacio los algoritmos MCMC 
+:::
 
 Esta cadena se corta en un k determinado tal que el algoritmo está encaminado y se encuentra en el soporte de $\theta$
 
@@ -90,3 +110,17 @@ Se corre al infinito y sacamos el principio. Los puntos garantizan que la distri
 Este método se parece mucho a la optimización por gradiente. Esto nos dice que la estadística Bayesiana y Frecuentista se parecen mucho. Sin embargo, la Bayesiana es más difícil de calcular porque el algoritmo de optimización busca explorar el espacio para ver la distribución de $\theta$.
 
 **Observación** $\theta \in \mathbb{R}^p$, MCMC M-H funciona cuando $p\sim 1$. Si $p>>1$, se usa Hamiltonian-MCMC que usa el gradiente.
+
+:::{figure} ./figures/clase_7_04.JPG 
+:width: 50% 
+:align: center
+
+ Dispersión de los datos
+:::
+
+:::{figure} ./figures/clase_7_05.JPG 
+:width: 50% 
+:align: center 
+
+Dispersión de los datos para el caso Lotka-Volterra 
+:::
