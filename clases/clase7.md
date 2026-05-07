@@ -55,7 +55,8 @@ Observemos que podemos asociar:  $- \log(P(Y \mid \theta))$ con la **función de
 # Observación: Tanto en el caso Frecuentista como en el Bayesiano
 Cuando el numero de observaciones $n \to \infty$ tenemos que 
 
-$$\theta_{MAP} \to \theta_{0}$$ $$\theta_{MLE} \to \theta_{0}$$
+$$\theta_{MAP} \to \theta_{0}$$ 
+$$\theta_{MLE} \to \theta_{0}$$
 
 Siendo $\theta_{0}$ el verdadero valor de $\theta$
 
