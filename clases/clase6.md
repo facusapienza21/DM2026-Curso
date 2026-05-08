@@ -12,7 +12,7 @@ title: No6 - Función de costo
 
 En esta clase nos vamos a centrar en responder:
 
-## ¿De donde proviene la función de costo $\mathcal{L}$?
+## Origen de la función de costo $\mathcal{L}$
 
 La función de costo se deriva del modelo observacional que conecta la ecuación de estado de mi problema con los datos.
 
@@ -21,16 +21,18 @@ La función de costo se deriva del modelo observacional que conecta la ecuación
 En nuestro ejemplo característico de Lotka-Volterra (*Depredador-Presa* ver {doc}`Clase N.º 2 <./clase2>`) tenemos:
 
 $$
-\mathcal{L}(\theta,y) = \sum_{i=1}^{N} \left\| x(t_i; \theta) - y_i \right\|_{2}^{2}
+\mathcal{L}(\theta,y) = \sum_{i=1}^{N} \left\| x(t_i; \theta) - y_i \right\|_{2}^{2} ,
 $$
 $$
-y_i = x(t_i; \theta) + \varepsilon_i
+y_i = x(t_i; \theta) + \varepsilon_i ,
 $$
 $$
-\frac{dx}{dt} = f(x, t, \theta)
+\frac{dx}{dt} = f(x, t, \theta) ,
 $$
 
-Donde $x(t_i; \theta)$ es la función de estado de mi sistema, que está descripta en este caso (*y en los que se va a enfocar este curso*) por una ecuación diferencial y un $\varepsilon_i$ que representa el ruido observacional. Para Lotka-Volterra tenemos $\theta \in \mathbb{R}^{p}$ con $n = 2$ (dimensión del estado) y $p = 4$ (número de parámetros).
+donde $x(t_i; \theta)$ es la función de estado de mi sistema, que está descripta en este caso (*y en los que se va a enfocar este curso*) por una ecuación diferencial y un $\varepsilon_i$ que representa el ruido observacional.
+
+Para Lotka-Volterra tenemos $\theta \in \mathbb{R}^{p}$ con $n = 2$ (dimensión del estado) y $p = 4$ (número de parámetros).
 
 :::{note}
 Cuando $p \gg 1$, este planteo nos lleva al régimen de las **NODE** (Neural ODEs), donde la dinámica está parametrizada por una red neuronal con muchos parámetros.
@@ -41,20 +43,18 @@ Supongamos que estamos en una dimensión ($n=1$) y que el ruido $\varepsilon_i \
 La probabilidad Gaussiana de observar $y_i$ dado $x_i$ y $\sigma$ de este modelo es:
 
 $$
-P(y_i|x_i,\sigma) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(y_i-x_i)^{2}}{2\sigma^{2}}}
+P(y_i|x_i,\sigma) = \frac{1}{\sqrt{2\pi}\sigma} \.e^{-\frac{(y_i-x_i)^{2}}{2\sigma^{2}}}
 $$
 
 y como las variables son independientes, la probabilidad de observar todos los puntos es:
 
 $$
-P(y_1,...,y_n)|x(t_i;\theta)) = \prod_{i=1}^{n}P(y_i|x_i,\sigma)
+P(y_1,...,y_n)|x(t_i;\theta)) = \prod_{i=1}^{n}P(y_i|x_i,\sigma),
 $$
 
-Donde $P(y_1,...,y_n)|x(t_i;\theta))$ es la **Verosimilitud** y la llamaremos $L(\theta;y)$, este va a ser nuestro modelo probabilístico para este ejemplo que nos dice dadas nuestras distribuciones de probabilidad, como los datos desde $y_1$ hasta $y_n$ se generan aleatoriamente.
+donde $P(y_1,...,y_n)|x(t_i;\theta))$ es la **verosimilitud** y la llamaremos $L(\theta;y)$. 
 
-:::{note}
-Este modelo incorpora como estamos modelando el estado y las observaciones de nuestro sistema.
-:::
+Este va a ser nuestro modelo probabilístico para este ejemplo, que nos dice dadas nuestras distribuciones de probabilidad, como los datos desde $y_1$ hasta $y_n$ se generan aleatoriamente.
 
 :::{tip}
 Para facilitar las cuentas definimos:
@@ -66,25 +66,13 @@ $$
 Esto lo hacemos para sacarnos de encima los productos y tener todo descrito por sumas.
 :::
 
-Para poder hacer inferencia entre los parámetros del problema y nuestro modelo probabilístico vamos a utilizar:
-
-**El Principio de Máxima Verosimilitud:**
-
-Este principio busca estimar los parámetros del modelo que maximicen la Verosimilitud, esta ultima nos dice que tan probable es observar los parámetros $y_1$ hasta $y_N$ dada la trayectoria observada $x(t_i;\theta)$, si calculamos esta probabilidad para distintos $\theta$ la verosimilitud va a dar distintos valores, entonces lo que queremos estimar es cuales son los parámetros $\theta$ que la maximizan.
+Para poder hacer inferencia entre los parámetros del problema y nuestro modelo probabilístico vamos a utilizar el {term}`principio de máximia verosomilitud <Principio de Máximia Verosomilitud>`
 
 $$
-\hat{\theta}_{MLE} = \arg\max_{\theta} L(\theta;y) = \arg\max_{\theta} \ell(\theta;y)
+\ell(\theta;y_i) = -\sum_{i=1}^{N} \left( \frac{(y_i-x_i)^{2}}{2\sigma^{2}} + \log(\sqrt{2\pi}\,\sigma) \right),
 $$
 
-**Notar** que la última igualdad es válida porque el logaritmo es una función monótona creciente.
-
-Volviendo a nuestro ejemplo:
- 
-$$
-\ell(\theta;y_i) = -\sum_{i=1}^{N} \left( \frac{(y_i-x_i)^{2}}{2\sigma^{2}} + \log(\sqrt{2\pi}\,\sigma) \right)
-$$
-
-aplicando el principio de máxima Verosimilitud:
+aplicamos el principio de máxima verosimilitud:
 
 $$
 \hat{\theta}_{MLE} = \arg\max_{\theta} \left[ -\sum_{i=1}^{N} \left( \frac{(y_i-x_i)^{2}}{2\sigma^{2}} + \log(\sqrt{2\pi}\,\sigma) \right) \right]
@@ -99,7 +87,7 @@ $$
 En conclusión, para este problema, el estimador de máxima verosimilitud es el que minimiza los residuos cuadráticos.
 
 :::{important}
-En general podemos mirar un problema de optimización como uno de máxima verosimilitud.
+En muchos casos podemos mirar un problema de optimización como uno de máxima verosimilitud, mediante la siguiente identidad:
 
 $$
 \max_{\theta} L(\theta;y) = \min_{\theta} \left( -\log \mathcal{L}(\theta,y) \right)
@@ -118,7 +106,7 @@ $$
 Cuya probabilidad es:
 
 $$
-P(\varepsilon_i|b) = \frac{1}{2b}\, e^{-\frac{|\varepsilon_i|}{2b}} \quad \text{con } b>0
+P(\varepsilon_i|b) = \frac{1}{2b}\. e^{-\frac{|\varepsilon_i|}{2b}} \quad \text{con } b>0
 $$
 
 Como en el ejemplo anterior, vamos a maximizar la variable $\theta$ para encontrar la función de costo.
@@ -137,7 +125,7 @@ $$
 Es una distribución que tiene colas más pesadas (los extremos decaen más lentamente) a diferencia de la Gaussiana, por eso se usa para hacer estadística más robusta.
 :::
 
-Hasta ahora vinimos haciendo máxima verosimilitud solo sobre los parámetros $\theta$, en el siguiente ejemplo veremos que pasa si $\sigma$ también es un parámetro.
+Hasta ahora vinimos haciendo máxima verosimilitud sólo sobre los parámetros $\theta$, en el siguiente ejemplo veremos que pasa si $\sigma$ también es un parámetro.
 
 **Ejemplo 3: distribución gaussiana con $\sigma_i \neq \text{cte}$**
 
@@ -166,7 +154,7 @@ $$
 Cuya probabilidad es:
 
 $$
-P(\boldsymbol{\varepsilon}|\Sigma) = \frac{1}{(2\pi)^{N/2}\,\left|\det(\Sigma)\right|^{1/2}}\, e^{-\frac{1}{2}\boldsymbol{\varepsilon}^{T}\Sigma^{-1} \boldsymbol{\varepsilon}}
+P(\boldsymbol{\varepsilon}|\Sigma) = \frac{1}{(2\pi)^{N/2}\.\left|\det(\Sigma)\right|^{1/2}}\. e^{-\frac{1}{2}\boldsymbol{\varepsilon}^{T}\Sigma^{-1} \boldsymbol{\varepsilon}}
 $$
 
 :::{note}
@@ -180,38 +168,37 @@ $$
 $$
 
 :::{note}
-Esta norma está pesada en $\Sigma$ y se conoce como **norma de Mahalanobis**, notar que si sólo me queda la diagonal de esta matriz $\Sigma$ me devuelve la norma euclídea.
+Esta norma está pesada en $\Sigma$ y se conoce como **norma de Mahalanobis**, notar que si sólo me queda la diagonal de esta matriz $\Sigma$ me devuelve la norma Euclídea.
 :::
 
-## ¿Podemos encontrar siempre una biyección entre $L(\theta,y)$ y $\mathcal{L}(\theta,y)$ como venimos haciendo?
+## Biyección entre $L(\theta,y)$ y $\mathcal{L}(\theta,y)$:
 
-La respuesta corta es NO, pero podemos hacer lo siguiente:
+No siempre vamos a poder encontar una biyeccion entre $L(\theta,y)$ y $\mathcal{L}(\theta,y)$, pero podemos hacer lo siguiente:
 
 Dado $\mathcal{L}(\theta,y)$ queremos encontrar $L(\theta,y)$, para ello vamos a definirnos una función de probabilidad a la que llamaremos $L^{*}(\theta,y)$:
 
 $$
-L^{*}(\theta,y) =\frac{e^{-\mathcal{L}(\theta,y)}}{z(\theta)} 
+L^{\*}(\theta,y) =\frac{e^{-\mathcal{L}(\theta,y)}}{z(\theta)} 
+$$
+$$
+z(\theta) = \int e^{-\mathcal{L}(\theta,y)}dy,
 $$
 
-$$
-z(\theta) = \int e^{-\mathcal{L}(\theta,y)}dy
-$$
-
-Donde $z(\theta)$ representa el factor de normalización, que puede depender del parámetro $\theta$, esto no nos pasaba en los ejemplos anteriores y como consecuencia, al recuperar la función de costo como veníamos haciendo, se nos va a agregar un término extra.
+donde $z(\theta)$ representa el factor de normalización, que puede depender del parámetro $\theta$, esto no nos pasaba en los ejemplos anteriores y como consecuencia, al recuperar la función de costo como veníamos haciendo, se nos va a agregar un término extra.
 
 $$
-\mathcal{L}^{*}(\theta,y) = -\log L^{*}(\theta,y) = \mathcal{L}(\theta,y) + \log z(\theta)
+\mathcal{L}^{\*}(\theta,y) = -\log L^{\*}(\theta,y) = \mathcal{L}(\theta,y) + \log z(\theta)
 $$
 
-Definimos $R(\theta) = \log z(\theta)$ y lo llamaremos Término de Regularización.
+Definimos $R(\theta) = \log z(\theta)$ y lo llamaremos término de regularización.
 
 Luego **el caso mas general** de un problema de optimización va a tener esta forma:
 
 $$
-\mathcal{L}(\theta,y) =  \mathcal{L_{EMPIRICA}}(\theta,y) + R(\theta)
+\mathcal{L}(\theta,y) =  \mathcal{L_{EMPIRICA}}(\theta,y) + R(\theta) ,
 $$
 
-donde $\mathcal{L_{EMPIRICA}}(\theta,y)$ depende tanto de los parámetros como de los datos y $R(\theta)$ solo depende de los parámetros.
+donde $\mathcal{L_{EMPIRICA}}(\theta,y)$ depende tanto de los parámetros como de los datos y $R(\theta)$ sólo depende de los parámetros.
 
 **Ejemplos:** vamos a ver distintas funciones de costo que suelen aparecer cotidianamente, con $y \in \mathbb{R}^{n}$, $x \in \mathbb{R}^{n \times p}$, $\theta \in \mathbb{R}^{p}$ y los $\lambda$ son hiperparámetros del problema.
 
@@ -219,7 +206,7 @@ donde $\mathcal{L_{EMPIRICA}}(\theta,y)$ depende tanto de los parámetros como d
 Todos los ejemplos que vamos a mostrar tienen solución analítica exacta.
 :::
 
-**1) Regresión lineal Ridge**   
+**1) Regresión lineal Ridge** 
 
 $$
 \min_{\theta} \underbrace{\left\| y - x \theta \right\|^{2}_{2}}_{\text{Función de Costo Empírica}} + \underbrace{\lambda \left\| \theta \right\|^{2}_{2}}_{\text{Término de Regularización}}
@@ -255,11 +242,13 @@ El término de Regularización penaliza la segunda derivada, lo que impone suavi
 
 Podemos observar qué pasa cuando variamos el $\lambda$:
 
-- $\text{Si } \lambda \longrightarrow \infty \;\Rightarrow\; \text{regresión lineal}$
+- $\text{Si } \lambda \longrightarrow \infty \Rightarrow \text{regresión lineal}$
 
-- $\text{Si } \lambda = 0 \;\Rightarrow\; \text{interpolación}$
+- $\text{Si } \lambda = 0 \Rightarrow \text{interpolación}$
 
-## Hasta ahora resolvimos nuestros problemas pensándolos con estadística frecuentista, ¿Cómo la podemos conectar con la estadística Bayesiana?
+## introduccón a la estadística Bayesiana:
+
+Hasta ahora resolvimos nuestros problemas pensándolos con estadística frecuentista, y nos preguntamos como se relacionan estas ideas con la estadística Bayesiana (ver {doc}`Clase N.º 7 <./clase7>`).
 
 En la estadística Bayesiana vamos a tener:
 
@@ -278,10 +267,10 @@ Si podemos calcular esta distribución, no solo vamos a obtener el $\theta$ que 
 Buscando quien maximiza la distribución $\mathbb{P}_{post}(\theta,y)$, podemos recuperar la solución encontrada con la estadística frecuentista.
 
 $$
-\theta_{MAP} = \arg\max_{\theta}\mathbb{P}_{post}(\theta,y) = \arg\min_{\theta} \left[ -\underbrace{\log \mathbb{P}(y,\theta)}_{\ell(\theta,y)} - \underbrace{\log \mathbb{P}_{prior}(\theta)}_{R(\theta)} \right]
+\theta_{MAP} = \arg\max_{\theta}\mathbb{P}_{post}(\theta,y) = \arg\min_{\theta} \left[ -\underbrace{\log \mathbb{P}(y,\theta)}_{\ell(\theta,y)} - \underbrace{\log \mathbb{P}_{prior}(\theta)}_{R(\theta)} \right],
 $$
 
-Donde en $\ell(\theta,y)$ está la Verosimilitud y $R(\theta)$ es el término de Regularización de la estadística frecuentista.
+donde en $\ell(\theta,y)$ está la Verosimilitud y $R(\theta)$ es el término de Regularización de la estadística frecuentista.
 
 ## Resumen
 
