@@ -9,28 +9,26 @@ title: No5 - Optimización
 :width: 100%
 :::
 
-Estas notas introducen el problema general de optimización que aparece al ajustar modelos dinámicos a datos. En particular, veremos cómo se define una función de costo, qué significa buscar parámetros óptimos, qué diferencias hay entre búsqueda global y búsqueda local, y cómo se conectan los métodos de optimización con el ajuste de trayectorias de ODEs.
+Estas notas introducen el problema general de optimización que aparece al ajustar modelos dinámicos a datos. 
+En particular, veremos cómo se define una función de costo, qué significa buscar parámetros óptimos, qué diferencias hay entre búsqueda global y búsqueda local, y cómo se conectan los métodos de optimización con el ajuste de trayectorias de ODEs.
 
 # Problema general de optimización
 
-En muchos problemas de modelado queremos encontrar parámetros que hagan que un modelo describa lo mejor posible los datos observados. Para eso definimos una **función de costo** o **función de pérdida** $L$, que mide qué tan mal se ajusta el modelo para un cierto valor de los parámetros.
+En muchos problemas de modelado queremos encontrar parámetros que hagan que un modelo describa lo mejor posible los datos observados. 
+Para eso definimos una **función de costo** o **función de pérdida** $L$, que mide qué tan mal se ajusta el modelo para un cierto valor de los parámetros.
 
 De manera general, buscamos resolver el problema
-
 $$
-\min_{\theta} L(\theta; X, Y), \qquad \theta \in \Omega \subseteq \mathbb{R}^p.
+\min_{\theta} L(\theta; X, Y), \qquad \theta \in \Omega \subseteq \mathbb{R}^p,
 $$
-
-Donde:
-
-* $\theta$ es el vector de parámetros del modelo.
-* $p$ es la cantidad de parámetros.
-* $\Omega$ es el espacio de búsqueda o conjunto de valores admisibles para $\theta$.
-* $X$ e $Y$ representan los datos disponibles.
+donde:
+* $\theta$ es el vector de parámetros del modelo,
+* $p$ es la cantidad de parámetros,
+* $\Omega$ es el espacio de búsqueda o conjunto de valores admisibles para $\theta$,
+* $X$ e $Y$ representan los datos disponibles, y
 * $L(\theta; X,Y)$ mide el desacuerdo entre el modelo y los datos.
 
 El objetivo es encontrar un parámetro $\theta^*$ que minimice la función de costo:
-
 $$
 \theta^* = \arg\min_{\theta \in \Omega} L(\theta).
 $$
@@ -39,22 +37,25 @@ $$
 En este contexto, la optimización aparece como una herramienta para realizar **estimación paramétrica**: buscamos parámetros que no conocemos, pero que queremos inferir a partir de datos observados.
 :::
 
-En la práctica, incluso si escribimos el problema como una minimización exacta, no siempre podemos encontrar el mínimo global de forma analítica. Por eso necesitamos algoritmos numéricos de optimización.
+En la práctica, incluso si escribimos el problema como una minimización exacta, no siempre podemos encontrar el mínimo global de forma analítica. 
+Por eso necesitamos algoritmos numéricos de optimización.
 
 # ¿De dónde sale la función de costo?
 
 Una pregunta central es cómo construir la función $L(\theta)$. En general, la función de costo se elige para cuantificar el error entre las observaciones y las predicciones del modelo.
 
 Por ejemplo, si tenemos observaciones $Y_i$ y un modelo que predice valores $\hat{Y}_i(\theta)$, una elección clásica es la suma de errores cuadráticos:
-
 $$
 L(\theta) = \sum_{i=1}^N \|Y_i - \hat{Y}_i(\theta)\|_2^2.
 $$
 
-Esta elección penaliza más fuertemente errores grandes y conduce al método de **cuadrados mínimos**. En clases anteriores apareció en el contexto de ajuste de trayectorias: se comparan datos observados contra trayectorias generadas por una ODE.
+Esta elección penaliza más fuertemente errores grandes y conduce al método de **cuadrados mínimos**. 
+En [clases anteriores](https://facusapienza.org/DM2026-Curso/clase4/#pre-entrenamiento) apareció en el contexto de ajuste de trayectorias: se comparan datos observados contra trayectorias generadas por una ODE.
 
-:::{tip} Interpretación estadística(próxima clase visto más a detalle)
-Cuando se minimiza una suma de cuadrados, muchas veces se está asumiendo implícitamente un modelo de ruido Gaussiano independiente con varianza constante. Bajo ese supuesto, minimizar cuadrados mínimos coincide con maximizar la verosimilitud.
+:::{tip} Interpretación estadística 
+Cuando se minimiza una suma de cuadrados, muchas veces se está asumiendo implícitamente un modelo de ruido Gaussiano independiente con varianza constante. 
+Bajo ese supuesto, minimizar cuadrados mínimos coincide con maximizar la verosimilitud.
+Visto con más detalle en [la próxima clase](https://facusapienza.org/DM2026-Curso/clase6/).
 :::
 
 # Tipos de algoritmos de optimización
@@ -70,43 +71,31 @@ Una primera distinción importante es entre:
 
 La búsqueda global intenta encontrar el mínimo global de $L(\theta)$ en todo el espacio de parámetros $\Omega$.
 
-Una estrategia simple consiste en evaluar la función de costo en muchos puntos del espacio de parámetros, por ejemplo mediante una grilla. En dimensión baja esto puede ser razonable, pero en dimensión alta se vuelve rápidamente inviable.
+Una estrategia simple consiste en evaluar la función de costo en muchos puntos del espacio de parámetros, por ejemplo mediante una grilla. 
 
-:::{warning} Maldición de la dimensionalidad
+:::{warning} Maldición de la dimensionalidad 
 Si cada parámetro se evalúa en $k$ posibles valores y tenemos $p$ parámetros, una grilla completa requiere $k^p$ evaluaciones de la función de costo. Por eso la búsqueda exhaustiva escala muy mal con la dimensión.
 :::
 
-La búsqueda global puede ser útil cuando el espacio de parámetros es pequeño, cuando la función tiene muchos mínimos locales o cuando no tenemos una buena inicialización. Sin embargo, suele ser costosa.
-Para tener una idea mas concreta de cómo escala este método con la dimensión, en clase vimos que este método de es útil hasta 4 o 5 dimensiones. Luego rápidamente se vuelve incalculable
-
-
-
+La búsqueda global puede ser útil cuando el espacio de parámetros es pequeño, cuando la función tiene muchos mínimos locales o cuando no tenemos una buena inicialización. 
+Sin embargo, suele ser costosa. En dimensión baja ($p$ $\leq$ 4) esto puede ser razonable, pero en dimensión alta se vuelve rápidamente inviable.
 
 ## Búsqueda local
 
 La búsqueda local comienza desde un punto inicial $\theta_0$ y genera una sucesión de parámetros
+$$ \theta_0, \theta_1, \theta_2, \ldots $$
+tal que 
+$$\theta^{m+1} = \theta^m + \Delta \theta^m$$
+buscando que la función de costo disminuya (en promedio) en cada paso.
 
-$$
-\theta_0, \theta_1, \theta_2, \ldots
-$$
-
-buscando que la función de costo disminuya en cada paso.
-
-La idea general es actualizar los parámetros de la forma
-
-$$
-\theta^{m+1} = \theta^m + \Delta \theta^m,
-$$
-
-para alguna dirección de actualización $\Delta \theta^m$.
-
-A diferencia de la búsqueda global, estos métodos no garantizan necesariamente encontrar el mínimo global. Pueden converger a un mínimo local, a un punto silla, o incluso fallar si la función está mal condicionada o si la inicialización es mala.
+A diferencia de la búsqueda global, estos métodos no garantizan necesariamente encontrar el mínimo global. 
+Pueden converger a un mínimo local, a un punto silla, o incluso fallar si la función está mal condicionada o si la inicialización es mala.
 
 :::{note}
 En problemas de ajuste de modelos dinámicos, muchas veces se combinan estrategias: primero se usa una búsqueda global o una inicialización heurística, y luego se refina la solución con un método local.
 :::
 
-# Métodos locales según la información que usan
+# Métodos de búsqueda local
 
 Dentro de los métodos locales, podemos distinguir tres grandes familias:
 
@@ -124,27 +113,32 @@ Esto puede ser útil cuando:
 * Calcular derivadas es demasiado costoso.
 * El modelo funciona como una caja negra.
 
-Sin embargo, al no usar información geométrica de la función, suelen necesitar muchas evaluaciones de $L$.
+Sin embargo, al no usar información geométrica de la función, suelen necesitar muchas evaluaciones de $L$. 
+
+No los usaremos en este curso, pero dejamos algunos ejemplos de métodos de orden cero.
+
+### Nelder-Mead (Método del Símplex)
+Uno de los métodos sin derivadas más populares. Opera sobre un símplex geométrico de $n+1$ puntos en $\mathbb{R}^n$, aplicando operaciones de reflexión, expansión, contracción y reducción para moverse hacia el mínimo. Es eficaz en dimensiones bajas, pero tiene dificultades en altas dimensiones debido a la pérdida de efectividad de los pasos de expansión y contracción.
+
+### Búsqueda Directa (*Direct Search* o *Pattern Search*)
+Los métodos de búsqueda directa evalúan la función objetivo en un conjunto de puntos candidatos ("poll points") y seleccionan el siguiente iterado como aquel que produce un decremento suficiente; si ningún punto lo logra, se reduce el tamaño del paso. 
+
 
 ## Métodos de primer orden
 
 Los métodos de primer orden usan el gradiente de la función de costo:
-
 $$
 \nabla_\theta L(\theta) = \frac{\partial L}{\partial \theta}.
 $$
-
 El gradiente indica la dirección de mayor crecimiento local de la función. Por eso, para minimizar, nos movemos en la dirección opuesta al gradiente.
 
-# Descenso por gradiente
+### Descenso por gradiente
 
 El método más básico de primer orden es el **descenso por gradiente**. La actualización es
-
 $$
 \theta^{m+1} = \theta^m - \alpha^m \nabla_\theta L(\theta^m), \qquad m=0,1,2,\ldots
 $$
-
-Donde $\alpha^m > 0$ es el tamaño de paso o *learning rate* en la iteración $m$.
+donde $\alpha^m > 0$ es el tamaño de paso o *learning rate* en la iteración $m$.
 
 La intuición es simple: si el gradiente apunta hacia donde $L$ aumenta más rápido, entonces $-\nabla_\theta L$ apunta hacia donde $L$ disminuye más rápido localmente.
 
@@ -152,27 +146,21 @@ La intuición es simple: si el gradiente apunta hacia donde $L$ aumenta más rá
 Si $\alpha^m$ es demasiado grande, el método puede oscilar o divergir. Si es demasiado chico, puede converger muy lentamente. Elegir el tamaño de paso es una parte central del problema de optimización.
 :::
 
-## Momentum
+### Gradiente con momento (o *Momentum*)
 
-Una mejora común del descenso por gradiente es agregar **momentum**. La idea es que la dirección de actualización no dependa solamente del gradiente actual, sino también de las direcciones tomadas en pasos anteriores.
+Una mejora común del descenso por gradiente es agregar **momento**. La idea es que la dirección de actualización no dependa solamente del gradiente actual, sino también de las direcciones tomadas en pasos anteriores.
 
 Una forma de escribirlo es:
-
 $$
 \theta^{m+1} = \theta^m - \alpha^m g^m,
 $$
-
 con
-
 $$
 g^m = \eta g^{m-1} + (1-\eta) \nabla_\theta L(\theta^m),
 $$
-
 para $0 \leq \eta < 1$.
 
 El término $g^m$ actúa como una media móvil de gradientes. Esto puede suavizar oscilaciones y acelerar el avance en direcciones consistentes.
-
-
 
 ## Forma general de los métodos de primer orden
 
@@ -190,9 +178,27 @@ $$
 
 Es decir, la dirección de actualización puede depender del gradiente actual, de gradientes anteriores y de parámetros anteriores.
 
-:::{note} Adam
-El optimizador Adam entra dentro de esta familia. Combina ideas de momentum con estimaciones adaptativas de escala para cada coordenada del gradiente. Por eso es muy usado en entrenamiento de redes neuronales.
+Para más detalles sobre métodos de optimización, léase {cite}`Ruder_2016`.
+
+:::{note} Adam (*Adaptive Moment Estimation*)
+El optimizador Adam combina ideas de momento con estimaciones adaptativas de escala para cada coordenada del gradiente. 
+Por ser muy robusto ante elección del learning rate inicial, es muy usado en entrenamiento de redes neuronales.
+
+**Momento**: acumula una media móvil del gradiente.
+$$
+m_t = \beta_1 m_{t-1} + (1 - \beta_1) \nabla f(\theta_t)
+$$
+**Adaptación del paso**: acumula una media móvil del gradiente *al cuadrado*, para escalar el learning rate por parámetro:
+$$
+v_t = \beta_2 v_{t-1} + (1 - \beta_2) (\nabla f(\theta_t))^2
+$$
+La actualización queda:
+$$
+\theta_{t+1} = \theta_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+$$
+donde $\hat{m}_t$ y $\hat{v}_t$​ son correcciones de sesgo al inicio del entrenamiento.
 :::
+
 
 # Métodos de segundo orden
 
@@ -204,7 +210,7 @@ $$
 
 Mientras que el gradiente indica una dirección de descenso local, el Hessiano describe cómo cambia ese gradiente alrededor del punto actual.
 
-## Método de Newton
+## Método de Newton-Raphson
 
 El método de Newton usa una aproximación cuadrática local de la función de costo. Su actualización puede escribirse como
 
@@ -675,20 +681,16 @@ Esto hace que sólo se grafiquen valores cerca de la trayectoria observada. La r
 
 Este ejemplo resume varias ideas centrales de la clase.
 
-Primero, la función de costo no es simplemente una fórmula cerrada en los parámetros. Para evaluarla, hay que resolver una ODE. 
-
-Segundo, los gradientes se calculan a través del solver de la ODE.
-
-Tercero, se combinan dos métodos locales:
-
-* Adam, como primera etapa robusta basada en gradientes.
-* BFGS, como etapa de refinamiento quasi-Newton.
-
-Cuarto, los resultados deben interpretarse en varios niveles:
-
-* disminución de la pérdida,
-* ajuste visual de trayectorias,
-* recuperación de los términos de interacción,
-* comportamiento de la función aprendida en el espacio de estados.
-
-En resumen, el ejemplo muestra que ajustar una UDE no consiste sólo en resolver una ecuación diferencial, sino en resolver repetidamente muchas ecuaciones diferenciales dentro de un proceso de optimización.
+1. La función de costo no es simplemente una fórmula cerrada en los parámetros. 
+Para evaluarla, hay que resolver una ODE. 
+2. Los gradientes se calculan a través del solver de la ODE.
+3. Se combinan dos métodos locales:
+    * Adam, como primera etapa robusta basada en gradientes.
+    * BFGS, como etapa de refinamiento quasi-Newton.
+4. Los resultados deben interpretarse en varios niveles:
+    * disminución de la pérdida,
+    * ajuste visual de trayectorias,
+    * recuperación de los términos de interacción,
+    * comportamiento de la función aprendida en el espacio de estados.
+    
+En resumen, el ejemplo muestra que ajustar una UDE no consiste solamente en resolver una ecuación diferencial, sino en resolver repetidamente muchas ecuaciones diferenciales dentro de un proceso de optimización.
