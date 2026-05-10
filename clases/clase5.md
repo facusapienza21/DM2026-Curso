@@ -180,7 +180,7 @@ Es decir, la dirección de actualización puede depender del gradiente actual, d
 
 Para más detalles sobre métodos de optimización, léase {cite}`Ruder_2016`.
 
-:::{note} Adam (*Adaptive Moment Estimation*)
+## Método Adam (*Adaptive Moment Estimation*)
 El optimizador Adam combina ideas de momento con estimaciones adaptativas de escala para cada coordenada del gradiente. 
 Por ser muy robusto ante elección del learning rate inicial, es muy usado en entrenamiento de redes neuronales.
 
@@ -197,7 +197,6 @@ $$
 \theta_{t+1} = \theta_t - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
 $$
 donde $\hat{m}_t$ y $\hat{v}_t$​ son correcciones de sesgo al inicio del entrenamiento.
-:::
 
 
 # Métodos de segundo orden
@@ -210,7 +209,7 @@ $$
 
 Mientras que el gradiente indica una dirección de descenso local, el Hessiano describe cómo cambia ese gradiente alrededor del punto actual.
 
-## Método de Newton-Raphson
+## Método de Newton
 
 El método de Newton usa una aproximación cuadrática local de la función de costo. Su actualización puede escribirse como
 
@@ -222,25 +221,41 @@ $$
 La diferencia principal con descenso por gradiente es que la dirección de descenso se corrige usando la curvatura local de la función.
 
 :::{important}
-Cuando el Hessiano está bien definido y es positivo definido cerca del óptimo, Newton puede converger muy rápido. Sin embargo, calcular, almacenar e invertir el Hessiano puede ser muy costoso en problemas de alta dimensión.
+Cuando el Hessiano está bien definido y es positivo definido cerca del óptimo, Newton puede converger muy rápido. Sin embargo, calcular, almacenar e invertir el Hessiano es $\mathcal{O}(p^3)$, lo que puede ser muy costoso en problemas de alta dimensión.
 :::
 
-## Métodos quasi-Newton
+## Métodos cuasi-Newton
 
-Los métodos quasi-Newton buscan aproximar la información de segundo orden sin calcular explícitamente el Hessiano exacto.
+Los métodos cuasi-Newton buscan aproximar la información de segundo orden sin calcular explícitamente el Hessiano exacto. 
+Por este motivo se conocen también como "métodos de orden 1.5".
 
-En lugar de usar $H_L(\theta)$ directamente, construyen una aproximación a partir de gradientes y pasos anteriores. Un ejemplo muy usado es **BFGS**.
+En lugar de usar $H_L(\theta)$ directamente, construyen una aproximación a la curvatura de la función de corso a partir de gradientes y pasos anteriores, lo que permite capturar parte de la ventaja de Newton sin pagar el costo completo de calcular el Hessiano exacto. 
 
-:::{note} BFGS
-BFGS estima progresivamente una matriz que aproxima la curvatura de la función de costo. Esto permite capturar parte de la ventaja de Newton sin pagar el costo completo de calcular el Hessiano exacto.
-:::
+### BFGS 
+El método cuasi-Newton más popular es el de Broyden, Fletcher, Goldfarb, Shanno, conocido como "BFGS". 
+
+La actualización de la aproximación inversa del Hessiano es:
+$$
+B_{t+1} = \left(I - \rho_t s_t y_t^\top\right) B_t \left(I - \rho_t y_t s_t^\top\right) + \rho_t s_t s_t^\top
+$$
+donde:
+* $s_t = \theta_{t+1} - \theta_t$ (paso en los parámetros), 
+* $y_t = \nabla f(\theta_{t+1}) - \nabla f(\theta_t)$ (cambio en el gradiente), y
+* $\rho_t = \frac{1}{y_t^\top s_t}$
+
+La clave es que $B_t$ se actualiza con información del gradiente en dos puntos consecutivos, satisfaciendo la condición secante:
+$$
+B_{t+1} y_t = s_t
+$$
+que es la versión discreta de lo que haría el Hessiano verdadero.
+
+
 
 # Optimización en ajuste de trayectorias de ODEs
 
 Volvamos ahora al caso que aparece en el curso: queremos ajustar parámetros de una ODE a partir de datos observados.
 
 Supongamos que tenemos un sistema dinámico
-
 $$
 \frac{dx}{dt} = f(x,t,\theta),
 \qquad
@@ -248,45 +263,33 @@ x(t_0) = x_0.
 $$
 
 Para cada valor de $\theta$, resolver la ODE produce una trayectoria $x(t;\theta)$. Si observamos datos $Y_i$ en tiempos $t_i$, una función de pérdida natural es
-
 $$
 L(\theta) = \sum_{i=1}^N \|Y_i - x(t_i;\theta)\|_2^2.
 $$
 
 Como $x(t_i;\theta)$ se obtiene resolviendo numéricamente una ODE, también podemos escribir esta pérdida como
-
 $$
 L(\theta) = \sum_{i=1}^N \|Y_i - \operatorname{ODESolve}(t_i,\theta)\|_2^2.
 $$
-
 :::{note}
 En este caso, la función de costo no es una fórmula cerrada simple en $\theta$. Cada evaluación de $L(\theta)$ requiere resolver la ODE para esos parámetros.
 :::
 
 Desde el punto de vista de la optimización, el problema sigue siendo
-
 $$
 \min_{\theta} L(\theta),
 $$
-
 pero la dependencia de $L$ respecto de $\theta$ está mediada por la solución de una ecuación diferencial.
 
 # Gradiente de la pérdida en ODEs
 
-Para usar métodos de primer orden necesitamos calcular
-
-$$
-\frac{dL}{d\theta}.
-$$
+Para usar métodos de primer orden necesitamos calcular $\frac{dL}{d\theta}$.
 
 Si
-
 $$
 L(\theta) = \sum_{i=1}^N \|Y_i - x(t_i;\theta)\|_2^2,
 $$
-
 entonces, aplicando regla de la cadena, obtenemos una expresión del tipo
-
 $$
 \frac{dL}{d\theta}
 = -\sum_{i=1}^N 2\left(Y_i - x(t_i;\theta)\right)^\top
@@ -294,26 +297,23 @@ $$
 $$
 
 El término clave es
-
 $$
 S(t_i,\theta) = \frac{\partial x(t_i;\theta)}{\partial \theta},
 $$
-
 que se conoce como **sensibilidad** de la solución respecto de los parámetros.
 
 :::{important} Sensibilidades
-Las sensibilidades miden cuánto cambia la trayectoria $x(t;\theta)$ cuando perturbamos los parámetros $\theta$. Son necesarias para calcular gradientes de la pérdida respecto de los parámetros.
+Las sensibilidades miden cuánto cambia la trayectoria $x(t;\theta)$ cuando perturbamos los parámetros $\theta$. 
+Son necesarias para calcular gradientes de la pérdida respecto de los parámetros.
 :::
 
 Si $x(t;\theta) \in \mathbb{R}^n$ y $\theta \in \mathbb{R}^p$, entonces
-
 $$
 S(t,\theta) \in \mathbb{R}^{n \times p}.
 $$
-
 Cada columna de $S$ representa cómo cambia el estado del sistema cuando se modifica uno de los parámetros.
 
-En la practica NO es necesario calcular esta matriz S(el profe no explicó bien cómo), ya que calcular esa matriz es muy costoso.
+En la practica NO es necesario calcular esta matriz S, ya que calcular esa matriz es muy costoso.
 
 
 # Cierre de la clase
@@ -347,8 +347,6 @@ $$
 $$
 
 donde $\theta$ representa los pesos y sesgos de la red neuronal, y $L(\theta)$ mide qué tan lejos está la trayectoria predicha por el modelo de la trayectoria observada.
-
----
 
 ## ¿Qué se está optimizando?
 
@@ -384,10 +382,6 @@ end
 
 La red neuronal recibe el estado actual $(x,y)$ y devuelve dos términos de interacción. Por lo tanto, los parámetros que se optimizan no son directamente los coeficientes clásicos del sistema, sino los pesos internos de la red que modela la parte faltante de la dinámica.
 
-
-
----
-
 ## Predicción: evaluar un punto del espacio de parámetros
 
 Para evaluar la función de costo en un punto $\theta$, el código debe resolver la UDE con esos parámetros. Esto aparece en la función `predict`:
@@ -416,7 +410,6 @@ Es decir, `predict(ps)` no hace una predicción directa como en una regresión l
 Esto hace que el problema de optimización sea más costoso: cada evaluación de la pérdida requiere integrar la dinámica.
 
 La función `remake` permite reutilizar la estructura del problema `prob_ude`, pero reemplazando los parámetros actuales por `ps`. Esto es útil porque durante el entrenamiento los parámetros cambian en cada iteración.
----
 
 ## Función de costo
 
@@ -464,6 +457,7 @@ $$
 $$
 
 Esta es la conexión principal con la clase: la función de costo mide el desacuerdo entre modelo y datos, y el optimizador busca parámetros que reduzcan ese desacuerdo.
+
 ## Entrenamiento en dos fases
 
 El código entrena el modelo en dos etapas:
@@ -501,9 +495,7 @@ $$
 
 Lo que cambia es la estrategia de actualización de los parámetros.
 
----
-
-## Primera fase: Adam
+### Primera fase: Adam
 
 La primera fase se define como:
 
@@ -527,7 +519,7 @@ Adam es un método local de primer orden. Esto significa que usa información de
 En términos generales, Adam actualiza los parámetros usando una dirección basada en gradientes recientes y una escala adaptativa para cada coordenada. Por eso suele ser robusto en problemas con redes neuronales, donde la función de costo puede ser irregular, no convexa y de alta dimensión.
 
 
-## Segunda fase: BFGS
+### Segunda fase: BFGS
 
 Una vez terminada la etapa con Adam, el código usa la solución obtenida como punto inicial para BFGS:
 
@@ -554,8 +546,8 @@ optprob2 = OptimizationProblem(optf, res1.u)
 
 BFGS es un método quasi-Newton. En lugar de usar solamente el gradiente actual, intenta construir una aproximación de la curvatura de la función de costo a partir de la historia de pasos y gradientes.
 
-
 En este ejemplo, Adam cumple el rol de acercar los parámetros a una región razonable del espacio de búsqueda. Luego BFGS refina la solución aprovechando información aproximada de curvatura.
+
 ## Resultado final del entrenamiento
 
 Al finalizar BFGS, el código toma los parámetros finales:
@@ -576,45 +568,40 @@ sol_trained  = solve(prob_trained, Vern7(), saveat=0.1, abstol=1e-6, reltol=1e-6
 
 Esto permite construir la trayectoria final aprendida por el modelo.
 
----
-
 ## Interpretación de la curva de pérdida
 
 La primera salida importante para analizar la optimización es la curva de pérdida:
 
-```julia
-p2 = plot(1:length(loss_history), loss_history, label="Loss (MSE)",
-          xlabel="Época", ylabel="MSE", title="Curva de entrenamiento",
-          linewidth=2, color=:purple, yscale=:log10, legend=false)
-```
+:::{figure} ./figures/no5_lotka_volterra_inverse_ude_evo_L.png
+:width: 100%
+:align: center
+
+Curva de $L$ según época. 
+:::
 
 Esta curva muestra el valor de la función de costo a lo largo de las iteraciones.
 
-
-Conceptualmente, esperamos observar dos comportamientos:
-
-1. Una primera caída importante durante Adam.
-2. Una etapa de refinamiento durante BFGS.
+Se ven dos comportamientos:
+1. Una primera caída (hasta 1500 épocas) importante durante Adam.
+2. Una etapa de refinamiento (luego de 1500 épocas) durante BFGS.
 
 La curva de pérdida es el gráfico más directamente relacionado con la clase de optimización: muestra cómo el algoritmo va reduciendo la función objetivo.
----
 
 ## Interpretación del gráfico de trayectorias
 
-La figura principal se guarda como:
+:::{figure} ./figures/no5_lotka_volterra_inverse_ude_tray.png
+:width: 100%
+:align: center
 
-```julia
-savefig(fig, "lotka_volterra_inverse_ude.png")
-```
+Trayectorias halladas por la NN en comparación con los datos reales.
+:::
 
-En ella se comparan:
-
+En esta figura se comparan:
 * los datos de referencia,
 * la trayectoria producida por el modelo entrenado,
 * la curva de pérdida del entrenamiento.
 
-
-Si la UDE entrenada se superpone bien con los puntos observados, significa que los parámetros encontrados por el optimizador generan una dinámica compatible con los datos.
+Si la UDE entrenada se superpone bien con los puntos observados, como en el gáfico presentado, significa que los parámetros encontrados por el optimizador generan una dinámica compatible con los datos.
 
 
 ## Interpretación de los términos de interacción aprendidos
@@ -626,24 +613,22 @@ true_f1 = @. -p_true[2] * X_traj * Y_traj
 true_f2 = @.  p_true[3] * X_traj * Y_traj
 ```
 
-y luego:
+:::{figure} ./figures/no5_lotka_volterra_inverse_ude_interactions.png
+:width: 100%
+:align: center
 
-```julia
-savefig(p3, "lotka_volterra_inverse_ude_interactions.png")
-```
+Términos de interaccion aprendidos contrastado contra los reales. Esta figura muestra solapamiento de 100%.
+:::
 
 En este ejemplo sintético sabemos que la red debería aprender:
-
 $$
 NN_1(x,y) \approx -\beta xy,
 $$
-
 $$
 NN_2(x,y) \approx \delta xy.
 $$
 
 Este gráfico permite analizar si la optimización recuperó algo parecido a la función faltante verdadera, no sólo si logró ajustar la trayectoria.
-
 
 Desde el punto de vista de optimización, este gráfico ayuda a distinguir dos niveles de éxito:
 
@@ -652,15 +637,18 @@ Desde el punto de vista de optimización, este gráfico ayuda a distinguir dos n
 
 El primer objetivo puede alcanzarse sin que el segundo sea perfecto, especialmente si hay pocos datos o si sólo observamos una parte limitada del espacio de estados.
 
----
 
 ## Interpretación de los heatmaps
 
-La última figura se guarda como:
+La última figura que el código genera es esta:
 
-```julia
-savefig(fig_nn, "lotka_volterra_inverse_ude_nn_heatmap.png")
-```
+
+:::{figure} ./figures/no5_lotka_volterra_inverse_ude_nn_heatmap.png
+:width: 100%
+:align: center
+
+Heatmap de los valores recuperados por la NN cerca de la trayectoria. En el gradiente se puede ver la operación que la NN aprendió.
+:::
 
 Los heatmaps muestran los valores que devuelve la red neuronal en distintas regiones del espacio de estados $(x,y)$.
 
@@ -672,10 +660,8 @@ Sin embargo, el código aplica una máscara:
 sqrt(d) < mask_threshold ? nn([x, y], nn_ps, nn_st)[1][output_idx] : NaN
 ```
 
-Esto hace que sólo se grafiquen valores cerca de la trayectoria observada. La razón es importante: la red fue entrenada principalmente con información en esa región del espacio de estados. Lejos de esa región, la salida de la red puede ser una extrapolación poco confiable.
-
-
----
+Esto hace que sólo se grafiquen valores cerca de la trayectoria observada. La razón es importante: la red fue entrenada principalmente con información en esa región del espacio de estados. 
+Lejos de esa región, la salida de la red puede ser una extrapolación poco confiable.
 
 ## Qué nos enseña este ejemplo sobre optimización
 
@@ -692,5 +678,5 @@ Para evaluarla, hay que resolver una ODE.
     * ajuste visual de trayectorias,
     * recuperación de los términos de interacción,
     * comportamiento de la función aprendida en el espacio de estados.
-    
+
 En resumen, el ejemplo muestra que ajustar una UDE no consiste solamente en resolver una ecuación diferencial, sino en resolver repetidamente muchas ecuaciones diferenciales dentro de un proceso de optimización.
