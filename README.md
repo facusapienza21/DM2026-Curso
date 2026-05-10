@@ -18,3 +18,4 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | No2           | Ali Martín Zynda ([@alimartinza](https://github.com/alimartinza)), Cecilia Bolaños ([@ceciliabolanos](https://github.com/ceciliabolanos)), Manuel Matías Drescher ([@ManuDrescher](https://github.com/ManuDrescher))|
 | No3           | ...  |
 | No4           | Francisco Castillo Menegotto ([@FrCastillo](https://github.com/FrCastilloM)), Lucas Grasso Ramos ([@LucasGrasso](https://github.com/LucasGrasso))  |
+| No7           | Ema Sairstein ([@emasapirstein](https://github.com/emasapirstein)), Ingrid von Foerster ([@ingruvf](https://github.com/ingruvf))|
