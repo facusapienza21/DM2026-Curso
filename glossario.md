@@ -31,7 +31,8 @@ Programación diferenciable
 
 Sistema de Lotka-Volterra
 : Modelo depredador-presa descripto por el sistema de ODEs: $\frac{dx}{dt} = \alpha x - \beta x y$, $\frac{dy}{dt} = \delta x y - \gamma y$. Es uno de los ejemplos recurrentes del curso. — [Clase 2](clases/clase2.md)
-:::
 
 Inductive bias
 : El sesgo inductivo (inductive bias) es el onjunto de supuestos, restricciones o conocimientos previos utilizados para condicionar el resultado de un algoritmo ante datos observados. — [Clase 7](clases/clase7.md)
+
+:::
