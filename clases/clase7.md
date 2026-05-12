@@ -101,6 +101,28 @@ $\hat{Y}_k=\{Y^k_1, ..., Y^k_N\} \curvearrowright \theta^*_k$
 Si bootstrap se comporta bien, en ciertos casos particulares se obtiene el posterior. :::
 
 # Estimar el posterior
+Hallar el valor exacto del Posterior es computacionalmente costoso, lo que nos obliga a utilizar algoritmos de simulación para reconstruir la distribución de los parámetros
+Hasta ahora definimos el Posterior como
+$$P(\theta \mid Y) = \frac{P(Y \mid \theta)P(\theta)}{P(Y)}$$
+
+Sin embargo, en la práctica, calcular esta expresión tiene una gran dificultad:
+
+Para calcular el denominador $P(Y)$,  debemos integrar sobre todo el espacio de parámetos $\Theta$
+
+$$P(Y)=\int_{\Theta} P(Y \mid \theta) P(\theta) d\theta$$
+
+Resolver esta integral puede ser muy complicado y si el vector de parámetros $\theta$ tiene muchas dimensiones, el volumen del espacio de búsqueda crece exponencialmente.
+
+Dado que no podemos calcular $P(Y)$, la estrategia consiste en **evadir la integral**.
+
+En lugar de buscar la función de densidad exacta, buscamos generar una secuencia de puntos:
+
+$$\{\theta_1, \theta_2, \dots, \theta_k\} \sim \mathbb{P}(\theta \mid Y)$$
+
+Pasamos de un problema de **Cálculo** (resolver la integral) a uno de **Búsqueda** (diseñar algoritmos que exploren el espacio y dediquen el tiempo de cálculo solo a las zonas de alta densidad).
+
+A continuación veamos cuales son estos algoritmos
+
 
 ## Algortimos
 
@@ -210,3 +232,6 @@ Esto nos induce a una **Estrategia de Optimización Alternada**, que se traduce 
  1. **Paso $\theta$:** Dado $\hat{\sigma}_i$ actual, estimamos $\theta$ minimizando la suma pesada. 
  2. **Paso $\sigma$:** Dado $\hat{\theta}$ actual, estimamos los nuevos $\sigma_i$. 
  3. **Repetir** ambos pasos hasta alcanzar la convergencia.
+
+
+
