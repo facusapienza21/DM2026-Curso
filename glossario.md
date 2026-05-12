@@ -35,4 +35,12 @@ Sistema de Lotka-Volterra
 Inductive bias
 : El sesgo inductivo (inductive bias) es el onjunto de supuestos, restricciones o conocimientos previos utilizados para condicionar el resultado de un algoritmo ante datos observados. — [Clase 7](clases/clase7.md)
 
+Principio de Máxima Verosimilitud
+: Este principio busca estimar los parámetros del modelo que maximicen la verosimilitud, esta ultima nos dice que tan probable es observar los parámetros $y_1$ hasta $y_N$ dada la trayectoria observada $x(t_i;\theta)$, si calculamos esta probabilidad para distintos $\theta$ la verosimilitud va a dar distintos valores, entonces lo que queremos estimar es cuales son los parámetros $\theta$ que la maximizan. — [Clase 6](clases/clase6.md)
+
+$$
+\hat{\theta}_{MLE} = \arg\max_{\theta} L(\theta;y) = \arg\max_{\theta} \ell(\theta;y)
+$$
+
+La última igualdad es válida porque el logaritmo es una función monótona creciente.
 :::

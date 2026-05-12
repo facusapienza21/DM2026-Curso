@@ -4,7 +4,7 @@ title: No3 - UDEs
 
 # Universal Differential Equations (UDEs)
 
-**Fecha:** 22/04/2026
+**Fecha:** 15/04/2026
 
 :::{iframe} https://www.youtube.com/embed/zkoWO0nnc3s
 :width: 100%
