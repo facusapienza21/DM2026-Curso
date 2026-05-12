@@ -93,6 +93,8 @@ $$
 
 ## Implementación
 
+### Problema directo
+
 Vemos una implementación de PINN directo.
 
 :::{note}
@@ -100,17 +102,15 @@ Se aplica escalado a la red porque las redes con bias tienden a ajustar mejor fu
 El escalado busca corregir este {term}`sesgo espectral <Sesgo espectral>`.
 :::
 
-## Técnicas para mejorar la convergencia
+#### Técnicas para mejorar la convergencia
 
-### Puntos de colocación
-
+**Puntos de colocación:**
 En una PINN hay que elegir puntos en el dominio temporal donde evaluar el residuo de la ecuación diferencial $D[x(\theta)]$. Hay dos familias:
 
 - **Uniforme:** puntos distribuidos uniformemente en el dominio.
 - **Escala logarítmica desde $t_0$:** mayor densidad de puntos cerca de la condición inicial. Una solución espuria que la red puede encontrar es arrancar en $u_0$ e irse inmediatamente a la trayectoria nula, lo que satisface trivialmente las ecuaciones de Lotka-Volterra. Concentrar puntos al principio fuerza al modelo a seguir la trayectoria correcta desde $t_0$.
 
-### Forzar la condición inicial exactamente
-
+**Forzar la condición inicial exactamente:**
 La condición inicial puede imponerse como restricción fuerte en lugar de suave. Una reparametrización directa es:
 
 $$
@@ -127,16 +127,20 @@ $$
 
 donde $\phi(t_0) = 0$. Por ejemplo, $\phi(t) = \frac{t - t_0}{t - T_0}$ con $T_0$ cualquier número finito satisface $\phi(t_0) = 0$ y $\phi(t) \to 1$ cuando $t \to \infty$.
 
-## Problema inverso
+### Problema inverso
 
 En el problema inverso no solo se conoce la condición inicial sino también observaciones de la trayectoria. El objetivo deja de ser únicamente ajustar $u(t_0) = u_0$ y pasa a ser ajustar la trayectoria completa. En este caso se aplica a Lotka-Volterra sin conocer los parámetros del sistema.
 
-[Imagen de convergencia de parámetros]
-
+```{figure} ../code/08_LV_inverse_PINN/lv_inverse_pinn_params.png
+:width: 75%
+:align: center
+```
 El error puntual muestra que la PINN ajusta exactamente en los puntos de colocación y en los puntos de observación, pero el error crece en las regiones intermedias.
 
-[Imagen de error puntual]
-
+```{figure} ../code/08_LV_inverse_PINN/lv_inverse_pinn_error.png
+:width: 75%
+:align: center
+```
 :::{important}
 En este ejemplo se usó una grilla fija de puntos de colocación. En la práctica, conviene resamplear la grilla en cada iteración. Hay dos estrategias:
 
