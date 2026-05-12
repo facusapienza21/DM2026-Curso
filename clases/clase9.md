@@ -6,7 +6,7 @@ title: No9 - PINNs (continuación)
 
 **Fecha:** 11/05/2026
 
-:::{iframe} https://www.youtube.com/embed/blahblahblah
+:::{iframe} https://www.youtube.com/embed/fr6iQbl_XfA
 :width: 100%
 :::
 
@@ -88,28 +88,58 @@ $$
 \| \nabla \mathcal{L}_{\text{emp}}^k \| \sim \| \lambda_1^k \nabla \mathcal{L} \| \sim \| \lambda_2^k \nabla \mathcal{L} \| \sim \cdots
 $$
 
-## Puntos de colocación
 
 
-<!-- GUIDO: ANOTÉ ESTO PERO NO ESTOY SEGURO QUE ESTÉ BIEN -->
-<!-- PENSABA REVISARLO UNA VEZ QUE SE SUBAN LAS GRABACIONES -->
-<!-- En una PINN hay que elegir dos tipos de puntos en el dominio temporal: -->
-<!-- * **Puntos de condición inicial y de borde:** donde se impone $u(t_0) = u_0$.
-* **Puntos de colocación:** donde se evalúa el residuo de la ecuación diferencial $D[x(\theta)]$. Son los puntos donde le "pedimos" al modelo que satisfaga la dinámica. -->
-
-:::{tip} Forzar la condición inicial exactamente
-Para _forzar_ exactamente la condición inicial $u_0$, se puede reparametrizar la salida de la red neuronal como:
-
-$$
-u(t) = \text{NN}(t)(t - t_0) + u_0
-$$
-
-De esta manera, en $t = t_0$ se tiene $u(t_0) = \text{NN}(t_0) \cdot 0 + u_0 = u_0$ independientemente de los parámetros de la red.
-:::
 
 ## Implementación
+
+Vemos una implementación de PINN directo.
 
 :::{note}
 Se aplica escalado a la red porque las redes con bias tienden a ajustar mejor funciones de alta frecuencia que de baja frecuencia.
 El escalado busca corregir este {term}`sesgo espectral <Sesgo espectral>`.
+:::
+
+## Técnicas para mejorar la convergencia
+
+### Puntos de colocación
+
+En una PINN hay que elegir puntos en el dominio temporal donde evaluar el residuo de la ecuación diferencial $D[x(\theta)]$. Hay dos familias:
+
+- **Uniforme:** puntos distribuidos uniformemente en el dominio.
+- **Escala logarítmica desde $t_0$:** mayor densidad de puntos cerca de la condición inicial. Una solución espuria que la red puede encontrar es arrancar en $u_0$ e irse inmediatamente a la trayectoria nula, lo que satisface trivialmente las ecuaciones de Lotka-Volterra. Concentrar puntos al principio fuerza al modelo a seguir la trayectoria correcta desde $t_0$.
+
+### Forzar la condición inicial exactamente
+
+La condición inicial puede imponerse como restricción fuerte en lugar de suave. Una reparametrización directa es:
+
+$$
+u(t) = \text{NN}_\theta(t)(t - t_0) + u_0
+$$
+
+En $t = t_0$ se tiene $u(t_0) = \text{NN}_\theta(t_0) \cdot 0 + u_0 = u_0$ independientemente de los parámetros. Sin embargo, el factor $(t - t_0)$ crece linealmente, obligando a la red a desaprender un trend lineal.
+
+Una mejor alternativa es usar una función $\phi$ acotada:
+
+$$
+u_\theta(t) = u_0 + \phi(t)\, \text{NN}_\theta(t)
+$$
+
+donde $\phi(t_0) = 0$. Por ejemplo, $\phi(t) = \frac{t - t_0}{t - T_0}$ con $T_0$ cualquier número finito satisface $\phi(t_0) = 0$ y $\phi(t) \to 1$ cuando $t \to \infty$.
+
+## Problema inverso
+
+En el problema inverso no solo se conoce la condición inicial sino también observaciones de la trayectoria. El objetivo deja de ser únicamente ajustar $u(t_0) = u_0$ y pasa a ser ajustar la trayectoria completa. En este caso se aplica a Lotka-Volterra sin conocer los parámetros del sistema.
+
+[Imagen de convergencia de parámetros]
+
+El error puntual muestra que la PINN ajusta exactamente en los puntos de colocación y en los puntos de observación, pero el error crece en las regiones intermedias.
+
+[Imagen de error puntual]
+
+:::{important}
+En este ejemplo se usó una grilla fija de puntos de colocación. En la práctica, conviene resamplear la grilla en cada iteración. Hay dos estrategias:
+
+- **Resampleo uniforme:** nuevos puntos aleatorios en cada paso.
+- **Important sampling:** concentrar puntos donde el residuo de la ecuación diferencial es mayor, es decir, donde la PINN está errando más.
 :::
