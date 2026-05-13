@@ -403,7 +403,7 @@ Se tienen **dos redes** con parámetros distintos:
 | $\text{Id}$ | $D_{\beta_1}$ | $\mathcal{L}_{\text{física}}$ |
 
 
-La pérdida empírica $\mathcal{L}_{\text{emp}}$ también se incorpora a $\mathcal{L}_{\text{TOTAL}}$.
+La función de costo empírica $\mathcal{L}_{\text{emp}}$ también se incorpora a $\mathcal{L}_{\text{TOTAL}}$.
 
 ### Parámetros a optimizar
 
