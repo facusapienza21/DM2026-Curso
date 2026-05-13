@@ -14,21 +14,16 @@ title: No8 - PINNs
 
 Este es un problema de optimización **sin restricciones**:
 
-\[
-\min_{\theta} \mathcal{L} (\theta,y)
-=
-\min_{\theta}
-\sum_{i=1}^{N}
-\left\|\left\| y_i - x(t_i,\theta) \right\| \right\|_2^2
-\tag{1}
-\]
+$$
+\min_{\theta} \mathcal{L} (\theta,y)=\min_{\theta}\sum_{i=1}^{N} \left\|\left\| y_i - x(t_i,\theta) \right\| \right\|_2^2
+$$
 
-donde \( \mathcal{L} \) es la función de costo.
+$(1)$
+donde $\mathcal{L}$ es la función de costo.
 
-Podemos reescribir esto como un problema **con restricciones**, dejando a \(x\) libre pero exigiendo que satisfaga una ecuación diferencial:
+Podemos reescribir esto como un problema **con restricciones**, dejando a $x$ libre pero exigiendo que satisfaga una ecuación diferencial:
 
-\[
-\min_{\theta,x}
+$$\min_{\theta,x}
 \sum_{i=1}^{N}
 \left\|\left\| y_i - x(t_i) \right\| \right\|_2^2
 \quad
@@ -37,38 +32,36 @@ Podemos reescribir esto como un problema **con restricciones**, dejando a \(x\) 
 \begin{cases}
 \dfrac{dx}{dt} = f(x,t,\theta) \\
 x(t_0)=x_0
-\end{cases}
-\tag{2}
-\]
+\end{cases}$$
 
 Es decir, estamos convirtiendo
 
-\[
+$$
 \min_{\theta} f(x(\theta))
-\]
+$$
 
 en
 
-\[
+$$
 \min_{\theta,x} f(x,\theta)
 \quad
 \text{sujeto a}
 \quad
 G(x,\theta)=0
-\]
+$$
 
-Si uno puede invertir \(G(x,\theta)\) para obtener \(x=x(\theta)\), volvemos al problema sin restricciones.
+Si uno puede invertir $G(x,\theta)$ para obtener $x=x(\theta)$, volvemos al problema sin restricciones.
 
 En este caso,
 
-\[
+$$
 G(x,\theta)=
 \begin{bmatrix}
 \dfrac{du}{dt} - f(u,t,\theta) \\
 u(t_0)-u_0
 \end{bmatrix}
 =0
-\]
+$$
 
 > Esto se hace con el solver numérico.
 
@@ -76,18 +69,18 @@ u(t_0)-u_0
 
 # Forma general del problema de optimización
 
-\[
+$$
 \min_{\theta} f(\theta)
-\]
+$$
 
 sujeto a
 
-\[
+$$
 \begin{cases}
 g(\theta)=0 \\
 h(\theta)\leq 0
 \end{cases}
-\]
+$$
 
 ---
 
@@ -97,41 +90,32 @@ La dualidad lagrangiana toma un problema con restricciones y lo transforma en un
 
 Se define el lagrangiano:
 
-\[
-\mathcal{L}(\theta,\lambda,\nu)
-=
-f(\theta)
+$$ \mathcal{L}(\theta,\lambda,\nu)
+= f(\theta)
 +
-\lambda\, g(\theta)
+\lambda g(\theta)
 +
-\nu\, h(\theta)
-\]
+\nu h(\theta)$$
 
 donde:
 
-- \(\lambda\): multiplicadores de Lagrange asociados a restricciones de igualdad.
-- \(\nu\): multiplicadores asociados a restricciones de desigualdad.
+- $\lambda$: multiplicadores de Lagrange asociados a restricciones de igualdad.
+- $\nu$: multiplicadores asociados a restricciones de desigualdad.
 
 ---
 
-Imaginemos un problema sin restricciones \(h\). La dualidad lagrangiana nos dice:
+Imaginemos un problema sin restricciones $h$. La dualidad lagrangiana nos dice:
 
-\[
-\min_{\lambda}\max_{\theta}\mathcal{L}(\theta,\lambda)
-=
-\max_{\theta}\min_{\lambda}\mathcal{L}(\theta,\lambda)
-\]
+$$\min_{\lambda}\max_{\theta}\mathcal{L}(\theta,\lambda)=\max_{\theta}\min_{\lambda}\mathcal{L}(\theta,\lambda)$$
 
 # Ejemplo: LASSO
 
 Consideremos el problema de optimización:
 
-\[
-\min_{\theta}
+$$\min_{\theta}
 \left\| \left\| y - x \theta \right\| \right\|_2^2
 +
-\lambda \left\| \left\|  \theta \right\| \right\|_1
-\]
+\lambda \left\| \left\|  \theta \right\| \right\|_1$$
 
 donde:
 
@@ -140,68 +124,49 @@ donde:
 
 Recordemos que
 
-\[
-\|\theta\|_1
-=
-\sum_{i=1}^{p} |\theta_i|
-\]
+$$\left\| \left\|  \theta \right\| \right\|_1=\sum_{i=1}^{p} |\theta_i|$$
 
 Entonces,
 
-\[
-\theta^\ast
-=
+$$\theta^\ast=
 \arg\min_{\theta}
 \left\| \left\| y- x\theta \right\| \right\|_2^2
 +
-\lambda \left\| \left\| \theta  \right\| \right\|_1
-\]
+\lambda \left\| \left\| \theta  \right\| \right\|_1$$
 
 puede reinterpretarse como
 
-\[
-\theta^\ast
-=
-\arg\min_{\theta}
-\left\{
+$$\theta^\ast=
+\arg\min_{\theta} \left\{
 \begin{aligned}
 & \left\| \left\| y-x\theta \right\| \right\|_2^2 \\
 &\text{sujeto a } \left\| \left\| \theta  \right\| \right\|_1 \leq C(\lambda)
-\end{aligned}
-\right.
-\]
-
+\end{aligned} \right.$$
 ---
 
 # Problema relajado
 
 Tomemos el problema (1) y escribámoslo como:
 
-\[
-\min_{\theta,x} \mathcal{L}(\theta,x)=f(\theta,x)
-\tag{3}
-\]
+$$\min_{\theta,x} \mathcal{L}(\theta,x)=f(\theta,x)
+\tag{3}$$
 
 sujeto a
 
-\[
-\left\| \left\|
+$$\left\| \left\|
 \frac{dx}{dt}
 -
 f(x,t,\theta)
 \right\| \right\|_2
 =
 \varepsilon
-\qquad \forall t
-\]
+\qquad \forall t$$
 
 y
 
-\[
-\left\| \left\| x(t_0)-u_0 \right\| \right\|_2 \leq \varepsilon
-\]
+$$\left\| \left\| x(t_0)-u_0 \right\| \right\|_2 \leq \varepsilon$$
 
-El problema (1) se recupera cuando \(\varepsilon=0\).
+El problema (1) se recupera cuando $\varepsilon=0$.
 
 ---
 
@@ -209,8 +174,7 @@ El problema (1) se recupera cuando \(\varepsilon=0\).
 
 Aplicando dualidad lagrangiana:
 
-\[
-\min_{\theta,x}
+$$\min_{\theta,x}
 \mathcal{L}(\theta,x)
 +
 \lambda_{\varepsilon}
@@ -221,8 +185,7 @@ Aplicando dualidad lagrangiana:
 f(x,t,\theta)
 \right\| \right\|_2^2
 dt
-\tag{4}
-\]
+\tag{4}$$
 
 El segundo término actúa como un término de regularización con derivadas.
 
@@ -230,7 +193,7 @@ El segundo término actúa como un término de regularización con derivadas.
 
 ---
 
-Ahora no resolvemos explícitamente ninguna ecuación diferencial, sino que optimizamos directamente sobre \(x\).
+Ahora no resolvemos explícitamente ninguna ecuación diferencial, sino que optimizamos directamente sobre $x$.
 
 Este problema puede resolverse usando splines.
 
@@ -240,21 +203,21 @@ La ecuación (4) constituye el punto de partida para una PINN (*Physics-Informed
 
 ## Caso ODE
 
-La idea es escribir \(x(t)\) como una red neuronal:
+La idea es escribir $x(t)$ como una red neuronal:
 
-\[
+$$
 x_\beta(t)
-\]
+$$
 
-donde \(\beta\) representa el conjunto de parámetros de la red neuronal:
+donde $\beta$ representa el conjunto de parámetros de la red neuronal:
 
-\[
+$$
 \beta = [W_1,\dots,W_n,b_1,\dots,b_n]
-\]
+$$
 
 Por ejemplo, una red neuronal puede escribirse como:
 
-\[
+$$
 x(t)
 =
 \sigma\!\left(
@@ -265,38 +228,38 @@ W_2\,
 \right)
 +b_3
 \right)
-\]
+$$
 
 ---
 
 Para construir la función de costo necesitamos:
 
-1. Poder evaluar \(x_\beta(t)\) para todo \(t\).
+1. Poder evaluar $x_\beta(t)$ para todo $t$.
 2. Poder evaluar
 
-\[
+$$
 \frac{dx_\beta}{dt}\Big|_{t=s}
-\]
+$$
 
-para cualquier \(s\).
+para cualquier $s$.
 
 ---
 
 # Modo 1: PINN forward/directo
 
-En este caso, \(\theta\) permanece fijo y no se optimiza.
+En este caso, $\theta$ permanece fijo y no se optimiza.
 
-Una vez obtenida \(x(t)\), la introducimos en el segundo término de la ecuación (4).
+Una vez obtenida $x(t)$, la introducimos en el segundo término de la ecuación (4).
 
 Tomamos puntos de prueba:
 
-\[
+$$
 t_0 < z_1 < z_2 < \dots < z_k  < \dots < t_1
-\]
+$$
 
 y definimos la función de costo:
 
-\[
+$$
 \min_{\beta}
 \left\| \left\| x(t_0)-x_0\right\| \right\|_2^2
 +
@@ -309,7 +272,7 @@ y definimos la función de costo:
 f(x,t,\theta)
 \right)_{t=x_k}
 \right\| \right\|^2
-\]
+$$
 
 La suma actúa como una aproximación de la integral.
 
@@ -323,51 +286,51 @@ Esto es equivalente a utilizar una red neuronal como *solver* numérico.
 
 Consideremos:
 
-\[
+$$
 x \in \mathbb{R}^n,
 \qquad
 t \in \mathbb{R},
 \qquad
 (n=1,2,3)
-\]
+$$
 
 La ecuación del calor es:
 
-\[
+$$
 \frac{\partial u}{\partial t}
 -
 D\nabla^2 u
 =
 0
-\]
+$$
 
-donde \(D\) es la difusividad.
+donde $D$ es la difusividad.
 
 La ecuación debe satisfacerse para:
 
-\[
+$$
 \forall x\in\Omega,
 \qquad
 \forall t\in[t_0,t_1]
-\]
+$$
 
 ---
 
 ## Condiciones de borde
 
-\[
+$$
 u(x,t)=u_B(x,t)
 \qquad
 \forall x\in\partial\Omega
-\]
+$$
 
 ---
 
 ## Condición inicial
 
-\[
+$$
 u(x,t_0)=u_0(x)
-\]
+$$
 
 ---
 
@@ -378,7 +341,7 @@ Vamos a considerar una parametrización para el borde espacial, otra para la con
 
 La función de costo a minimizar sobre los parámetros $\beta$ es:
 
-$$\min_{\beta} \; \lambda_1 \sum_{i=1}^{K_1} \left\| \left\|  u_\beta(t_0, x_i^I) - u_0(x_i^I) \right\| \right\|^2 + \lambda_2 \sum_{j=1}^{K_2} \left\| \left\| u_\beta(t_j^B, x_j^B) - u_B(t_j^B, x_j^B) \right\| \right\|^2 + \lambda_3 \sum_{m=1}^{K_3} \left\| \left\| \left\| \mathcal{G}[u_\beta] \Big|_{t_M, x_M} \right\| \right\|_2^2$$
+$$\min_{\beta} \; \lambda_1 \sum_{i=1}^{K_1} \left\| \left\|  u_\beta(t_0, x_i^I) - u_0(x_i^I) \right\| \right\|^2 + \lambda_2 \sum_{j=1}^{K_2} \left\| \left\| u_\beta(t_j^B, x_j^B) - u_B(t_j^B, x_j^B) \right\| \right\|^2 + \lambda_3 \sum_{m=1}^{K_3} \left\| \left\| \mathcal{G}[u_\beta] \Big|_{t_M, x_M} \right\| \right\|_2^2$$
 
 $$\equiv \mathcal{L}_{\text{inicial}} + \mathcal{L}_{\text{borde}} + \mathcal{L}_{\text{físico}}$$
 
