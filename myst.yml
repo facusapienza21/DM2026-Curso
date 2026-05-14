@@ -28,7 +28,8 @@ project:
         - file: clases/clase7.md
         - file: clases/clase8.md
         - file: clases/clase9.md
-        - file: clases/clase_template.md
+        - file: clases/clase10.md
+        # - file: clases/clase_template.md
     - title: Projecto Final
       children:
         - file: proyecto/general_info.md
