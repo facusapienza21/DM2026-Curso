@@ -15,10 +15,9 @@ title: No8 - PINNs
 Este es un problema de optimización **sin restricciones**:
 
 $$
-\min_{\theta} \mathcal{L} (\theta,y)=\min_{\theta}\sum_{i=1}^{N} \left\|\left\| y_i - x(t_i,\theta) \right\| \right\|_2^2
+\min_{\theta} \mathcal{L} (\theta,y)=\min_{\theta}\sum_{i=1}^{N} \left\|\left\| y_i - x(t_i,\theta) \right\| \right\|_2^2 \qquad (1)
 $$
 
-$(1)$
 donde $\mathcal{L}$ es la función de costo.
 
 Podemos reescribir esto como un problema **con restricciones**, dejando a $x$ libre pero exigiendo que satisfaga una ecuación diferencial:
@@ -149,7 +148,7 @@ $$\theta^\ast=
 Tomemos el problema (1) y escribámoslo como:
 
 $$\min_{\theta,x} \mathcal{L}(\theta,x)=f(\theta,x)
-\tag{3}$$
+\qquad (3)$$
 
 sujeto a
 
@@ -174,18 +173,12 @@ El problema (1) se recupera cuando $\varepsilon=0$.
 
 Aplicando dualidad lagrangiana:
 
-$$\min_{\theta,x}
-\mathcal{L}(\theta,x)
-+
+$$\min_{\theta,x} \mathcal{L}(\theta,x)+
 \lambda_{\varepsilon}
 \int_{t_0}^{t_1}
 \left\| \left\|
 \frac{dx}{dt}
--
-f(x,t,\theta)
-\right\| \right\|_2^2
-dt
-\tag{4}$$
+-f(x,t,\theta) \right\| \right\|_2^2 dt \qquad (4)$$
 
 El segundo término actúa como un término de regularización con derivadas.
 
