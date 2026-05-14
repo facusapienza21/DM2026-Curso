@@ -12,7 +12,7 @@ title: No8 - PINNs
 
 # Optimización con restricciones y dualidad lagrangiana
 
-Este es un problema de optimización **sin restricciones**:
+Muchos de los problemas que hasta ahora trabajamos parecieran tratar de minimizar la función de costo **sin restricciones**; por ejemplo, cuadrados mínimos:
 
 $$
 \min_{\theta} \mathcal{L} (\theta,y)=\min_{\theta}\sum_{i=1}^{N} \left\|\left\| y_i - x(t_i,\theta) \right\| \right\|_2^2 \qquad (1)
@@ -49,7 +49,7 @@ $$
 G(x,\theta)=0
 $$
 
-Si uno puede invertir $G(x,\theta)$ para obtener $x=x(\theta)$, volvemos al problema sin restricciones.
+Si uno puede invertir $G(x,\theta)$ para obtener $x=x(\theta)$ (ya sea analítica o numéricamente), volvemos al problema sin restricciones.
 
 En este caso,
 
@@ -68,6 +68,8 @@ $$
 
 # Forma general del problema de optimización
 
+La forma más general del problema de optimización puede escribirse como:
+
 $$
 \min_{\theta} f(\theta)
 $$
@@ -80,6 +82,8 @@ g(\theta)=0 \\
 h(\theta)\leq 0
 \end{cases}
 $$
+
+La diferencia entre resolver estos problemas con y sin restricciones es debido a la dualidad lagrangiana.
 
 ---
 
@@ -103,9 +107,9 @@ donde:
 
 ---
 
-Imaginemos un problema sin restricciones $h$. La dualidad lagrangiana nos dice:
+Imaginemos un problema sin restricciones $h$. La dualidad lagrangiana nos dice, bajo ciertas hipótesis (dualidad fuerte):
 
-$$\min_{\lambda}\max_{\theta}\mathcal{L}(\theta,\lambda)=\max_{\theta}\min_{\lambda}\mathcal{L}(\theta,\lambda)$$
+$$\max_{\lambda}\min_{\theta}\mathcal{L}(\theta,\lambda)=\min_{\theta}\max_{\lambda}\mathcal{L}(\theta,\lambda)$$
 
 # Ejemplo: LASSO
 
@@ -119,13 +123,13 @@ $$\min_{\theta}
 donde:
 
 - el primer término corresponde al error de ajuste,
-- el segundo término penaliza la complejidad del modelo.
+- el segundo término penaliza la complejidad del modelo (en este caso, prefiere soluciones esparsas).
 
 Recordemos que
 
-$$\left\| \left\|  \theta \right\| \right\|_1=\sum_{i=1}^{p} ||\theta_i||$$
+$$\left\| \left\|  \theta \right\| \right\|_1=\sum_{i=1}^{p} \left\| \left\| \theta_i \right\| \right\|$$
 
-Entonces,
+Entonces puede mostrarse que el $\theta^\ast$ que minimiza:
 
 $$\theta^\ast=
 \arg\min_{\theta}
@@ -135,32 +139,29 @@ $$\theta^\ast=
 
 puede reinterpretarse como
 
-$$\theta^\ast = \arg\min_{\theta} \left\| \left\| y-x\theta \right\| \right\|_2^2 \quad \text{sujeto a} \quad \|\| \theta\|\|_1 \leq C(\lambda)$$
+$$\theta^\ast = \arg\min_{\theta} \left\| \left\| y-x\theta \right\| \right\|_2^2 \quad \text{sujeto a} \quad \left\| \left\| \theta \right\| \right\|_1 \leq C(\lambda)$$
 
+Por lo cual, la dualidad lagrangiana nos asegura que un problema de minimización de un lagrangiano puede reescribirse como un problema de optimización con restricciones.
+
+Notar que si nuestro $\lambda \rightarrow 0$ entonces la constante $C \rightarrow \infty$. Esto puede interpretarse como que si no restringimos demasiado nuestras soluciones a que cumplan nuestros vínculos, entonces habrá más libertad para los valores $\theta$ que se puedan obtener, logrando que $C$ sea muy grande; análogo ocurre para el caso extremo opuesto. Es decir, notamos que la dependencia entre $\lambda$ y $C$ es inversamente proporcional.
 
 ---
 
 # Problema relajado
 
-Tomemos el problema (1) y escribámoslo como:
+Hay posibilidad de "relajar" la función de costo con un factor $\varepsilon$. Por ejemplo, tomemos el problema (1) y escribámoslo como:
 
-$$\min_{\theta,x} \mathcal{L}(\theta,x)=f(\theta,x) \qquad (3)$$
+$$\min_{\theta,x} \mathcal{L}(\theta,x)= \qquad (3)$$
 
 sujeto a
 
-$$\left\| \left\| \frac{dx}{dt} - f(x,t,\theta) \right\| \right\|_2 = \varepsilon \qquad \forall t$$
+$$\left\| \left\| \frac{dx}{dt} - f(x,t,\theta) \right\| \right\|_2 \leq \varepsilon \qquad \forall t$$
 
 y
 
 $$\left\| \left\| x(t_0)-u_0 \right\| \right\|_2 \leq \varepsilon$$
 
-El problema (1) se recupera cuando $\varepsilon=0$.
-
----
-
-# Dualidad lagrangiana
-
-Aplicando dualidad lagrangiana:
+donde recuperamos el problema (1) si $\varepsilon=0$ (es decir, si la ecuación diferencial se cumple exactamente). Una pregunta natural sería ¿de qué lagrangiano proviene esta restricción? Por dualidad lagrangiana, puede mostrarse que:
 
 $$\min_{\theta,x} \mathcal{L}(\theta,x)+
 \lambda_{\varepsilon}
@@ -169,23 +170,16 @@ $$\min_{\theta,x} \mathcal{L}(\theta,x)+
 \frac{dx}{dt}
 -f(x,t,\theta) \right\| \right\|_2^2 dt \qquad (4)$$
 
-El segundo término actúa como un término de regularización con derivadas.
-
-> En el caso clásico de estadística esto corresponde a un “profiling”.
-
----
-
-Ahora no resolvemos explícitamente ninguna ecuación diferencial, sino que optimizamos directamente sobre $x$.
-
-Este problema puede resolverse usando splines.
+El segundo término actúa como un término de regularización con derivadas (en el caso clásico de estadística esto corresponde a un “profiling”). Asimismo, vemos que si $\varepsilon \rightarrow 0$ entonces $\lambda_\varepsilon \rightarrow \infty$ y viceversa. Esta forma tiene la misma (o similar) que resolver mediante "splines" o "smooth splines", solo que allí se utilizan las derivadas segundas.
 
 La ecuación (4) constituye el punto de partida para una PINN (*Physics-Informed Neural Network*).
+
 
 # Physics-Informed Neural Networks (PINNs)
 
 ## Caso ODE
 
-La idea es escribir $x(t)$ como una red neuronal:
+La idea es agarrar el "profiling" y nuestras incógnitas a optimizar ($x(t)$) usando una red neuronal. Es decir, cambiamos nuestra $x(t)$ por:
 
 $$
 x_\beta(t)
@@ -197,7 +191,7 @@ $$
 \beta = [W_1,\dots,W_n,b_1,\dots,b_n]
 $$
 
-Por ejemplo, una red neuronal puede escribirse como:
+por lo cual, con esto, lo ponemos en la ecuación diferencial y optimizamos sobre los parámetros de la red neuronal. Por ejemplo, una red neuronal puede escribirse como:
 
 $$
 x(t) = \sigma \left( W_3 \sigma \left( W_2 \sigma(W_1 t)+b_2\right) +b_3 \right) $$
@@ -232,18 +226,7 @@ $$
 y definimos la función de costo:
 
 $$
-\min_{\beta}
-\left\| \left\| x(t_0)-x_0\right\| \right\|_2^2
-+
-\tilde{\lambda}
-\sum_{k=1}^{K}
-\left\| \left\|
-\left(
-\frac{dx_\beta}{dt}
--
-f(x,t,\theta)
-\right)_{t=x_k}
-\right\| \right\|^2
+\min_{\beta} \left\| \left\| x(t_0)-x_0\right\| \right\|_2^2 + \tilde{\lambda} \sum_{k=1}^{K} \left\| \left\| \left( \frac{dx_\beta}{dt} - f(x,t,\theta) \right)_{t=x_k} \right\| \right\|^2
 $$
 
 La suma actúa como una aproximación de la integral.
@@ -268,15 +251,10 @@ $$
 
 La ecuación del calor es:
 
-$$
-\frac{\partial u}{\partial t}
--
-D\nabla^2 u
-=
-0
+$$ \frac{\partial u}{\partial t} - D \nabla^2 u = 0
 $$
 
-donde $D$ es la difusividad.
+donde $D$ es la difusividad y $\nabla^2 = \frac{\partial}{\partial x} + \frac{\partial}{\partial y} + \frac{\partial}{\partial z}$ es el laplaciano.
 
 La ecuación debe satisfacerse para:
 
@@ -349,7 +327,7 @@ $$\implies \min_{\beta} \, \mathcal{L}_{\text{TOT}}(\beta) \simeq 0 \quad \text{
 
 ### Problema
 
-Dados los datos observados $\{u^{\text{obs}}(t_i, x_i)\}_{i=1}^{N}$, se busca **recuperar** $D = D(x)$: la difusividad como función de $x$.
+Dados los datos observados $\left[u^{\text{obs}}(t_i, x_i)\right]_{i=1}^{N}$, se busca **recuperar** $D = D(x)$: la difusividad como función de $x$.
 
 ### Idea
 
@@ -366,19 +344,19 @@ Se tienen **dos redes** con parámetros distintos:
 
 | Operación sobre $u_{\beta_1}$ | Resultado | Función de costo asociada |
 |---|---|---|
-| $\text{Id}$ | $u_{\beta_1}$ | $\mathcal{L}_{\text{inicial}}$, $\mathcal{L}_{\text{borde}}$, $\mathcal{L}_{\text{empírica}}$ |
+| $\text{Id}$ | $u_{\beta_1}$ | $\mathcal{L}_{\text{inicial, borde, empírica}}$ |
 | $\frac{\partial}{\partial t}$ | $\dfrac{\partial u_{\beta_1}}{\partial t}$ | $\mathcal{L}_{\text{física}}$ |
-| $\nabla$ | $\nabla u_{\beta_1}$ | $\mathcal{L}_{\text{físico}}$ (usa $D_{\beta_2}$) |
+| $\nabla$ | $\nabla u_{\beta_1}$ | $\mathcal{L}_{\text{física}}$ |
 
 | Operación sobre $D_{\beta_1}$ | Resultado | Función de costo asociada |
 |---|---|---|
 | $\text{Id}$ | $D_{\beta_1}$ | $\mathcal{L}_{\text{física}}$ |
 
 
-La función de costo empírica $\mathcal{L}_{\text{emp}}$ también se incorpora a $\mathcal{L}_{\text{TOTAL}}$.
+La función de costo empírica también se incorpora a $\mathcal{L}_{\text{TOTAL}}$.
 
 ### Parámetros a optimizar
 
 $$\beta = [\beta_1, \beta_2]$$
 
-Se minimiza $\mathcal{L}_{\text{TOTAL}}$ conjuntamente sobre $\beta_1$ y $\beta_2$, de modo que al final $u_{\beta_1}$ aproxima la solución **y** $D_{\beta_2}$ recupera la difusividad desconocida.
+Se minimiza la función de costo total conjuntamente sobre $\beta_1$ y $\beta_2$, de modo que al final $u_{\beta_1}$ aproxima la solución **y** $D_{\beta_2}$ recupera la difusividad desconocida.
