@@ -14,7 +14,7 @@ title: No9 - PINNs Pt2
 Esta clase continúa directamente desde la [Clase 8](clase8.md), donde se introdujeron las PINNs.
 :::
 
-## Tres enfoques para incorporar ecuaciones diferenciales
+## Tres tipos de algoritmos para incorporar ecuaciones diferenciales
 
 Cuando queremos estimar o aproximar una ecuación diferencial con modelos de aprendizaje automático, hay tres enfoques principales:
 
@@ -28,7 +28,7 @@ $$
 \min_{\theta,\, x} \mathcal{L}_{\text{emp}}(y, x, \theta) + \lambda \| D[x(\theta)] \|.
 $$
 
-3. **Restricciones fuertes** (se satisfacen _estrictamente_): el modelo debe satisfacer la ecuación diferencial $D[x(\theta)]$ en todo momento.
+3. **Restricciones fuertes** (se satisfacen _estrictamente_): el modelo debe satisfacer la ecuación diferencial $D[x(\theta)] = 0$ en todo momento.
 Son las **NODE** y **UDE**:
 
 $$
@@ -37,7 +37,7 @@ $$
 
 ## Dualidad Lagrangiana
 
-Un resultado fundamental de la optimización con restricciones establece que, si relajamos la restricción fuerte $D[x(\theta)] = 0$ por una restricción aproximada $\| D[x(\theta)] \| \leq \varepsilon$, existe un $\lambda(\varepsilon)$ tal que la solución del problema con restricción suave (penalizado con $\lambda(\varepsilon)$) coincide con la solución del problema con restricción fuerte relajada:
+Un resultado fundamental de la optimización con restricciones establece que, si relajamos la restricción fuerte $D[x(\theta)] = 0$ por una restricción aproximada $\| D[x(\theta)] \| \leq \varepsilon$, existe un $\lambda(\varepsilon)$ tal que la solución del problema con restricción suave (penalizado con $\lambda(\varepsilon)$) coincide con la solución del problema con restricción fuerte relajada {cite}`boyd2004convex`:
 
 $$
 \lambda(\varepsilon) = \lambda \quad \Longleftrightarrow \quad \text{restricción suave} = \text{restricción fuerte relajada}
@@ -45,13 +45,18 @@ $$
 
 :::{note} Hard PINN
 Elegir $\lambda \to \infty$ en la formulación suave es equivalente a hacer $\varepsilon \to 0$, es decir, a forzar la restricción estrictamente.
-Las Hard PINNs imponen la ecuación diferencial de forma exacta reparametrizando la solución directamente, en lugar de penalizarla.
+Las Hard PINNs imponen la ecuación diferencial de forma exacta reparametrizando la solución directamente, en lugar de penalizarla {cite}`Lu_Pestourie_Yao_Wang_Verdugo_Johnson_2021`.
 :::
 
-## Dificultades al estimar PINNs
+## Dificultades al entrenar PINNs
 
 En la práctica, entrenar PINNs tiene problemas importantes de optimización.
-La función de pérdida tiene dos términos muy distintos: $\mathcal{L}_{\text{emp}}$ (ajuste a los datos) y $\lambda \|D[x(\theta)]\|$ (residuo de la ecuación diferencial).
+La función de pérdida puede tener múltiples términos: $\mathcal{L}_{\text{emp}}$ (ajuste a los datos) y uno o mas términos de penalización $\lambda_i \|D_i[x(\theta)]\|$, uno por cada restricción (condición inicial, condición de borde, residuo de la ecuación diferencial, etc.).
+
+$$
+\mathcal{L}_{\text{PINN}} = \mathcal{L}_{\text{emp}} + \sum_{i=1}^{n} \lambda_i \|D_i[x(\theta)]\|
+$$
+
 Cuando $\lambda$ es muy grande, el problema se vuelve **mal condicionado**: los gradientes del término de penalización dominan, entonces el optimizador tiene problemas para elegir la dirección óptima.
 
 ```{figure} ./figures/no9_pinns_mal_condicionadas.png
@@ -73,22 +78,24 @@ Un $\kappa(H)$ grande indica que la función de pérdida tiene direcciones con c
 
 ### Selección de $\lambda$
 
-En general, el vector de hiperparámetros $\lambda = (\lambda_1, \ldots, \lambda_n)$ controla cuánto pesa cada restricción.
-Hay dos estrategias para elegirlos:
+En general, el vector de hiperparámetros $\lambda = (\lambda_1, \ldots, \lambda_n)$ controla cuánto pesa cada restricción. Hay tres estrategias para elegirlos:
 
 * **Adimensionalización:** normalizar todos los términos para que operen en la misma escala:
 
 $$
-\mathcal{L}_{\text{emp}}^k \sim \lambda_1^k \mathcal{L} \sim \lambda_2^k \mathcal{L} \sim \cdots \sim \lambda_n^k \mathcal{L}
+\mathcal{L}_{\text{emp}}^k \approx \lambda_1^k \mathcal{L}_{CI} \approx \lambda_2^k \mathcal{L}_{\partial} \approx \cdots
 $$
 
-* **Elección democrática** (hiperparámetros adaptativos): igualar las normas de los gradientes de cada término, de forma que ningún $\lambda$ domine el gradiente total:
+* **Elección democrática — valor absoluto:** elegir los $\lambda^k$ tal que las magnitudes de todos los términos sean iguales en cada iteración:
+$$
+\left| \mathcal{L}_{\text{emp}}^k \right| \approx \left| \lambda_1^k \mathcal{L}_{CI} \right| \approx \left| \lambda_2^k \mathcal{L}_{\partial} \right| \approx \cdots
+$$
+
+* **Elección democrática — norma de gradientes:** igualar las normas de los gradientes de cada término, de forma que ninguno domine la actualización:
 
 $$
-\| \nabla \mathcal{L}_{\text{emp}}^k \| \sim \| \lambda_1^k \nabla \mathcal{L} \| \sim \| \lambda_2^k \nabla \mathcal{L} \| \sim \cdots
+\| \nabla_\theta \mathcal{L}_{\text{emp}}^k \| \approx \| \lambda_1^k \nabla_\theta \mathcal{L}_{CI} \| \approx \| \lambda_2^k \nabla_\theta \mathcal{L}_{\partial} \| \approx \cdots
 $$
-
-
 
 
 ## Implementación
@@ -105,7 +112,7 @@ El escalado busca corregir este {term}`sesgo espectral <Sesgo espectral>`.
 #### Técnicas para mejorar la convergencia
 
 **Puntos de colocación:**
-En una PINN hay que elegir puntos en el dominio temporal donde evaluar el residuo de la ecuación diferencial $D[x(\theta)]$. Hay dos familias:
+En una PINN hay que elegir puntos en el dominio temporal donde evaluar el residuo de la ecuación diferencial $D[x(\theta)]$. En este ejemplo, exploramos solo dos opciones de hacer esto:
 
 - **Uniforme:** puntos distribuidos uniformemente en el dominio.
 - **Escala logarítmica desde $t_0$:** mayor densidad de puntos cerca de la condición inicial. Una solución espuria que la red puede encontrar es arrancar en $u_0$ e irse inmediatamente a la trayectoria nula, lo que satisface trivialmente las ecuaciones de Lotka-Volterra. Concentrar puntos al principio fuerza al modelo a seguir la trayectoria correcta desde $t_0$.
