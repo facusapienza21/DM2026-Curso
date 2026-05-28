@@ -104,21 +104,81 @@ $$
 
 Vemos una implementación de PINN directo.
 
+```julia
+t0, T = tspan
+scale_layer_inp = WrappedFunction(t -> (t .- t0) ./ (T - t0))
+scale_layer_out = WrappedFunction(x -> 10.0 .* x)
+```
+
 :::{note}
 Se aplica escalado a la red porque las redes con bias tienden a ajustar mejor funciones de alta frecuencia que de baja frecuencia.
 El escalado busca corregir este {term}`sesgo espectral <Sesgo espectral>`.
 :::
 
+Definimos la red neuronal:
+```julia
+nn = Chain(
+    scale_layer_inp,
+    Dense(1 => 5, tanh),
+    Dense(5 => 10, tanh),
+    Dense(10 => 10, tanh),
+    Dense(10 => 2),
+    scale_layer_out
+)
+```
+
+**Puntos de colocación:**
+En una PINN hay que elegir puntos en el dominio temporal donde evaluar el residuo de la ecuación diferencial $D[x(\theta)]$.
+```julia
+N_col = 100
+# t_col = collect(range(tspan[1], tspan[2], length=N_col))
+# t_col = 10.0.^collect(range(log10(tspan[1] + 1e-10), log10(tspan[2]), length = N_col))
+t_col = [
+    10.0.^collect(range(log10(tspan[1] + 1e-10), 
+	log10(tspan[2]), length = div(N_col, 2)));
+    collect(range(tspan[1], tspan[2], length=div(N_col, 2)))
+]
+```
+```{figure} ../code/06_LV_forward_PINN/lv_pinn_solution.png
+:width: 75%
+:align: center
+:figclass: text-center
+
+Las cruces son los puntos de colocación: donde la ecuación diferencial se está evaluando.
+```
+Este es un ejemplo que claramente no convergió bien, probablemente el resultado mejoraría ejecutando el código por mas tiempo, pero.. ¿Qué mas podemos hacer?
+
+
 #### Técnicas para mejorar la convergencia
 
 **Puntos de colocación:**
-En una PINN hay que elegir puntos en el dominio temporal donde evaluar el residuo de la ecuación diferencial $D[x(\theta)]$. En este ejemplo, exploramos solo dos opciones de hacer esto:
+La ubicación de los puntos de colocación no es arbitraria. En este ejemplo, exploramos solo dos opciones:
 
 - **Uniforme:** puntos distribuidos uniformemente en el dominio.
 - **Escala logarítmica desde $t_0$:** mayor densidad de puntos cerca de la condición inicial. Una solución espuria que la red puede encontrar es arrancar en $u_0$ e irse inmediatamente a la trayectoria nula, lo que satisface trivialmente las ecuaciones de Lotka-Volterra. Concentrar puntos al principio fuerza al modelo a seguir la trayectoria correcta desde $t_0$.
 
 **Forzar la condición inicial exactamente:**
-La condición inicial puede imponerse como restricción fuerte en lugar de suave. Una reparametrización directa es:
+Vemos cómo implementamos la función de costo:
+```julia
+function pinn_loss_components(ps)
+    u_ic    = nn([tspan[1]], ps, st)[1]
+    ic_loss = sum((u_ic .- u0) .^ 2)
+
+    phys_residuals = map(t_col) do t_i
+        u    = nn([t_i], ps, st)[1]
+        dudt = nn_dudt(t_i, ps, st)
+        rhs  = lv_rhs(u)
+        sum((dudt .- rhs) .^ 2)
+    end
+    phys_loss_weighted = λ_physics * mean(phys_residuals)
+
+    return ic_loss, phys_loss_weighted
+end
+
+pinn_loss(ps) = sum(pinn_loss_components(ps))
+```
+
+Estamos definiendo a la condición inicial como una restricción suave. No es ideal. ¿Cómo podemos imponerla como restricción fuerte? Una reparametrización directa es:
 
 $$
 u(t) = \text{NN}_\theta(t)(t - t_0) + u_0
@@ -134,20 +194,123 @@ $$
 
 donde $\phi(t_0) = 0$. Por ejemplo, $\phi(t) = \frac{t - t_0}{t - T_0}$ con $T_0$ cualquier número finito satisface $\phi(t_0) = 0$ y $\phi(t) \to 1$ cuando $t \to \infty$.
 
+
+Podemos aplicar esto al ejemplo:
+```julia
+function u_ansatz(t_val, ps, st)
+    raw = nn([t_val], ps, st)[1]   # NN(t) ∈ ℝ²
+    return u0 .+ t_val .* raw      # u₀ + t·NN(t)
+end
+
+# Derivada temporal del ansatz por diferencias finitas centrales
+function u_ansatz_dudt(t_val, ps, st; h=1e-4)
+    u_fwd = u_ansatz(t_val + h, ps, st)
+    u_bwd = u_ansatz(t_val - h, ps, st)
+    return (u_fwd .- u_bwd) ./ (2h)
+end
+function pinn_loss(ps)
+    phys_residuals = map(t_col) do t_i
+        u    = u_ansatz(t_i, ps, st)
+        dudt = u_ansatz_dudt(t_i, ps, st)
+        rhs  = lv_rhs(u)
+        sum((dudt .- rhs) .^ 2)
+    end
+    return mean(phys_residuals)
+end
+```
+
+```{figure} ../code/07_LV_forward_PINN_hard_IC/lv_pinn_hardIC_solution.png
+:width: 75%
+:align: center
+:figclass: text-center
+
+Mejora... pero no es ideal.
+```
+
+Aún podría ser mejorable este resultado. Pero no es lo que nos interesa, no buscamos que una PINN sea excelente resolviendo una ecuación diferencial. Donde verdaderamente brillan las PINN es en el problema inverso.
+
+
 ### Problema inverso
 
 En el problema inverso no solo se conoce la condición inicial sino también observaciones de la trayectoria. El objetivo deja de ser únicamente ajustar $u(t_0) = u_0$ y pasa a ser ajustar la trayectoria completa. En este caso se aplica a Lotka-Volterra sin conocer los parámetros del sistema.
 
+
+#### Generación de datos observados
+
+Se resuelve la ODE con los parámetros verdaderos (desconocidos para la PINN) y se submuestran $M = 40$ puntos uniformes:
+
+```julia
+const α_true = 1.0;   const β_true = 0.1
+const δ_true = 0.075; const γ_true = 1.5
+const u0    = [10.0, 5.0]
+const tspan = (0.0, 15.0)
+
+prob_true = ODEProblem(lotka_volterra!, u0, tspan, [α_true, β_true, δ_true, γ_true])
+sol_true  = solve(prob_true, Tsit5(), saveat=0.01)
+
+M_obs = 40
+t_obs = collect(range(tspan[1], tspan[2], length=M_obs))
+u_obs = hcat([sol_true(t) for t in t_obs]...)   # (2, M_obs)
+```
+
+#### Parámetros entrenables
+
+Los parámetros de la ODE se inicializan lejos de los valores verdaderos y se agrupan junto con los pesos de la red en un único `NamedTuple` que `Optimisers.jl` puede diferenciar recursivamente:
+
+```julia
+p_ode_init = [0.5, 0.05, 0.04, 1.0]   # [α̂, β̂, δ̂, γ̂]
+
+theta = (nn = nn_ps, ode = copy(p_ode_init))
+```
+
+#### Función de pérdida
+
+```julia
+const λ_phys = 1.0
+
+function inverse_loss_components(theta)
+    nn_ps = theta.nn
+    α̂, β̂, δ̂, γ̂ = theta.ode
+
+    data_residuals = map(1:M_obs) do j
+        u_pred = nn([t_obs[j]], nn_ps, st)[1]
+        sum((u_pred .- u_obs[:, j]) .^ 2)
+    end
+    data_loss = mean(data_residuals)
+
+    phys_residuals = map(t_col) do t_i
+        u    = nn([t_i], nn_ps, st)[1]
+        dudt = nn_dudt(t_i, nn_ps, st)
+        x, y = u[1], u[2]
+        rhs  = [α̂*x - β̂*x*y,
+                δ̂*x*y - γ̂*y]
+        sum((dudt .- rhs) .^ 2)
+    end
+    phys_loss = λ_phys * mean(phys_residuals)
+
+    return data_loss, phys_loss
+end
+
+inverse_loss(theta) = sum(inverse_loss_components(theta))
+```
+
+
+#### Resultados
+
 ```{figure} ../code/08_LV_inverse_PINN/lv_inverse_pinn_params.png
 :width: 75%
 :align: center
+
+Convergencia de los parámetros estimados $\hat{p}$ hacia los valores verdaderos a lo largo del entrenamiento.
 ```
+
 El error puntual muestra que la PINN ajusta exactamente en los puntos de colocación y en los puntos de observación, pero el error crece en las regiones intermedias.
 
 ```{figure} ../code/08_LV_inverse_PINN/lv_inverse_pinn_error.png
 :width: 75%
 :align: center
 ```
+
 :::{important}
 En este ejemplo se usó una grilla fija de puntos de colocación. En la práctica, conviene resamplear la grilla en cada iteración. Hay dos estrategias:
 
