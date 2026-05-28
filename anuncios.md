@@ -1,5 +1,15 @@
 # Anuncios
 
+:::{important} 13/05/2026 - Semana sin clases
+:class: dropdown
+Queridos estudiantes,
+
+Recuerden que la próxima semana no hay clases. Nos reecontramos nuevamente el miércoles 27 de mayo.
+
+Saludos,
+Facu
+:::
+
 :::{important} 28/04/2026 - No hay clases
 :class: dropdown
 Queridos estudiantes,
