@@ -89,7 +89,7 @@ La diferencia entre resolver estos problemas con y sin restricciones es debido a
 
 # Dualidad lagrangiana
 
-La dualidad lagrangiana toma un problema con restricciones y lo transforma en uno sin restricciones mediante multiplicadores de Lagrange.
+La dualidad lagrangiana toma un problema con restricciones y lo transforma en uno sin restricciones mediante mediante el metodo de los multiplicadores de Lagrange.
 
 Se define el lagrangiano:
 
@@ -107,11 +107,11 @@ donde:
 
 ---
 
-Imaginemos un problema sin restricciones $h$. La dualidad lagrangiana nos dice, bajo ciertas hipótesis (dualidad fuerte):
+Imaginemos un problema sin restricciones $h$. La dualidad lagrangiana nos dice, bajo ciertas hipótesis (dualidad fuerte) (\cite{boyd2004convex}):
 
 $$\max_{\lambda}\min_{\theta}\mathcal{L}(\theta,\lambda)=\min_{\theta}\max_{\lambda}\mathcal{L}(\theta,\lambda)$$
 
-# Ejemplo: LASSO
+# Ejemplo: Lasso
 
 Consideremos el problema de optimización:
 
@@ -143,7 +143,9 @@ $$\theta^\ast = \arg\min_{\theta} \left\| \left\| y-x\theta \right\| \right\|_2^
 
 Por lo cual, la dualidad lagrangiana nos asegura que un problema de minimización de un lagrangiano puede reescribirse como un problema de optimización con restricciones.
 
-Notar que si nuestro $\lambda \rightarrow 0$ entonces la constante $C \rightarrow \infty$. Esto puede interpretarse como que si no restringimos demasiado nuestras soluciones a que cumplan nuestros vínculos, entonces habrá más libertad para los valores $\theta$ que se puedan obtener, logrando que $C$ sea muy grande; análogo ocurre para el caso extremo opuesto. Es decir, notamos que la dependencia entre $\lambda$ y $C$ es inversamente proporcional.
+Notar que si nuestro $\lambda \rightarrow 0$ entonces la constante $C \rightarrow \infty$.
+Esto puede interpretarse como que si no restringimos demasiado nuestras soluciones a que cumplan nuestros vínculos, entonces habrá más libertad para los valores $\theta$ que se puedan obtener, logrando que $C$ sea muy grande; análogo ocurre para el caso extremo opuesto.
+Es decir, notamos que la dependencia entre $\lambda$ y $C$ es inversa.
 
 ---
 
@@ -170,12 +172,14 @@ $$\min_{\theta,x} \mathcal{L}(\theta,x)+
 \frac{dx}{dt}
 -f(x,t,\theta) \right\| \right\|_2^2 dt \qquad (4)$$
 
-El segundo término actúa como un término de regularización con derivadas (en el caso clásico de estadística esto corresponde a un “profiling”). Asimismo, vemos que si $\varepsilon \rightarrow 0$ entonces $\lambda_\varepsilon \rightarrow \infty$ y viceversa. Esta forma tiene la misma (o similar) que resolver mediante "splines" o "smooth splines", solo que allí se utilizan las derivadas segundas.
+El segundo término actúa como un término de regularización con derivadas (en el caso clásico de estadística esto corresponde a un “profiling”). Asimismo, vemos que si $\varepsilon \rightarrow 0$ entonces $\lambda_\varepsilon \rightarrow \infty$ y viceversa. Esta forma tiene la misma (o similar) que resolver mediante ["splines" o "smooth splines"](./clase6.md), solo que allí se utilizan las derivadas segundas.
 
 La ecuación (4) constituye el punto de partida para una PINN (*Physics-Informed Neural Network*).
 
 
 # Physics-Informed Neural Networks (PINNs)
+
+Las PINNs fueron introducidas recientemente por Raissi, Perdikaris y Karniadakis en el siguiente trabajo: \cite{Raissi_Perdikaris_Karniadakis_2019}.
 
 ## Caso ODE
 
@@ -266,7 +270,7 @@ $$
 
 ---
 
-## Condiciones de borde
+con la condición de borde:
 
 $$
 u(x,t)=u_B(x,t)
@@ -276,7 +280,7 @@ $$
 
 ---
 
-## Condición inicial
+y su condición inicial:
 
 $$
 u(x,t_0)=u_0(x)
@@ -324,6 +328,8 @@ $$\implies \min_{\beta} \, \mathcal{L}_{\text{TOT}}(\beta) \simeq 0 \quad \text{
 ---
 
 ## PINNs Modo 2: Inverso
+
+¡Este es el uso verdadero de una PINN! El modo "forward" es mas de juguete que otra cosa.
 
 ### Problema
 
