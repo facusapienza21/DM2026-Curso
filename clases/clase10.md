@@ -42,7 +42,7 @@ Es fácil ver que el problema radica en **cómo elegir los hiperparámetros $\la
   
   % Gesualdi: No encontré bibliografía en que se utilizara "Curva L"
 
-  * **L-Curve** Metodología empírica donde se grafica la pérdida empírica contra la pérdida física para diferentes valores de $\lambda$ y se toma por adecuado aquel que se encuentra en el punto máximo de curvatura como se ve en [fig. 1](#fig:seleccion_hiperparametro) a partir de escalar las magnitudes logarítmicamente.
+  * **L-Curve** Metodología empírica donde se grafica la pérdida empírica contra la pérdida física para diferentes valores de $\lambda$ y se toma por adecuado aquel que se encuentra en el punto máximo de curvatura como se ve en [fig. 1](#fig:seleccion_hiperparametro) a partir de escalar las magnitudes logarítmicamente. Se recomienda ver {cite}`Hansen_2001`.
     :::{figure} ./figures/no10_l_curve.svg
     :width: 100%
     :align: center
@@ -51,24 +51,24 @@ Es fácil ver que el problema radica en **cómo elegir los hiperparámetros $\la
     Selección de hiperparámetro $\lambda$ óptimo en función de la L-curve descrita por logaritmos de funciones de costo.
     :::
 
-* **Hiperparámetros Adaptativos:** La mejor práctica en PINNs es recurrir a la mate-optimización de estos parámetros actualizando los $\lambda_i$ dinámicamente durante el entrenamiento buscando equiparar peso de las funciones de costo (o su efecto sobre los parámetros). 
+* **Hiperparámetros Adaptativos:** La mejor práctica en PINNs es recurrir a la meta-optimización de estos parámetros actualizando los $\lambda_i$ dinámicamente durante el entrenamiento buscando equiparar peso de las funciones de costo (o su efecto sobre los parámetros). 
   Algunos criterios para la adaptación incluyen:
   * Forzar a que todos los términos de la función de costo contribuyan de manera similar en magnitud.
 
     $$\mathcal{L}_{Emp} \simeq \lambda_{i} \mathcal{L}_{FIS}^{(i)}(\theta;x)$$
 
-  * **Gradient Matching (Coincidencia de gradiente):** Asegurar que los gradientes de la pérdida física y empírica tengan magnitudes similares
+  * Asegurar que los gradientes de la pérdida física y empírica tengan magnitudes similares
    
     $$\lVert\nabla\mathcal{L}_{Emp}\rVert_2 \simeq \lambda_{i} \lVert\mathcal{L}_{FIS}^{(i)}(\theta;x)\rVert_2$$
 
-    De esta manera, se evita que una componente domine la actualización del gradiente y, por ende, el siguente paso en el espacio de parámetros; de forma similar a la vista en  [fig. 2](#fig:gradient_matching) .
+    De esta manera, se evita que una componente domine la actualización del gradiente y, por ende, el siguente paso en el espacio de parámetros; de forma similar a la vista en  [fig. 2](#fig:desplazamiento_parametros) .
 
-  :::{figure} ./figures/no10_gradient_matching.svg
+  :::{figure} ./figures/no10_desplazamiento_loss.svg
   :width: 90%
   :align: center
-  :label: fig:gradient_matching
+  :label: fig:desplazamiento_parametros
 
-  Trayectoria de elección a través de Gradient Matching de la funciones de costo sobre el espacio de parámetros $\theta$.
+  Trayectoria de elección a través de igualar gradientes de las funciones de costo sobre el espacio de parámetros $\theta$.
   :::
 
 
@@ -88,14 +88,14 @@ Para asegurar esa elección existen distintas estrategias de *sampleo*:
     :::
 
     :::{caution} 
-    Éte método corre riesgo de acoplarse erróneamente con las frecuencias características de la ecuación que se intenta resolver como se puede observar en [fig. 4](fig:sincronizacion)
+    Éste método corre riesgo de acoplarse erróneamente con las frecuencias características de la ecuación que se intenta resolver como se puede observar en [fig. 4](fig:sincronizacion)
 
     :::{figure} ./figures/no10_sincronizacion.svg
     :width: 90%
     :align: center
     :label: fig:sincronizacion
 
-    Representación de inconsistencias por sampleo sobre grilla uniforme aplicado a función periódica.
+    Representación de inconsistencias por sampleo sobre grilla uniforme aplicado a función periódica. La vista en el dominio (derecha) ilustra conceptualmente la grilla uniforme subyacente que genera la distribución en el dominio físico $\Omega$ (izquierda).
     :::
     :::    
    
@@ -105,7 +105,7 @@ Para asegurar esa elección existen distintas estrategias de *sampleo*:
     :align: center
     :label: fig:sampleo_aleatorio
 
-    Representación de sampleo uniformemente aleatorio sobre dominio arbitrario $\Omega$.
+    Representación de sampleo uniformemente aleatorio sobre dominio arbitrario $\Omega$.La vista en el dominio (derecha) ilustra conceptualmente la grilla uniformemente aleatoria subyacente que genera la distribución en el dominio físico $\Omega$ (izquierda)
     :::
     
     En general, elude posibles sinterizaciones con frecuencias características de la ecuación analizada dada la aleatoriedad de la muestra.
@@ -145,7 +145,7 @@ Las redes neuronales clásicas tienen la propiedad intrínseca de aprender **baj
     Por el comportamiento sobre las frecuencias, las redes neuronales clásicas, suelen ser tratadas como filtros pasa bajos dada esta facilidad en la implementación de frecuencias bajas. Se puede ver, por ejemplo, en [fig. 8](fig:sesgo_y_ff) donde parece ajustarse a la oscilación de menor frecuencia de la función buscada.
   :::
 
-Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), donde las **altas frecuencias tienen un significado físico importante** y no son solo ruido despreciable (por ejemplo, vórtices pequeños, turbulencias o singularidades). Si la red no puede capturar altas frecuencias, no podrá aproximar estas soluciones.
+Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), donde las **altas frecuencias tienen un significado físico importante** y no son sólo ruido despreciable (por ejemplo, vórtices pequeños, turbulencias o singularidades). Si la red no puede capturar altas frecuencias, no podrá aproximar estas soluciones.
 
 
 ### **Soluciones al Sesgo Espectral:**
@@ -182,7 +182,7 @@ Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), dond
   Representación de predicciones de una red neuronal aplicando *Bagging* en 200 iteraciones sobre una ecuación base con dos frecuencias características.
   :::
 
-* **Multistage Networks (Filosofía Boosting):** Se entrena una red neuronal que capturará principalmente las frecuencias bajas. Luego, se calcula el residuo (lo que no se pudo aprender, que son, por lo ya mencionado, frecuencias altas) y se entrena una *segunda* red neuronal para predecir exclusivamente ese residuo e iterar hasta abarcar la totalidad del espectro deseado y componiendo la predicción como la combinación lineal de estas redes. El ejemplo más común de este sistema es el algoritmo *LightGBM (LGBM)* que es utilizado para el gráfico presente en [fig. 10](lgbm).
+* **Multistage Networks (Filosofía Boosting):** Se entrena una red neuronal que capturará principalmente las frecuencias bajas. Luego, se calcula el residuo (lo que no se pudo aprender, que son, por lo ya mencionado, frecuencias altas) y se entrena una *segunda* red neuronal para predecir exclusivamente ese residuo e iterar hasta abarcar la totalidad del espectro deseado y componiendo la predicción como la combinación lineal de estas redes, véase {cite}`Wang_Lai_Chiang_2023`. El ejemplo más común de este sistema es el algoritmo *LightGBM (LGBM)* que es utilizado para el gráfico presente en [fig. 10](lgbm).
 
   :::{figure} ./figures/no10_lgbm.svg
   :label: fig:lgbm
@@ -192,3 +192,5 @@ Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), dond
   Representación de predicciones de una red neuronal haciendo uso de *LightGBM* en 200 iteraciones sobre una ecuación base con dos frecuencias características.
   :::
 
+:::{bibliography}
+:::
