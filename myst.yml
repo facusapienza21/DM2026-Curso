@@ -29,12 +29,13 @@ project:
         - file: clases/clase8.md
         - file: clases/clase9.md
         - file: clases/clase10.md
+        - file: clases/clase11.md
         # - file: clases/clase_template.md
     - title: Projecto Final
       children:
         - file: proyecto/general_info.md
         - file: proyecto/proyectos.md
-    - file: glossario.md
+    - file: glosario.md
     - file: referencias.md
     - file: contribucion.md
     - file: preguntas_frecuentes.md
