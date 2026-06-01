@@ -130,6 +130,82 @@ $$
 * **Sobrecarga computacional:** Matemáticamente, este enfoque termina siendo equivalente a la Diferenciación Automática (*Forward AutoDiff*), pero requiere operar algebraicamente con números complejos en cada paso, lo que consume más memoria y tiempo de cómputo.
 * **Error residual:** Aunque elimina el error de cancelación, sigue siendo una aproximación numérica sujeta al error de truncamiento del orden de $\mathcal{O}(\epsilon^2)$.
 
-### Forward AD
+Tanto el método de diferencias finitas como el de diferenciación compleja presentan un error de aproximación (de orden $\epsilon$).
+Por el contrario, Forward AD nos permite obtener la derivada numérica exacta, sin error de aproximación.
 
-**Grafos**
+### 3. Diferenciación Automática Forward (Forward AD)
+
+#### Concepto: Grafo Computacional
+
+Para entender AD, primero debemos modelar nuestra función como un Grafo Dirigido Acíclico (DAG).
+En este esquema, definimos un conjunto de variables de entrada, variables intermedias y una variable de salida.
+Las variables de entrada se denotan como $v_{-p+1}, v_{-p+2}, \dots, v_0$.
+Estas variables corresponden a los parámetros del modelo, por lo que forman el vector de entrada $\theta \in \mathbb{R}^p$.
+Luego, tenemos las variables intermedias, que se denotan desde $v_1$ hasta $v_{m-1}$.
+Finalmente, la variable $v_m$ representa el output de nuestra función.
+En este grafo computacional, una variable $v_j$ depende de $v_i$ siempre que $i < j$.
+Las aristas del DAG representan las operaciones elementales que conectan a las variables de una capa con la siguiente.
+
+**Esquema de DAG genérico:**
+
+```mermaid
+graph LR
+    A["$$v_{-p+1}$$"] --> D["$$v_1$$"]
+    B["$$v_{-p+2}$$"] --> E["$$v_2$$"]
+    C["..."] --> D
+    D --> F["$$v_3$$"]
+    E --> F
+    F --> G["$$v_m$$"]
+```
+
+**Ejemplo: $f(x) = \sin(x^2)$**
+
+Podemos representar esta función mediante un DAG de tres capas.
+En la primera capa, definimos la variable de entrada $v_0 = x$.
+La arista hacia la segunda capa aplica la operación $t \to t^2$, generando la variable intermedia $v_1 = v_0^2$.
+La arista hacia la tercera capa aplica la operación $t \to \sin(t)$, generando el output $v_2 = \sin(v_1)$.
+De esta manera, obtenemos el resultado final $v_2 = \sin(x^2)$.
+
+```mermaid
+graph LR
+    v0["$$v_0$$ = x"] -- "$$t$$ ➔ $$t^2$$" --> v1["$$v_1$$ = $$v_0^2$$"]
+    v1 -- "$$t$$ ➔ $$sin(t)$$" --> v2["$$v_2$$ = $$sin(v_1)$$"]
+```
+
+En el DAG general, nos interesa calcular la derivada del output con respecto a una de las entradas, es decir, $\frac{\partial v_m}{\partial v_{-p+1}}$.
+Para ello, utilizamos la Fórmula de Bauer.
+La Fórmula de Bauer establece que $\frac{\partial v_i}{\partial v_j}$ (con $i > j$) es igual a la sumatoria, sobre todos los caminos posibles $w_0 \to w_1 \to \dots \to w_k$ (donde $w_0 = v_j$ y $w_k = v_i$), del producto de las derivadas locales $\frac{\partial w_{k+1}}{\partial w_k}$.
+
+$$\frac{\partial v_i}{\partial v_j} = \sum_{\text{caminos}} \prod_{k=1}^{K-1} \frac{\partial w_{k+1}}{\partial w_k}$$
+
+
+#### Implementación de Forward AD: Números Duales
+
+Una manera de implementar Forward AD es mediante el uso de Números Duales.
+Un número dual extiende los números reales introduciendo una componente abstracta $\epsilon$.
+Esta componente cumple con la propiedad de que $\epsilon^2 = 0$, con $\epsilon \neq 0$.
+Un número dual se escribe de la forma $x_\epsilon = x_1 + \epsilon x_2$.
+En este $x_1$ es el valor real de la variable y $x_2$ representa la variable derivada.
+Ambos coeficientes, $x_1$ y $x_2$, pertenecen a los números reales.
+
+**Propiedades de los Números Duales:**
+
+Si tenemos dos números duales $x_\epsilon = x_1 + \epsilon x_2$ e $y_\epsilon = y_1 + \epsilon y_2$, se cumplen las siguientes propiedades:
+- **Suma:** $x_\epsilon + y_\epsilon = (x_1 + y_1) + \epsilon (x_2 + y_2)$.
+- **Producto:** $x_\epsilon \cdot y_\epsilon = (x_1 \cdot y_1) + \epsilon (x_1 \cdot y_2 + x_2 \cdot y_1)$.
+Notemos que la componente $\epsilon$ del producto es estructuralmente idéntica a la regla de la derivada del producto.
+
+En este contexto, $x_1$ almacena el valor de la variable original y $x_2$ almacena la derivada de esa variable con respecto a un parámetro.
+Por simplicidad, asumiendo $p=1$, tenemos que $x_2 = \frac{\partial x_1}{\partial \theta}$ e $y_2 = \frac{\partial y_1}{\partial \theta}$.
+Reemplazando en la regla del producto, obtenemos $x_\epsilon \cdot y_\epsilon = x_1 y_1 + \epsilon \left( x_1 \frac{\partial y_1}{\partial \theta} + y_1 \frac{\partial x_1}{\partial \theta} \right)$.
+Esto equivale directamente a $x_\epsilon \cdot y_\epsilon = x_1 y_1 + \epsilon \frac{\partial (x_1 y_1)}{\partial \theta}$.
+
+**Implementación Computacional**
+
+Para implementar esto, extendemos el concepto de "número" en nuestro código al de "número dual".
+De esta forma, cada operación matemática atómica sabe cómo multiplicar números duales y, en consecuencia, propaga la derivada automáticamente.
+En el **Modo Forward** (a diferencia del modo Reverse), la evaluación avanza desde las entradas hacia la salida.
+Para ello, inicializamos nuestras variables de entrada emparejando su valor con su derivada direccional.
+Por ejemplo, el número dual inicializado para la entrada $v_{-p+1}$ sería:
+$v_{-p+1} + \epsilon \frac{\partial v_{-p+1}}{\partial \theta_1}$.
+
