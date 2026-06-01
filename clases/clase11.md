@@ -146,18 +146,6 @@ Finalmente, la variable $v_m$ representa el output de nuestra función.
 En este grafo computacional, una variable $v_j$ depende de $v_i$ siempre que $i < j$.
 Las aristas del DAG representan las operaciones elementales que conectan a las variables de una capa con la siguiente.
 
-**Esquema de DAG genérico:**
-
-```mermaid
-graph LR
-    A["$$v_{-p+1}$$"] --> D["$$v_1$$"]
-    B["$$v_{-p+2}$$"] --> E["$$v_2$$"]
-    C["..."] --> D
-    D --> F["$$v_3$$"]
-    E --> F
-    F --> G["$$v_m$$"]
-```
-
 **Ejemplo: $f(x) = \sin(x^2)$**
 
 Podemos representar esta función mediante un DAG de tres capas.
@@ -168,8 +156,8 @@ De esta manera, obtenemos el resultado final $v_2 = \sin(x^2)$.
 
 ```mermaid
 graph LR
-    v0["$$v_0$$ = x"] -- "$$t$$ ➔ $$t^2$$" --> v1["$$v_1$$ = $$v_0^2$$"]
-    v1 -- "$$t$$ ➔ $$sin(t)$$" --> v2["$$v_2$$ = $$sin(v_1)$$"]
+    v0["$$v_0 = x$$"] -- "$$t \to t^2$$" --> v1["$$v_1 = v_0^2$$"]
+    v1 -- "$$t \to \sin(t)$$" --> v2["$$v_2 = \sin(v_1)$$"]
 ```
 
 En el DAG general, nos interesa calcular la derivada del output con respecto a una de las entradas, es decir, $\frac{\partial v_m}{\partial v_{-p+1}}$.
