@@ -154,12 +154,6 @@ La arista hacia la segunda capa aplica la operación $t \to t^2$, generando la v
 La arista hacia la tercera capa aplica la operación $t \to \sin(t)$, generando el output $v_2 = \sin(v_1)$.
 De esta manera, obtenemos el resultado final $v_2 = \sin(x^2)$.
 
-```mermaid
-graph LR
-    v0["$$v_0 = x$$"] -- "$$t \to t^2$$" --> v1["$$v_1 = v_0^2$$"]
-    v1 -- "$$t \to \sin(t)$$" --> v2["$$v_2 = \sin(v_1)$$"]
-```
-
 En el DAG general, nos interesa calcular la derivada del output con respecto a una de las entradas, es decir, $\frac{\partial v_m}{\partial v_{-p+1}}$.
 Para ello, utilizamos la Fórmula de Bauer.
 La Fórmula de Bauer establece que $\frac{\partial v_i}{\partial v_j}$ (con $i > j$) es igual a la sumatoria, sobre todos los caminos posibles $w_0 \to w_1 \to \dots \to w_k$ (donde $w_0 = v_j$ y $w_k = v_i$), del producto de las derivadas locales $\frac{\partial w_{k+1}}{\partial w_k}$.
