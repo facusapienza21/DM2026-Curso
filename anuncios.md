@@ -1,5 +1,22 @@
 # Anuncios
 
+:::{important} 29/05/2026 - Fechas de entregas finales y posters
+:class: dropdown
+Queridos estudiantes,
+
+Les recuerdo las fechas importantes para el cierre de la materia:
+
+- **17/06/2026, 12:00–14:00 hs** — Exposición de posters.
+- **19/06/2026** — Fecha límite de entrega del informe final (enviar a `fsapienza@dm.uba.ar` antes de la medianoche).
+
+Pueden consultar toda la información sobre el formato del informe, la estructura esperada, los posters y los criterios de evaluación en la [página del proyecto final](proyecto/general_info.md).
+
+Cualquier duda, no duden en escribirme o consultarme en clase.
+
+Saludos,
+Facu
+:::
+
 :::{important} 13/05/2026 - Semana sin clases
 :class: dropdown
 Queridos estudiantes,

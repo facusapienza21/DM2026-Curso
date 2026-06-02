@@ -6,8 +6,8 @@
 | --- | --- |
 | Fecha final para asignar proyecto | 06/05/2026 |
 | Fecha final de validación de proyectos | 13/05/2026 |
-| Fecha de entrega | Por confirmar (Mediados de junio) |
-| Fecha de exposición de posters | Por confirmar (Mediados de junio) |
+| Fecha de exposición de posters | 17/06/2026 12:00-14hrs |
+| Fecha de entrega | 19/06/2026 |
 | | |
 <!-- ::: -->
 
@@ -57,12 +57,64 @@ Una vez que el contenido sea satisfactorio, el issue recibirá la etiqueta `Proy
 
 ## Entrega
 
-:::{warning} Trabajo en progreso
-Todavía no hay información al respecto!
+El proyecto final debe ser enviado a `fsapienza@dm.uba.ar` antes de la medianoche de la fecha límite de entrega.
+El informe debe tener entre 7 y 12 páginas (sin contar referencias ni apéndices) y describir el proyecto de forma completa: motivación, metodología, resultados y conclusiones.
+Escribir el reporte como si fuera un artículo científico dirigido a un lector con conocimientos generales del área pero no necesariamente familiarizado con el problema específico.
+El informe tiene que ser lo más autocontenido posible: incluir definiciones, notación y contexto suficientes para que el problema y la solución sean comprensibles sin necesidad de consultar fuentes externas.
+Incluir todas las referencias académicas relevantes al final del documento (las mismas no cuentan como páginas del reporte).
+Cuanto mayor sea la cantidad de miembros de un grupo/proyecto, más producción se espera en dicho reporte.
+
+El informe debe seguir la siguiente estructura general:
+
+1. **Introducción** — motivación del problema, contexto y objetivos.
+2. **Métodos** — descripción del modelo, ecuaciones, datos y técnicas utilizadas.
+3. **Resultados** — presentación clara de los resultados obtenidos, con figuras y tablas cuando corresponda.
+4. **Discusión y conclusiones** — interpretación de los resultados y posibles trabajos futuros.
+5. **Agradecimientos** *(Acknowledgments)* — reconocimiento de colaboraciones, financiamiento y uso de herramientas de IA.
+6. **Datos y Software** — información sobre datos y software utilizados.
+7. **Referencias** — todas las fuentes citadas en el texto.
+
+:::{important} Datos y Software
+Incluir una sección breve al final del informe (antes de las referencias) indicando cómo acceder a los datos y al código utilizados en el proyecto.
+
+- **Datos:** indicar la fuente del dataset; si es de acceso público, incluir el link o DOI y la licencia de uso si corresponde.
+- **Software:** mencionar las librerías y versiones utilizadas. Si el código desarrollado está disponible en un repositorio de GitHub público (altamente recomendado), incluir el link.
+
+
+**Ejemplo de Data Availability Statement:**
+> *Los datos utilizados en este trabajo corresponden al dataset público XYZ, disponible en [enlace/DOI]. El código desarrollado para este proyecto está disponible en [github.com/usuario/proyecto](https://github.com) bajo licencia MIT. Este trabajo utilizó Julia v1.10 con los paquetes `DifferentialEquations.jl` (REF) y `Lux.jl`.*
 :::
+
+:::{important} Agradecimientos y use de AI
+Los Agradecimientos son el lugar apropiado para declarar el uso de herramientas de inteligencia artificial.
+Pueden usar LLMs u otras herramientas de IA para realizar el trabajo, pero deben aclarar qué herramientas usaron, para qué y cómo.
+La responsabilidad sobre el contenido del informe es siempre de los autores: cualquier afirmación incorrecta o referencia inexistente generada por un LLM es responsabilidad del grupo.
+
+**Ejemplo de declaración de uso de IA en Agradecimientos:**
+> *Los autores utilizaron ChatGPT (OpenAI, GPT-4o) para asistir en la redacción y revisión del texto, y GitHub Copilot para completar fragmentos de código repetitivos. Todos los resultados, ecuaciones y conclusiones fueron verificados manualmente por los autores.*
+:::
+
+## Posters
+
+La exposición de posters se realizará el **17/06/2026** durante el horario de clase.
+Cada grupo presentará su trabajo en formato poster, de manera similar a como se hace en congresos y conferencias científicas.
+
+El poster debe incluir:
+
+- **Título y autores**
+- **Introducción y motivación** — el problema abordado y por qué es relevante.
+- **Métodos** — descripción concisa del modelo o técnica utilizada, con ecuaciones clave si corresponde.
+- **Resultados principales** — figuras y/o tablas que ilustren los hallazgos más importantes.
+- **Conclusiones** — síntesis de los resultados y preguntas abiertas.
+
+El poster debe poder leerse de forma autónoma y ser visualmente claro: priorizar figuras y esquemas por sobre texto extenso.
+No hay restricciones de formato o herramienta; pueden usar PowerPoint, LaTeX o cualquier otra.
+
+Durante la exposición, el instructor y los demás estudiantes podrán hacer preguntas sobre el trabajo.
+Seguramente hayan profesores y estudiantes invitados recorriendo los posters.
 
 ## Evaluación
 
-:::{warning} Trabajo en progreso
-Todavía no hay información al respecto!
-:::
+La evaluación final consiste en una nota combinada entre la presentación de posters y el proyecto final.
+La nota es individual, aun cuando el proyecto haya sido realizado en grupo.
+Se evaluará la claridad de la exposición, la solidez metodológica, la calidad del análisis y la capacidad de responder preguntas sobre el trabajo realizado.
