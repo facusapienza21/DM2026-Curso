@@ -173,7 +173,41 @@ Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), dond
   Representación de predicciones de una red neuronal clásica con función de activación $\tanh(v)$ y otra haciendo uso *Fourier Features* en 200 iteraciones sobre una ecuación base con dos frecuencias características.
   :::
 
-* **Múltiples Redes Concurrentes (Filosofía Bagging):** Utilizar una suma de varias redes neuronales (que pueden o no tener la misma arquitectura), donde a cada una se le asigna (mediante pre-escalado de parámetros) la tarea de aprender una banda de frecuencia distinta, agrupando, luego, todas las contribuciones de estas. El desempeño de esta metodología se puede ver en [fig. 9](fig:bagging)
+* **Múltiples Redes Concurrentes (Filosofía Bagging):** Otro método es aumentar los valores de entrada para mapear y capturar de mejor manera las frecuencias bajas que tenga la señal.
+
+##### Esquema de la Arquitectura
+En este diseño, el input escalar $x$ se multiplica por factores enteros sucesivos en la primera capa modificada.
+Cada una de estas entradas escaladas alimenta a una red neuronal independiente (arquitectura tipo *Ensemble/Bagging*), cuyas salidas parciales se combinan finalmente en una neurona de salida global $u$:
+
+$$x \longrightarrow \begin{bmatrix} 1x \\ 2x \\ 3x \\ \vdots \\ nx \end{bmatrix} \longrightarrow \begin{aligned} &\boxed{\text{Red}_1(\theta_1)} \longrightarrow u_1 \\ &\boxed{\text{Red}_2(\theta_2)} \longrightarrow u_2 \\ &\boxed{\text{Red}_3(\theta_3)} \longrightarrow u_3 \\ &\ \vdots \\ &\boxed{\text{Red}_n(\theta_n)} \longrightarrow u_n \end{aligned} \longrightarrow \boxed{\sum} \longrightarrow u_{\text{final}}$$
+
+##### Expresión Formal del Modelo
+
+La salida final del sistema $u(x)$ se define como la combinación (frecuentemente un promedio o una suma ponderada) de $n$ redes neuronales "vainilla" independientes, donde cada red $i$ está parametrizada por sus propios pesos $\theta_i$:
+
+$$u_{\text{final}}(x) = \sum_{i=1}^{n} \text{Red}_i(i \cdot x ; \theta_i)$$
+
+##### Intuición de la Versión Bagging
+
+Si la señal original contiene una frecuencia extremadamente baja o "chiquita" del orden de:
+
+$$f_{\text{baja}} = \frac{1}{n}$$
+
+Una red neuronal estándar (vainilla) tendría severas dificultades para aprenderla debido al sesgo hacia las altas frecuencias.
+Al forzar la multiplicación de $x$ por el factor $n$ en la $n$-ésima neurona de la primera capa, la frecuencia efectiva se transforma:
+
+$$f_{\text{efectiva}} = n \cdot \left(\frac{1}{n}\right) = 1$$
+
+Al convertirla en una frecuencia fundamental ($1$), la red asociada a ese bloque ya tiene la capacidad de aprender esa componente de la señal sin problemas.
+Finalmente, todas estas capacidades predictivas de diferentes escalas de frecuencia se combinan en la neurona de salida general $u$.
+
+```{note}
+Nota al margen: Ensembles en Machine Learning
+* Bagging (Bootstrap Aggregating): Consiste en entrenar múltiples modelos en paralelo de forma independiente y promediar sus predicciones. La Solución 2 es de este tipo (paralela).
+* Boosting: Consiste en un proceso secuencial donde cada nuevo modelo se entrena específicamente para corregir los errores (residuos) de los modelos anteriores. La **Solución 3** aplica este concepto a redes neuronales.
+```
+
+ El desempeño de esta metodología se puede ver en [fig. 9](fig:bagging)
   :::{figure} ./figures/no10_bagging.svg
   :label: fig:bagging
   :width: 90%
@@ -182,7 +216,37 @@ Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), dond
   Representación de predicciones de una red neuronal aplicando *Bagging* en 200 iteraciones sobre una ecuación base con dos frecuencias características.
   :::
 
-* **Multistage Networks (Filosofía Boosting):** Se entrena una red neuronal que capturará principalmente las frecuencias bajas. Luego, se calcula el residuo (lo que no se pudo aprender, que son, por lo ya mencionado, frecuencias altas) y se entrena una *segunda* red neuronal para predecir exclusivamente ese residuo e iterar hasta abarcar la totalidad del espectro deseado y componiendo la predicción como la combinación lineal de estas redes, véase {cite}`Wang_Lai_Chiang_2023`. El ejemplo más común de este sistema es el algoritmo *LightGBM (LGBM)* que es utilizado para el gráfico presente en [fig. 10](lgbm).
+* **Multistage Networks (Filosofía Boosting):** Se entrena una red neuronal que capturará principalmente las frecuencias bajas. Luego, se calcula el residuo (lo que no se pudo aprender, que son, por lo ya mencionado, frecuencias altas) y se entrena una *segunda* red neuronal para predecir exclusivamente ese residuo e iterar hasta abarcar la totalidad del espectro deseado y componiendo la predicción como la combinación lineal de estas redes, véase {cite}`Wang_Lai_Chiang_2023`. 
+
+##### Esquema de la Arquitectura
+
+A diferencia de la arquitectura en paralelo de la solución anterior, aquí las redes se encadenan secuencialmente en etapas (*multistage*).
+Cada red aprende la señal residual de la etapa previa:
+
+$$x \longrightarrow \boxed{\text{Red}^{(1)}} \longrightarrow \text{Residuo}^{(1)} \longrightarrow \boxed{\text{Red}^{(2)}} \longrightarrow \text{Residuo}^{(2)} \longrightarrow \boxed{\text{Red}^{(3)}} \longrightarrow \dots \longrightarrow \boxed{\sum} \longrightarrow \hat{y}$$
+
+##### Expresión Formal del Modelo
+
+La predicción final del modelo compuesto por $K$ etapas es la suma acumulada de las salidas de cada una de las sub-redes entrenadas individualmente:
+
+$$\text{Red}_{\Theta}(x) = \sum_{i=1}^{K} \text{Red}^{(i)}_{\theta_i}(x)$$
+
+##### Mecanismo de Aprendizaje por Residuos
+
+El entrenamiento se realiza de forma estrictamente secuencial bajo la siguiente lógica:
+
+1. **Etapa 1:** Se entrena la primera red $\text{Red}^{(1)}$ con los datos originales.
+Esta red suele capturar los patrones más fáciles y dominantes de la señal (por ejemplo, las **frecuencias bajas**).
+2. **Etapa 2:** Se calcula el primer residuo, es decir, lo que la primera red no pudo aprender:
+   $$r^{(1)} = y - \text{Red}^{(1)}(x)$$
+   Luego, la segunda red $\text{Red}^{(2)}$ se entrena utilizando $r^{(1)}$ como su objetivo (*target*).
+   Esta red se ve forzada a capturar detalles más finos (como **frecuencias intermedias o altas**).
+3. **Etapa $i+1$:** De manera general, cada red subsiguiente aprende el residuo acumulado de todas las anteriores:
+   $$r^{(i)} = y - \sum_{j=1}^{i} \text{Red}^{(j)}(x)$$
+
+Al finalizar el proceso, la combinación de todas las etapas permite reconstruir tanto la estructura global de los datos como sus detalles de alta frecuencia.
+
+El ejemplo más común de este sistema es el algoritmo *LightGBM (LGBM)* que es utilizado para el gráfico presente en [fig. 10](lgbm).
 
   :::{figure} ./figures/no10_lgbm.svg
   :label: fig:lgbm
