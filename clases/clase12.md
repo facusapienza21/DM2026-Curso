@@ -184,9 +184,82 @@ Los pasos a seguir son:
 
 Con la diferenciación compleja, se deben hacer cálculos de términos redundantes, que en el caso con los números duales se omiten haciendo uso de la propiedad que define a los mismos.
 
-## Ecuaciones de sensibilidad
 
-Continuando con el recorrido por los distintos métodos de programación diferencial, las **Ecuaciones de sensibilidad** caen entre aquellas consideradas continuas y discretas. 
-Con continuo, se refiere a primero operar con la ecuación diferencial para luego discretizarla, en contraposición a los métodos discretos que se vieron con antelación que primero calculaban numéricamente la ecuación con el solver mediante.
+## Metodos Continuos Forward
+
+**Idea central**: A diferencia de los métodos discretos, donde se toma un solver numérico ya discretizado y se diferencia su algoritmo paso a paso, en los métodos continuos la estrategia es diferenciar primero y luego discretizar. Esto permite que al tomar como punto de entrada la propia ecuación diferencial, el cálculo de las sensibilidades se vuelve independiente de la lógica interna del solver, evitando asi depender del error numérico de la discretización.
+
+### Ecuación de Sensibilidad
+
+Tenemos una Ecuación Diferencial Ordinaria que depende de ciertos parámetros $\theta$:
+
+$$\frac{du}{dt} = f(u, t, \theta), \quad u(t_0) = u_0$$
+
+y una función de pérdida a minimizar:
+$$L(\theta) = L(u(\cdot, \theta), \theta)$$
+
+Para optimizar $\theta$, necesitamos el gradiente de la pérdida. 
+Usando la regla de la cadena:
+
+$$\frac{dL}{d\theta} = \frac{\partial L}{\partial u} \cdot \frac{\partial u}{\partial \theta} + \frac{\partial L}{\partial \theta}$$
+
+* **Fácil de calcular:** $\frac{\partial L}{\partial u}$ y $\frac{\partial L}{\partial \theta}$
+
+* **Difícil de calcular:** $\frac{\partial u}{\partial \theta}$. A este término se lo conoce como **Sensibilidad** ($S$).
+
+---
+
+#### Mini ejemplo (Ajuste de parámetros con error cuadrático)
+
+$$L(\theta) = \| u(t_1; \theta) - u_{\text{obs}} \|_2^2$$
+
+Tenemos que:
+
+* $\frac{\partial L}{\partial \theta} = 0$
+
+* $\frac{\partial L}{\partial u} = 2(u(t_1; \theta) - u_{\text{obs}})$
+
+---
+
+### Derivación de la Ecuación de Sensibilidad
+
+Para calcular $S(t) = \frac{\partial u}{\partial \theta}$, aprovechamos la ODE original:
+
+$$\frac{du}{dt} - f(u, t, \theta) = 0$$
+
+Aplicamos la derivada parcial respecto a $\theta$:
+
+$$\frac{\partial}{\partial \theta}\left(\frac{du}{dt}\right) - \frac{\partial}{\partial \theta}\big(f(u, t, \theta)\big) = 0$$
+
+y aprovechando que tienen la misma derivada y otras condiciones, podemos intercambiar el orden de derivación en el primer término:
+
+$$\frac{\partial}{\partial \theta}\left(\frac{du}{dt}\right) = \frac{d}{dt}\left(\frac{\partial u}{\partial \theta}\right) = \frac{dS}{dt}$$
+
+Por otro lado, aplicamos regla de la cadena al segundo término:
+
+$$\frac{\partial}{\partial \theta}\big(f(u, t, \theta)\big) = \frac{\partial f}{\partial u}\frac{\partial u}{\partial \theta} + \frac{\partial f}{\partial \theta} = \frac{\partial f}{\partial u} \cdot S + \frac{\partial f}{\partial \theta}$$
+
+Entonces, volviendo a nuestra ecuación original, tenemos que:
+
+$$\frac{\partial}{\partial \theta}\left(\frac{du}{dt}\right) - \frac{\partial}{\partial \theta}\big(f(u, t, \theta)\big) = \frac{dS}{dt} - \left(\frac{\partial f}{\partial u} \cdot S + \frac{\partial f}{\partial \theta}\right) = 0$$
+
+Y por lo tanto:
+
+$$\frac{dS}{dt} = \frac{\partial f}{\partial u} \cdot S + \frac{\partial f}{\partial \theta}$$
+
+Con la condición inicial:
+$$S(t_0) = \frac{\partial u_0}{\partial \theta}$$
+
+**Observación:** En la mayoría de los casos $S(t_0) = 0$ porque el estado inicial $u_0$ suele no depender de los parámetros que queremos optimizar.
 
 
+**Pros y Contras:**
+
+Pro:
+- Aunque la ODE original sea no lineal o lineal, la ODE referida a la sensibildiad es lineal respecto a $S$. Por lo tanto es simple de calcular.
+
+Contra:
+- Si el estado $u \in \mathbb{R}^n$ y los parámetros $\theta \in \mathbb{R}^p$, la matriz de sensibilidad $S$ es de tamaño $n \times p$. Por lo tanto el sistema de asociado a la ODE pasa a tener un tamaño de $n + (n \times p) = n(p+1)$ ecuaciones
+
+Importante:
+- Dado que es un método forward se resuelve en la práctica la ODE original $u(t)$ junto con la sensibilidad $S(t)$ al mismo tiempo.
