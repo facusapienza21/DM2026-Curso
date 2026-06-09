@@ -57,7 +57,8 @@ Una vez que el contenido sea satisfactorio, el issue recibirá la etiqueta `Proy
 
 ## Entrega
 
-El proyecto final debe ser enviado a `fsapienza@dm.uba.ar` antes de la medianoche de la fecha límite de entrega.
+El proyecto final debe ser enviado a `fsapienza@dm.uba.ar` con el asunto `[Proyecto Final] Proyecto No<numero>: <Titulo del proyecto>` (donde `<numero>` es el numero del issue en GitHub asociado al proyecto y `<Titulo del proyecto>` es el titulo del proyecto tal como aparece en el issue) antes de la medianoche de la fecha límite de entrega.
+El reporte debe estar en formato PDF.
 El informe debe tener entre 7 y 12 páginas (sin contar referencias ni apéndices) y describir el proyecto de forma completa: motivación, metodología, resultados y conclusiones.
 Escribir el reporte como si fuera un artículo científico dirigido a un lector con conocimientos generales del área pero no necesariamente familiarizado con el problema específico.
 El informe tiene que ser lo más autocontenido posible: incluir definiciones, notación y contexto suficientes para que el problema y la solución sean comprensibles sin necesidad de consultar fuentes externas.
