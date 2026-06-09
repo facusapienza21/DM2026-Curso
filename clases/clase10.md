@@ -13,7 +13,7 @@ title: No10 - PINNs Pt2
 
 # Visto en clase anterior
 
-En la clase anterior se introdujeron las PINNs ({terms}`PINNs`) y se analizó la dualidad entre las restricciones suaves y fuertes estableciendo que entrenar una red de estas características es un problema de optimización de alta dificultad dado que consta de minimizar una función de costo que no solo depende de los datos empíricos, sino también de que se satisfaga una ecuación diferencial sobre el dominio de la misma.
+En la clase anterior se introdujeron las PINNs ({terms}`PINNs`) y se analizó la dualidad entre las restricciones suaves y fuertes estableciendo que entrenar una red de estas características es un problema de optimización de alta dificultad dado que consta de minimizar una función de costo que no sólo depende de los datos empíricos, sino también de que se satisfaga una ecuación diferencial sobre el dominio de la misma.
 
 
 # Desafíos en el tratamiento de PINNs
@@ -111,7 +111,7 @@ Para asegurar esa elección existen distintas estrategias de *sampleo*:
     En general, elude posibles sinterizaciones con frecuencias características de la ecuación analizada dada la aleatoriedad de la muestra.
     
     :::{caution} 
-    Estos métodos de sampleo suelen generar *overfitting* sobre los puntos evaluados pues busca "simplemente" que la función de costo física se cumpla sobre los puntos específicos de la matriz de muestreo generando residuos nulos allí como se ve en [fig. 6](#fig:overfitting).
+    Estos métodos de sampleo puede generar *overfitting* sobre los puntos evaluados pues busca "simplemente" que la función de costo física se cumpla sobre los puntos específicos de la matriz de muestreo generando residuos nulos allí como se ve en [fig. 6](#fig:overfitting).
       :::{figure} ./figures/no10_overfitting.svg
       :width: 90%
       :align: center
@@ -142,8 +142,9 @@ Para asegurar esa elección existen distintas estrategias de *sampleo*:
 Las redes neuronales clásicas tienen la propiedad intrínseca de aprender **bajas frecuencias** mejor y más rápido que las altas frecuencias.
 
   :::{important} Comentario
-    Por el comportamiento sobre las frecuencias, las redes neuronales clásicas, suelen ser tratadas como filtros pasa bajos dada esta facilidad en la implementación de frecuencias bajas. Se puede ver, por ejemplo, en [fig. 8](fig:sesgo_y_ff) donde parece ajustarse a la oscilación de menor frecuencia de la función buscada.
+    Por el comportamiento sobre las frecuencias, las redes neuronales clásicas, suelen ser tratadas como filtros pasa bajos dada esta facilidad en la implementación de frecuencias bajas. Se puede ver, por ejemplo, en [fig. 8](fig:sesgo_y_ff) donde parece ajustarse a la oscilación de menor frecuencia de la función buscada, un fenómeno formalmente teorizado por {cite}`rahaman2019spectral`.
   :::
+
 
 Esto es muy problemático en ecuaciones diferenciales (como Navier-Stokes), donde las **altas frecuencias tienen un significado físico importante** y no son sólo ruido despreciable (por ejemplo, vórtices pequeños, turbulencias o singularidades). Si la red no puede capturar altas frecuencias, no podrá aproximar estas soluciones.
 
