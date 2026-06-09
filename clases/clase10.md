@@ -109,7 +109,7 @@ Para asegurar esa elección existen distintas estrategias de *sampleo*:
     En general, elude posibles sinterizaciones con frecuencias características de la ecuación analizada dada la aleatoriedad de la muestra.
     
     :::{caution} 
-    Estos métodos de sampleo puede generar *overfitting* sobre los puntos evaluados pues busca "simplemente" que la función de costo física se cumpla sobre los puntos específicos de la matriz de muestreo generando residuos nulos allí como se ve en [fig. 6](#fig:overfitting).
+    Estos métodos de sampleo pueden generar *overfitting* sobre los puntos evaluados pues busca "simplemente" que la función de costo física se cumpla sobre los puntos específicos de la matriz de muestreo generando residuos nulos allí como se ve en [fig. 6](#fig:overfitting).
       :::{figure} ./figures/no10_overfitting.svg
       :width: 90%
       :align: center
