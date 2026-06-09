@@ -39,8 +39,6 @@ ads
 Es fácil ver que el problema radica en **cómo elegir los hiperparámetros $\lambda_i$**.
 
 * **Hiperparámetros fijos:** Establezco de antemano los hiperparámetros y los dejo constantes entre iteraciones. 
-  
-  % Gesualdi: No encontré bibliografía en que se utilizara "Curva L"
 
   * **L-Curve** Metodología empírica donde se grafica la pérdida empírica contra la pérdida física para diferentes valores de $\lambda$ y se toma por adecuado aquel que se encuentra en el punto máximo de curvatura como se ve en [fig. 1](#fig:seleccion_hiperparametro) a partir de escalar las magnitudes logarítmicamente. Se recomienda ver {cite}`Hansen_2001`.
     :::{figure} ./figures/no10_l_curve.svg
