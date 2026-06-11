@@ -154,7 +154,111 @@ a la tolerancia ya que en ambos gráficos la curva se mantiene constante sobre l
 
 En resumen, *diferencias fínitas* es el método menos exacto ya que contiene error de truncado, mientras que *diferenciación compleja* baja hasta error de máquina a partir de un cierto $\epsilon$. *Forward AD* no depende de $\epsilon$, por lo que, en caso de que la tolerancia fuese el error de máquina, la curva se mantendría constante en ese valor.
 
-¿Y por qué no bajar el $\epsilon$ hasta que el error baje hasta el error de máquina usando *diferenciación compleja*? 
+## Comparación matemática: Diferenciación Compleja vs Forward AD
+
+Para entender la diferencia fundamental entre ambos métodos forward, desarrollamos paso a paso la derivada de $f(x) = \sin(x^2)$ en un punto $x$ cualquiera.
+
+El resultado esperado es: $f'(x) = 2x\cos(x^2)$
+
+### Método 1: Diferenciación Compleja
+
+**Idea central**: Evaluamos la función en un punto complejo $x + i\varepsilon$ y extraemos la derivada de la parte imaginaria.
+
+- **Parte real** del resultado → nos da el **valor** de la función $f(x)$
+- **Parte imaginaria** del resultado → contiene la información de la **derivada** $f'(x)$
+
+
+**Paso 1 — Definimos la Variable compleja**
+
+Definimos:
+
+$x = x_1 + ix_2$ con $i^2 = -1$
+
+y para calcular la derivada, tomamos $x_2 = \varepsilon$ muy pequeño:
+
+$x = x_1 + i\varepsilon$
+
+Aca:
+- $x_1$ es el punto donde evaluamos (parte real)
+- $\varepsilon$ es el "paso" de perturbación (parte imaginaria)
+
+**Paso 2 — Elevamos al cuadrado la variable compleja**
+
+$$(x_1 + i\varepsilon)^2 = x_1^2 + 2i\varepsilon x_1 + (i\varepsilon)^2 = x_1^2 + 2i\varepsilon x_1 - \varepsilon^2$$
+
+En particular,
+
+- **Parte real**: $a = x_1^2 - \varepsilon^2$ ← contiene el valor real
+- **Parte imaginaria**: $b = 2x_1\varepsilon$ ← contiene información de la derivada
+
+**Paso 3 — Aplicamos el seno**
+
+Para este caso, usamos la siguiente identidad 
+
+$$\sin(a + bi) = \sin(a)\cosh(b) + i\cos(a)\sinh(b)$$
+
+$$\sin(x^2) = \sin(x_1^2 - \varepsilon^2)\cosh(2x_1\varepsilon) + i\cos(x_1^2 - \varepsilon^2)\sinh(2x_1\varepsilon)$$
+
+**Paso 4 — Extraemos la derivada**
+
+La fórmula de diferenciación compleja nos dice que la derivada está en la parte imaginaria, dividida por $\varepsilon$:
+
+$$\frac{df}{dx} = \lim_{\varepsilon \to 0} \frac{\text{Im}(f(x + i\varepsilon))}{\varepsilon} = \lim_{\varepsilon \to 0} \frac{\cos(x_1^2 - \varepsilon^2)\sinh(2x_1\varepsilon)}{\varepsilon}$$
+
+**Paso 5 — Tomamos el límite $\varepsilon \to 0$**
+
+Como $\varepsilon^2 = 0$
+
+$$\frac{df}{dx} = \lim_{\varepsilon \to 0} \frac{\cos(x_1^2 - \varepsilon^2) \cdot \sinh(2x_1\varepsilon)}{\varepsilon} = \lim_{\varepsilon \to 0} \frac{\cos(x_1^2) \cdot \sinh(2x_1\varepsilon)}\varepsilon$$
+
+Luego, usando que $\sinh(z) \approx z$ para $z \to 0$ entonces $\sinh(2x_1\varepsilon) = 2x_1\varepsilon$:
+
+$$\frac{df}{dx} = \lim_{\varepsilon \to 0} \frac{\cos(x_1^2) \cdot 2x_1\varepsilon}{\varepsilon}$$
+
+y dividiendo por $\varepsilon$:
+
+$$\frac{df}{dx} = \cos(x_1^2) \cdot 2x_1 $$
+
+### Método 2: Forward AD (Números Duales)
+
+**Idea central**: Evaluamos la función en un "número dual" $x + \varepsilon$ y la derivada aparece directamente como coeficiente de $\varepsilon$.
+
+- Parte sin $\varepsilon$ (término "real") → nos da el valor de la función $f(x)$
+- Coeficiente de $\varepsilon$ (término "dual") → nos da directamente la derivada $f'(x)$
+
+**Paso 1 — Definimos la Variable dual**
+
+Definimos $x_\varepsilon = x_1 + \varepsilon$ con $\varepsilon^2 = 0, \quad \varepsilon \neq 0$
+
+Aca:
+- $x_1$ es el punto donde evaluamos (parte "valor real")
+- El coeficiente de $\varepsilon$ será la derivada (parte "dual")
+
+**Paso 2 — Elevamos al cuadrado**
+
+$$x_\varepsilon^2 = (x_1 + \varepsilon)^2 = x_1^2 + 2x_1\varepsilon + \varepsilon^2 = x_1^2 + 2x_1\varepsilon$$
+
+Obtenemos un número dual donde:
+- **Parte valor** (sin $\varepsilon$): $x_1^2$ 
+- **Parte dual** (coeficiente de $\varepsilon$): $2x_1$ 
+
+**Paso 3 — Aplicamos Seno**
+
+Expandimos por Taylor:
+
+$$\sin(x_1^2 + 2x_1\varepsilon) = \sin(x_1^2) + \cos(x_1^2) \cdot (2x_1\varepsilon) - \frac{\sin(x_1^2)}{2}(2x_1\varepsilon)^2 + ...$$
+
+Pero $(2x_1\varepsilon)^2 = 4x_1^2\varepsilon^2 = 0$, por lo que todos los términos de orden $\geq 2$ desaparecen:
+
+$$\sin(x_\varepsilon^2) = \sin(x_1^2) + \varepsilon \cdot 2x_1\cos(x_1^2)$$
+
+Entonces volviendo a la idea central, ya tenemos de forma explicita la derivada (tomamos la parte del coeficiente de $\varepsilon$):
+
+$$\frac{df}{dx} = 2x_1\cos(x_1^2)$$
+
+
+**Conclusión:** En el método de números duales (Forward AD) podemos obtener la derivada de forma inmediata (solamente una en una evaluación de la función tenemos el valor real y su derivada) sin necesidad de usar trucos matematicos, meternos con los limites o tener que extraer la parte imaginaria de un resultado. Es decir, si integramos esto dentro de un solver de ODEs, en cada paso tenemos la derivada correspondiente y de forma directa y automática.
+<!-- ¿Y por qué no bajar el $\epsilon$ hasta que el error baje hasta el error de máquina usando *diferenciación compleja*? 
 La ventaja de usar *Forward AD* recae en la eficiencia y simplicidad.
 
 Supongamos que tenemos la función $f(x) = sen(x^2)$, entonces el grafo computacional de la función puede ser expresado como
@@ -184,7 +288,8 @@ Los pasos a seguir son:
 
 Con la diferenciación compleja, se deben hacer cálculos de términos redundantes, que en el caso con los números duales se omiten haciendo uso de la propiedad que define a los mismos.
 
-
+ -->
+ 
 ## Metodos Continuos Forward
 
 **Idea central**: A diferencia de los métodos discretos, donde se toma un solver numérico ya discretizado y se diferencia su algoritmo paso a paso, en los métodos continuos la estrategia es diferenciar primero y luego discretizar. Esto permite que al tomar como punto de entrada la propia ecuación diferencial, el cálculo de las sensibilidades se vuelve independiente de la lógica interna del solver, evitando asi depender del error numérico de la discretización.
