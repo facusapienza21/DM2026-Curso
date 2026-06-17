@@ -16,7 +16,7 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | ------------- | ------------- |
 | No1           | Sebastian Souto ([@SoutoSebastian](https://github.com/SoutoSebastian)), Gian Lucca Sanza([@xGiannis](https://github.com/xGiannis)), Carolina Zappala ([@carozappala](https://github.com/carozappala))  |
 | No2           | Ali Martín Zynda ([@alimartinza](https://github.com/alimartinza)), Cecilia Bolaños ([@ceciliabolanos](https://github.com/ceciliabolanos)), Manuel Matías Drescher ([@ManuDrescher](https://github.com/ManuDrescher))|
-| No3           | ...  |
+| No3           | Matias Gangui ([@matias258](https://github.com/matias258)) |
 | No4           | Francisco Castillo Menegotto ([@FrCastillo](https://github.com/FrCastilloM)), Lucas Grasso Ramos ([@LucasGrasso](https://github.com/LucasGrasso))  |
 | No5           | Tomás Schmidt([@tomasschmidt04](https://github.com/tomasschmidt04)), Victoria Pérez Olivera ([@vperezol](https://github.com/vperezol)), Camila Mariana Ponce ([@CamilaMarianaPonce](https://github.com/CamilaMarianaPonce))  |
 | No6           | Iván Ezequiel Herold ([@ivanherld](https://github.com/ivanherld)), Camila Luciana Prieto ([@Camila15987](https://github.com/Camila15987)) |
