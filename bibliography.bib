@@ -185,6 +185,26 @@
   year         = {2016}
 }
 
+@Article{Wang_Lai_Chiang_2023, 
+  title        = {Multi-stage Neural Networks: Function Approximator of Machine Precision}, 
+  DOI          = {10.48550/arxiv.2307.08934}, 
+  abstractNote = {Deep learning techniques are increasingly applied to scientific problems, where the precision of networks is crucial. Despite being deemed as universal function approximators, neural networks, in practice, struggle to reduce the prediction errors below $O(10^{−5}$) even with large network size and extended training iterations. To address this issue, we developed the multi-stage neural networks that divides the training process into different stages, with each stage using a new network that is optimized to fit the residue from the previous stage. Across successive stages, the residue magnitudes decreases substantially and follows an inverse power-law relationship with the residue frequencies. The multi-stage neural networks effectively mitigate the spectral biases associated with regular neural networks, enabling them to capture the high frequency feature of target functions. We demonstrate that the prediction error from the multi-stage training for both regression problems and physics-informed neural networks can nearly reach the machine-precision $O(10^{−16})$ of double-floating point within a finite number of iterations. Such levels of accuracy are rarely attainable using single neural networks alone.}, 
+  journal      = {arXiv}, 
+  author       = {Wang, Yongji and Lai, Ching-Yao}, 
+  year         = {2023} 
+}
+
+@incollection{Hansen_2001,
+  title        = {The L-curve and its use in the numerical treatment of inverse problems},
+  volume       = {5},
+  isbn         = {978-1-85312-614-7},
+  url          = {https://www.sintef.no/globalassets/project/evitameeting/2005/lcurve.pdf},
+  abstractnote = {The L-curve is a log-log plot of the norm of a regularized solution versus the norm of the corresponding residual norm. It is a convenient graphical tool for displaying the trade-off between the size of a regularized solution and its fit to the given data, as the regularization parameter varies. The L-curve thus gives insight into the regularizing properties of the underlying regularization method, and it is an aid in choosing an appropriate regularization parameter for the given data. In this chapter we summarize the main properties of the L-curve, and demonstrate by examples its usefulness and its limitations both as an analysis tool and as a method for choosing the regularization parameter.},
+  pages        = {119--142},
+  booktitle    = {Computational Inverse Problems in Electrocardiology},
+  author       = {Hansen, Per Christian},
+  year         = {2001}
+}
 @Article{Lu_Pestourie_Yao_Wang_Verdugo_Johnson_2021,
   title={Physics-Informed Neural Networks with Hard Constraints for Inverse Design},
   volume={43},
@@ -202,4 +222,14 @@
   author={Boyd, Stephen and Vandenberghe, Lieven},
   year={2004},
   publisher={Cambridge university press}
+}
+
+@inproceedings{rahaman2019spectral,
+  title={On the Spectral Bias of Neural Networks},
+  author={Rahaman, Nasim and Baratin, Aristide and Arpit, Devansh and Draxler, Felix and Lin, Min and Hamprecht, Fred and Bengio, Yoshua and Courville, Aaron},
+  booktitle={International Conference on Machine Learning},
+  pages={5301--5310},
+  year={2019},
+  organization={PMLR},
+  note={\href{https://arxiv.org/abs/1806.08734}{arXiv:1806.08734}}
 }
