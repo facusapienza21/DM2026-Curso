@@ -49,11 +49,15 @@ Mismo grafo computacional de ejemplo que {numref}`grafo-computacional`. Se muest
 
 
 ### El método Forward
-Otro método, empleado la clase pasada, consiste en explorar el grafo en un orden tal que cada nodo sea explorado únicamente cuando se visitaron todos los nodos previos de los caminos de los que forma parte (ver ejemplo en figura). Esto permite unificar aquellos caminos que comparten secciones y reducir el costo computacional. Al ir acumulando los cálculos parciales de la fórmula de Bauer, se irán calculando las derivadas parciales de nodos de índice cada vez más altos. Así, podríamos decir que la estrategia _Forward_ para encontrar la derivada $\partial v_j/\partial v_i$ con $j>i$ consiste en encontrar cantidades $\omega$ previas a $v_j$ y reescribir el problema de acuerdo a la siguiente relación dinámica:
-$$\frac{\partial v_j}{\partial v_i} = \sum_{\omega \to v_j} \frac{\partial v_j}{\partial \omega}\frac{\partial \omega}{\partial v_i}.$$
-Al ser $\omega$ inmediatamente próximo a $v_j$, la derivada $\frac{\partial v_j}{\partial \omega}$ será sencilla de calcular, restando la dificultad en calcular $\frac{\partial \omega}{\partial v_i}$, lo que se hará de forma recursiva reaplicando la fórmula.
+Otro método, empleado en la clase pasada, consiste en recorrer el grafo en un orden topológico, de manera que cada nodo se evalúa únicamente después de haber evaluado todos sus predecesores en el grafo. Esto permite reutilizar cálculos intermedios y evitar la enumeración explícita de todos los caminos, reduciendo significativamente el costo computacional.
 
-En nuestro ejemplo (y como se muestra en {numref}`grafo-computacional-forward`), comenzaremos calculando $\frac{\partial v_0}{\partial v_0}$, luego $\frac{\partial v_1}{\partial v_0}$ y $\frac{\partial v_2}{\partial v_0}$, luego $\frac{\partial v_4}{\partial v_0}$, $\frac{\partial v_5}{\partial v_0}$ y $\frac{\partial v_6}{\partial v_0}$, luego $\frac{\partial v_8}{\partial v_0}$ y $\frac{\partial v_9}{\partial v_0}$ y por último el resultado buscado $\frac{\partial v_{10}}{\partial v_0}$. Ya que estamos calculando las derivadas de nodos cada vez más cercanos a la salida siguiendo el ordenamiento del grafo, llamamos a este el método _Forward_.
+Al propagar de manera ordenada los términos de la fórmula de Bauer, se van obteniendo derivadas parciales de nodos cada vez más “alejados” de las entradas. En este contexto, la estrategia *forward* para calcular la derivada $\partial v_j/\partial v_i$ consiste en expresar dicha cantidad en función de los predecesores inmediatos $\omega$ de $v_j$:
+$$\frac{\partial v_j}{\partial v_i} = \sum_{\omega \to v_j} \frac{\partial v_j}{\partial \omega}\frac{\partial \omega}{\partial v_i}.$$
+Al ser $\omega$ inmediatamente próximo a $v_j$, la derivada $\frac{\partial v_j}{\partial \omega}$ será sencilla de calcular, restando la dificultad en calcular $\frac{\partial \omega}{\partial v_i}$, lo que se hará de forma recursiva reaplicando la fórmula. 
+
+En nuestro ejemplo (y como se muestra en {numref}`grafo-computacional-forward`), comenzaremos calculando $\frac{\partial v_0}{\partial v_0}$, luego $\frac{\partial v_1}{\partial v_0}$ y $\frac{\partial v_2}{\partial v_0}$, luego $\frac{\partial v_4}{\partial v_0}$, $\frac{\partial v_5}{\partial v_0}$ y $\frac{\partial v_6}{\partial v_0}$, luego $\frac{\partial v_8}{\partial v_0}$ y $\frac{\partial v_9}{\partial v_0}$ y por último el resultado buscado $\frac{\partial v_{10}}{\partial v_0}$.
+
+Dado que las derivadas se calculan propagando información desde las entradas hacia la salida siguiendo el orden topológico del grafo, este procedimiento se denomina método *Forward*.
 ```{figure} figures/clase13/grafocompforward.png
 :width: 500px
 :align: center
