@@ -68,7 +68,7 @@ Mismo caso que {numref}`grafo-computacional-derivada`. Se muestra ahora también
 
 ## El método Reverse
 
-Análogamente al método forward, que consistía en explorar los nodos del grafo de forma ordenada partiendo de los parámetros y llegando al valor de salida, el método *reverse* consistirá en explorar los nodos del grafo en un orden similar pero partiendo del valor de salida y dirigiéndose hacia los parámetros, calculando en el proceso derivadas de la salida respecto a valores de cada vez menor índice. Así, el método reverse para calcular una derivada $\frac{\partial v_j}{\partial v_i}$ con $j>i$ también hará uso de cantidades intermedias $\omega$ que sucedan al nodo $v_i$ y se valdrá de la relación dinámica:
+Análogamente al método forward, que consistía en explorar los nodos del grafo de forma ordenada partiendo de los parámetros y llegando al valor de salida, el método *reverse* consistirá en explorar los nodos del grafo en un orden similar pero partiendo del valor de salida y dirigiéndose hacia los parámetros, calculando en el proceso derivadas de la salida respectoa valores de indices menores. Así, el método reverse para calcular una derivada $\frac{\partial v_j}{\partial v_i}$ con $j>i$ también hará uso de cantidades intermedias $\omega$ que sucedan al nodo $v_i$ y se valdrá de la relación dinámica:
 $$\frac{\partial v_j}{\partial v_i} = \sum_{v_i\to \omega} \frac{\partial v_j}{\partial \omega}\frac{\partial \omega}{\partial v_i}.$$
 De las dos derivadas a la derecha, esta vez será $\frac{\partial \omega}{\partial v_i}$ la que es fácil de calcular mientras que para $\frac{\partial v_j}{\partial \omega}$ se tendrá que aplicar la relación recursivamente. A este método también se le da el nombre *back-propagation*.
 
