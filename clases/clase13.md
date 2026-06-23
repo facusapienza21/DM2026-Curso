@@ -34,15 +34,19 @@ donde $\Gamma$ denota un camino dirigido en el grafo computacional desde $v_o$ h
 
 
 ### Costo computacional en la fórmula de Bauer, métodos de evaluación.
-La eficiencia en la evaluación de esta fórmula depende del método utilizado. 
-Por ejemplo, el método *naíf* de evaluación, listar todos los caminos, calcular el producto para cada camino, y luego efectuar la suma, es altamente ineficiente. Esto es porque muchos caminos compartirán secciones, que serán calculadas multiples veces sin reusar resultados. Por ejemplo, en {numref}`grafo-computacional-derivada` se muestran todas las aristas relevantes para calcular $\partial v_{10}/\partial v_0$. No es difícil notar que habrá más que un camino que une los nodos relevantes y que una buena parte de ellos utilizará la arista que une $v_0$ y $v_1$ y por lo tanto la derivada parcial $\partial v_1/\partial v_0$.
+La eficiencia en la evaluación de la fórmula de Bauer depende del método utilizado.
+
+Un método *naïf* consiste en listar todos los caminos del grafo computacional, calcular el producto de derivadas asociado a cada camino y luego sumar los resultados. Este procedimiento es altamente ineficiente, ya que muchos caminos comparten subcaminos, lo que implica recalcular múltiples veces las mismas derivadas sin reutilizar resultados.
+
+Por ejemplo, en {numref}`grafo-computacional-derivada` se muestran todas las aristas relevantes para calcular $\partial v_{10}/\partial v_0$. No es difícil notar que existe más de un camino que conecta los nodos relevantes y que una parte importante de ellos utiliza la arista que une $v_0$ con $v_1$, por lo que la derivada parcial $\partial v_1/\partial v_0$ se recalcula repetidamente a lo largo de distintos caminos.
 ```{figure} figures/clase13/grafocompderivada.png
 :width: 500px
 :align: center
 :name: grafo-computacional-derivada
 
-Mismo grafo computacional de ejemplo que {numref}`grafo-computacional`. Se muestran resaltadas las aristas que componen los distintos caminos que unen los nodos correspondientes a $v_0$ y $v_10$, y por lo tanto, que son relevantes para el cálculo de la derivada $\frac{v_{10}}{v_0}$.
+Mismo grafo computacional de ejemplo que {numref}`grafo-computacional`. Se muestran resaltadas las aristas que componen los distintos caminos que unen los nodos correspondientes a $v_0$ y $v_{10}$, y por lo tanto, que son relevantes para el cálculo de la derivada $\frac{v_{10}}{v_0}$.
 ```
+
 
 ### El método Forward
 Otro método, empleado la clase pasada, consiste en explorar el grafo en un orden tal que cada nodo sea explorado únicamente cuando se visitaron todos los nodos previos de los caminos de los que forma parte (ver ejemplo en figura). Esto permite unificar aquellos caminos que comparten secciones y reducir el costo computacional. Al ir acumulando los cálculos parciales de la fórmula de Bauer, se irán calculando las derivadas parciales de nodos de índice cada vez más altos. Así, podríamos decir que la estrategia _Forward_ para encontrar la derivada $\partial v_j/\partial v_i$ con $j>i$ consiste en encontrar cantidades $\omega$ previas a $v_j$ y reescribir el problema de acuerdo a la siguiente relación dinámica:
@@ -86,6 +90,7 @@ Ventaja en memoria de los métodos modo forward con respecto a los modo reverse.
 ```
 
 Para aliviar esta demanda de memoria, se suele usar la estrategia de *Checkpointing* ilustrada en {numref}`grafo-checkpointing`. Esta estrategia consiste en guardar en memoria el estado del sistema únicamente en ciertos puntos espaciados del programa. Si luego para el cálculo de derivadas mediante algún metodo backwards se requieren valores intermedios a los puntos disponibles, estos deberán poder obtenerse corriendo el programa de vuelta a partir del punto guardado más cercano. Con esta estrategia se balancea el úso de memoria y cómputo al decidir sobre que puntos guardar el estado del sistema.
+
 ```{figure} figures/clase13/checkpointing.png
 :width: 300px
 :align: center
