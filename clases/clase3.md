@@ -10,9 +10,12 @@ title: No3 - UDEs
 :width: 100%
 :::
 
-Vimos el modelo de Lotka-Volterra, que tiene cuatro parámetros representados como $\theta$ = ($\alpha$, $\beta$, $\delta$ y $\gamma$).
+Vimos anteriormente el modelo de Lotka-Volterra, que tiene cuatro parámetros representados como $\theta$ = ($\alpha$, $\beta$, $\delta$ y $\gamma$).
 Según los valores de estos parámetros y dada una condición inicial, el sistema genera distintas trayectorias.
 A estas trayectorias se les puede agregar ruido gaussiano para representar los datos que observamos en la realidad.
+
+Cuando no hay ruido los puntos siguen perfectamente las trayectorias. A medida que uno agrega ruido, los puntos se empiezan a alejar de la trayectoria. 
+
 
 A continuación tenemos dos implementaciones interactivas del modelo de Lotka-Volterra, una en Python y otra en Julia.
 En ambos casos se pueden modificar los parámetros y explorar cómo cambian las trayectorias temporales y el retrato de fases.
@@ -29,7 +32,7 @@ Interfaz interactiva en Python para explorar la dinámica del modelo de Lotka-Vo
 
 Acá hacemos una distinción importante:
 
-- El **estado del sistema** es la solución de las ecuaciones diferenciales.
+- El **estado del sistema** son las trayectorias dadas por las ecuaciones diferenciales.
 - En la mayoría de los casos, este estado es desconocido.
 - En la realidad observamos solo algunos puntos del sistema y no conocemos la dinámica subyacente.
 - Además, las observaciones suelen tener ruido.
@@ -55,6 +58,9 @@ $$
 $$
 En el caso de Lotka-Volterra tenemos cuatro parámetros.
 Al graficar el valor de la función de pérdida en un mapa 2D, eligiendo alguna combinación de dos parámetros, ya se pueden observar problemas como la presencia de mínimos locales.
+
+Pero si el problema no es lineal, pueden existir varios minimos locales. Nada nos garantiza que encontremos el minimo absoluto. 
+Veremos más adelante como resolver este tipo de problemas.
 
 ## NODEs
 
