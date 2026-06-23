@@ -84,7 +84,11 @@ Mismo caso que {numref}`grafo-computacional-derivada`. Se muestra ahora también
 ### Uso de memoria y _checkpointing_
 
 
-Una desventaja del modo reverse respecto al modo forwards, es que requiere precomputar los valores asignados a cada nodo para poder evaluar las derivadas. Por ejemplo, para calcular un valor para $\frac{\partial v_{j+1}}{\partial v_{j}}$, uno necesita del valor de $v_j$ o $v_{j+1}$ en que evaluar la derivada. En el modo forward, la obtención de estos valores a partir de los parámetros $v_{-p}, ... ,v_0$ o las variables secundarias que se deducen de estos puede hacerse en el momento. En el caso backwards, todos estos valores deberán conocerse al inicio del computo de la derivada, como se esquematiza en {numref}`grafo_doscasos`. Esto acarrea un costo adicional en memoria para guardar todas las variables intermedias del programa y un costo en tiempo por el acceso de la memoria.
+Una desventaja del modo reverse respecto al modo forwards, es que requiere precomputar los valores asignados a cada nodo para poder evaluar las derivadas. 
+
+Por ejemplo, para calcular un valor para $\frac{\partial v_{j+1}}{\partial v_{j}}$, uno necesita del valor de $v_j$ o $v_{j+1}$ en que evaluar la derivada. 
+
+En el modo forward, estos valores se generan y utilizan de manera secuencial a medida que avanza el cálculo. En cambio, en el modo reverse, los valores intermedios obtenidos durante el pase forward deben permanecer disponibles durante el recorrido inverso del grafo, como se esquematiza en  {numref}`grafo_doscasos`. Esto implica un costo adicional en memoria para guardar todas las variables intermedias del programa y un costo en tiempo por el acceso de la memoria.
 ```{figure} figures/clase13/doscasos.png
 :width: 500px
 :align: center
@@ -92,7 +96,6 @@ Una desventaja del modo reverse respecto al modo forwards, es que requiere preco
 
 Ventaja en memoria de los métodos modo forward con respecto a los modo reverse. Se esquematiza como en el caso forward, a medida que el programa calcula las diferentes cantidades intermedias del sistema (por ejemplo, resolviendo una ODE), estas ya se pueden utilizar para calcular los gradientes. En cambio, en el caso backwards, uno debe esperar a calcular la variable final antes de ir sucesivamente utilizando variables intermedias anteriores para propagar el gradiente para atrás. 
 ```
-
 Para aliviar esta demanda de memoria, se suele usar la estrategia de *Checkpointing* ilustrada en {numref}`grafo-checkpointing`. Esta estrategia consiste en guardar en memoria el estado del sistema únicamente en ciertos puntos espaciados del programa. Si luego para el cálculo de derivadas mediante algún metodo backwards se requieren valores intermedios a los puntos disponibles, estos deberán poder obtenerse corriendo el programa de vuelta a partir del punto guardado más cercano. Con esta estrategia se balancea el úso de memoria y cómputo al decidir sobre que puntos guardar el estado del sistema.
 
 ```{figure} figures/clase13/checkpointing.png
@@ -102,6 +105,9 @@ Para aliviar esta demanda de memoria, se suele usar la estrategia de *Checkpoint
 
 Mismo caso que {numref}`grafo_doscasos`. Se muestra la estrategia de checkpointing, en que el estado del sistema (en este caso valor de la ODE) se guarda únicamente en los puntos marcados por una cruz azul. Al calcular gradientes mediante backpropagation, el valor de la ODE en el punto a considerar debe calcularse a partir del valor en memoria más cercano.
 ```
+
+Esta estrategia permite equilibrar el uso de memoria y el costo computacional, intercambiando almacenamiento por costo de calculo computacional: cuanto menor es la cantidad de estados guardados, mayor es el trabajo necesario para reconstruir los valores intermedios durante el barrido inverso.
+
 
 ### Cuando conviene backwards? VJP vs JVP
 
