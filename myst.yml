@@ -30,6 +30,10 @@ project:
         - file: clases/clase9.md
         - file: clases/clase10.md
         - file: clases/clase11.md
+        - file: clases/clase12.md
+        - file: clases/clase13.md
+        - file: clases/clase14.md
+        - file: clases/clase15.md
         # - file: clases/clase_template.md
     - title: Projecto Final
       children:
