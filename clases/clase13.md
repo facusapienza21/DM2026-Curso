@@ -15,17 +15,23 @@ title: No13 - Programación Diferencial Pt3
 ### Repaso de la clase anteirior: Diferenciación automática en modo forward
 
 En la [clase 12](clase12.md), se estudió el método de *Automatic Differentiation (AD)* en el caso *Forward*, implementado mediante los números duales. Repasaremos a continuación los conceptos de este caso que reaparecerán en esta clase.
-Para realizar la diferenciación, consideramos la cantidad a diferenciar como el nodo final de un *grafo computacional* cuyas entradas son los $p$ parámetros de nuestro problema, como se muestra en {numref}`grafo-computacional`.
+
+Para calcular derivadas mediante AD, representamos el cálculo de una función como un grafo computacional. En este grafo, los nodos de entrada corresponden a los $p$ parámetros del problema, mientras que el nodo final representa la cantidad que deseamos diferenciar. Esta situación se muestra en
+`grafo-computacional`.
 ```{figure} figures/clase13/grafocomp.png
 :width: 500px
 :align: center
 :name: grafo-computacional
 
-Grafo computacional. Una cantidad de salida $v_10$, generalmente la función de pérdida, se escribe en términos de los parámetros del problema ($v_0,v_{-1},v_{-2},v_{-3}$) a partir de una serie de cantidades intermedias $v_1$ a $v_9$. Las aristas dirigidas en el grafo muestran como las cantidades iniciales se utilizan para calcular las siguientes, y así sucesivamente.
+Grafo computacional. Una cantidad de salida $v_{10}$, generalmente la función de pérdida, se escribe en términos de los parámetros del problema ($v_0,v_{-1},v_{-2},v_{-3}$) a partir de una serie de cantidades intermedias $v_1$ a $v_9$. Las aristas dirigidas en el grafo muestran como las cantidades iniciales se utilizan para calcular las siguientes, y así sucesivamente.
 ```
 
-A partir de la fórmula de Bauer, la derivada de la salida respecto a algún parámetro es la suma de los productos de derivadas correspondientes a los diferentes caminos del gráfo que los unen (ver [clase 11](clase11.md)).
-$$\frac{\partial v_m}{\partial v_o}= \sum_{v_o \underset{\Gamma}{\to} v_m} \prod_{w_k\to w_{k+1}\in \Gamma} \frac{\partial w_{k+1}}{\partial w_k}.$$
+A partir de esta representación, la derivada de la salida respecto a algún parámetro puede interpretarse en términos de los caminos del grafo. En particular, según la fórmula de Bauer, dicha derivada se obtiene como la suma de los productos de derivadas correspondientes a los diferentes caminos del gráfo que los unen (ver [clase 11](clase11.md)).
+$$\frac{\partial v_m}{\partial v_o}= \sum_{v_o \underset{\Gamma}{\to} v_m} \prod_{(w_k\to w_{k+1}) \in \Gamma} \frac{\partial w_{k+1}}{\partial w_k}.$$
+
+donde $\Gamma$ denota un camino dirigido en el grafo computacional desde $v_o$ hasta $v_m$.
+
+
 
 ### Costo computacional en la fórmula de Bauer, métodos de evaluación.
 La eficiencia en la evaluación de esta fórmula depende del método utilizado. 
