@@ -207,5 +207,3 @@ $$\frac{dL}{d\theta}(u,\theta)=-\lambda^t\frac{\partial G}{\partial \theta}+\fra
 
 La [clase siguiente](clase14.md) continuaremos viendo el método del adjunto, continuando con el caso discreto y luego incluyendo también el caso continuo.
 
-
-La [clase siguiente](clase14.md) continuaremos viendo el método del adjunto, continuando con el caso discreto y luego incluyendo también el caso continuo.
