@@ -168,24 +168,44 @@ Para dar números más concretos. Dada una ODE de $n$ variables, con $q=1$, para
 ## Método del adjunto
 
 Este es un metodo estándar de programación diferencial utilizando ecuaciones diferenciales.
-Supongamos que tenemos que resolver una ecuación diferencial $\frac{du}{dt}=f(u,\theta,t)$. 
-Podemos discretizar la solución en el tiempo para buscar únicamente un conjunto $\{u_j\}$, tales que $u_j=u(t_j)$. 
+Supongamos que tenemos que resolver una ecuación diferencial $$\frac{du}{dt}=f(u,\theta,t)$$. 
+
+Podemos discretizar la solución en el tiempo para buscar únicamente un conjunto $\{u_j\}$, tales que $u_j=u(t_j)$ con $t_1 < t_2 < \ldots$
+
 Podemos concatenar los valores a cada tiempo en un *super-vector*, $u=(u_1,...,u_m)\in \mathbb R^{nm}$, tal que la expresión para la ecuación diferencial discreta es $G(u,\theta)=0$.
+
 
 Podemos pensar, por ejemplo, en el caso de una ecuación diferencial lineal 
 $$\frac{du}{dt}=A(\theta)u+b(\theta).$$Una discretización posible, si utilizamos el método de euler explicito, es $$u_{j+1}=(\mathbb I +\Delta t A(\theta)) u_j+\Delta t b(\theta).$$
+
 Esta ecuación diferencial a su vez se puede reescribir como $$g_j(u,\theta)=u_{j+1}-(\mathbb I +\Delta t A(\theta)) u_j-\Delta t b(\theta)=0.$$En forma vectorial, esta resultará
 $$G(u,\theta)=(g_1,...,g_m)=0.$$
-Podemos considerar que además tendremos una función de costo para contrastar con datos observacionales, $L(u,\theta)$. Por ejemplo, podría ser de la forma $L(u,\theta)=\sum^m_{i=1}\omega_i||u_i^{OBS}-u_i||^2$, siendo $\omega_i$ el peso asignado a cada observación.
+
+Podemos considerar que además tendremos una función de costo para contrastar con datos observacionales, $L(u,\theta)$. Por ejemplo, podría ser de la forma 
+
+$$L(u,\theta)=\sum^m_{i=1}\omega_i||u_i^{{OBS}-u_i}||^2$$
+
+siendo $\omega_i$ el peso asignado a cada observación.
 
 El objetivo del método del adjunto será calcular el gradiente de la función de costo respecto a los parámetros, $\frac{dL}{d\theta}(u,\theta)$. 
 Utilizando la regla de la cadena podemos relacionar este gradiente con la sensibilidad:
 $$\frac{dL}{d\theta}(u,\theta)=\frac{\partial L}{\partial u}\frac{\partial u}{\partial \theta}+\frac{\partial L}{\partial \theta}.$$
-Para obtener la sensibilidad, que es el término difícil de esta ecuación resultante, se puede, por ejemplo, derivar la ecuación diferencial discreta:
-$$0=\frac{dG}{d\theta}=\frac{\partial G}{\partial u}\frac{\partial u}{\partial \theta}+\frac{\partial G}{\partial \theta}\;\Rightarrow\;\frac{\partial u}{\partial \theta}= -\left(\frac{\partial G}{\partial \theta}\right)^{-1}\frac{\partial G}{\partial \theta}.$$
+
+Para obtener la sensibilidad, que es el término difícil de esta ecuación resultante, se puede, por ejemplo, derivar la ecuación diferencial discreta. 
+Dado que $G(\theta) = 0$ $\forall \theta $ $\Rightarrow$ $\frac{dG}{d\theta} = 0$ $\Rightarrow$
+
+$$0=\frac{dG}{d\theta}=\frac{\partial G}{\partial u}\frac{\partial u}{\partial \theta}+\frac{\partial G}{\partial \theta}\;\Rightarrow\;\frac{\partial u}{\partial \theta}= -\left(\frac{\partial G}{\partial u}\right)^{-1}\frac{\partial G}{\partial \theta}.$$
+
+Nota: asumimos que $\frac{\partial G}{\partial U}$ es inversible bajo ciertas condiciones. 
+
 Esta expresión para la sensibilidad, al remplazarse en la expresión del gradiente de la función de costo otorga
-$$\frac{dL}{d\theta}(u,\theta)=-\frac{\partial L}{\partial u}\left(\frac{\partial G}{\partial \theta}\right)^{-1}\frac{\partial G}{\partial \theta}+\frac{\partial L}{\partial \theta}.$$
+$$\frac{dL}{d\theta}(u,\theta)=-\frac{\partial L}{\partial u}\left(\frac{\partial G}{\partial u}\right)^{-1}\frac{\partial G}{\partial \theta}+\frac{\partial L}{\partial \theta}.$$
+
+
 El método del adjunto define una cantidad $\lambda^t=\frac{\partial L}{\partial u}\left(\frac{\partial G}{\partial \theta}\right)^{-1}$, llamada la variable adjunta, tal que
-$$\frac{dL}{d\theta}(u,\theta)=-\lambda^t\frac{\partial G}{\partial \theta}+\frac{\partial L}{\partial \theta} \; \text{ con }\; \left(\frac{\partial G}{\partial \theta}\right)^T\lambda=\left(\frac{\partial L}{\partial u}\right)^T.$$
+$$\frac{dL}{d\theta}(u,\theta)=-\lambda^t\frac{\partial G}{\partial \theta}+\frac{\partial L}{\partial \theta} \; \text{ con }\; \left(\frac{\partial G}{\partial u}\right)^T\lambda=\left(\frac{\partial L}{\partial u}\right)^T.$$
+
+La [clase siguiente](clase14.md) continuaremos viendo el método del adjunto, continuando con el caso discreto y luego incluyendo también el caso continuo.
+
 
 La [clase siguiente](clase14.md) continuaremos viendo el método del adjunto, continuando con el caso discreto y luego incluyendo también el caso continuo.
