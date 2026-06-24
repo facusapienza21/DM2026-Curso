@@ -26,3 +26,4 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | No10          | Santiago Gesualdi ([@SantiiiGesualdi](https://github.com/SantiiiGesualdi)), Giuliana Barbieri ([@giulianabarbieri](https://github.com/giulianabarbieri))|
 | No11           | Constanza Nicolas ([@coco3511](https://github.com/coco3511)), Luca Emilio Petrarca ([@lucapetrarca](https://github.com/lucapetrarca))|
 | No12           | Demián Elnecavé ([@demianelnecave](https://github.com/demianelnecave)), Agustín Rabinowicz ([@agusraba05](https://github.com/Agusraba)), Leonardo Dominguez ([@leodomingue](https://github.com/leodomingue))|
+| No13          | Cyntia Bonomi ([@cyntiab](https://github.com/cyntiab)), Agustín Agote ([@Nitsuga01](https://github.com/Nitsuga01))|
