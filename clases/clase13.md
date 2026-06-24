@@ -109,9 +109,10 @@ Mismo caso que {numref}`grafo_doscasos`. Se muestra la estrategia de checkpointi
 Esta estrategia permite equilibrar el uso de memoria y el costo computacional, intercambiando almacenamiento por costo de calculo computacional: cuanto menor es la cantidad de estados guardados, mayor es el trabajo necesario para reconstruir los valores intermedios durante el barrido inverso.
 
 
-### Cuando conviene backwards? VJP vs JVP
+### Cuando conviene usar reverse? VJP vs JVP
 
-Vale la pena pensar en que casos las ventajas de los métodos backwards los vuelven convenientes aún considerando las penalidades en memoria y computacional que estos implican. Para ver un ejemplo de estas ventajas, podemos considerar una versión vectorizada de un grafo computacional (ilustrado en {numref}`grafo-computacional-vectorizado`):
+
+Vale la pena pensar en que casos las ventajas de los métodos *reverse*  los vuelven convenientes aún considerando las penalidades en memoria que estos implican. Para ver un ejemplo de estas ventajas, podemos considerar una versión vectorizada de un grafo computacional (ilustrado en {numref}`grafo-computacional-vectorizado`):
 ```{figure} figures/clase13/grafovectorizado.png
 :width: 500px
 :align: center
@@ -119,23 +120,50 @@ Vale la pena pensar en que casos las ventajas de los métodos backwards los vuel
 
 Grafo computacional en una versión vectorizada, en que cada cantidad $h_j$ representa un vector de $d_j$ cantidades intermedias que se calculan de las cantidades del nodo anterior mediante una función $g_j$.
 ```
-Aquí, los $p$ parámetros $\theta$ son la entrada del grafo computacional, mientras que la salida es la función de costo $\mathcal L$, un escalar real. En las capas intermedias, las variables intermedias $h_j\in \mathbb R^{d_j}$ se calculan como $h_j=g_j(h_{j-1})$, donde $g_j:\mathbb R^{d_{j-1}}\to \mathbb R^{d_j}$ es la función que relaciona las variables en cada nodo con el anterior. Así, la función de costo será 
+
+
+Aquí, los $p$ parámetros $\theta$ son la entrada del grafo computacional, mientras que la salida es la función de costo $\mathcal L$, un escalar real. En las capas intermedias, las variables intermedias $h_j\in \mathbb R^{d_j}$ se calculan como 
+
+$$h_j=g_j(h_{j-1})$$
+
+
+
+donde $g_j:\mathbb R^{d_{j-1}}\to \mathbb R^{d_j}$ es la función que relaciona las variables en cada nodo con el anterior. Así, la función de costo será 
+
+$$ \mathcal L: \mathbb{R}^{p} \rightarrow \mathbb{R}
+$$
+
 $$\mathcal L(\theta)=g_m\circ g_{m-1}\circ...\circ g_1(\theta).$$
+
 Empleando la regla de la cadena, el Jacobiano de la función de costo será el producto de los Jacobianos de cada $g_m$:
 $$D\mathcal L=Dg_m\;Dg_{m-1}\;...\;Dg_1 (\theta)$$
-El tamaño de $D\mathcal L$ será $1\times p$, y cada $Dg_{j}$ tendrá tamaño $d_m \times d_{m-1}$. Podemos observar que en este caso el calculo del lado derecho de la ecuación por un método backwards (equivalente a calcular de izquierda a derecha el producto de matrices) será eficiente en comparación a los métodos forward (equivalentes a calcular de derecha a izquierda el producto de matrices). Como en este caso $d_m=1$, al hacer el producto de izquierda a derecha, se estará realizando la multiplicación de un vector por una matriz repetidas veces (Vector-Jacobian Product (VJP)). En cambio, como $d_0=p$, al realizar la multiplicación en sentido inverso (Jacobian-Vector Product (JVP)), se estarán multiplicando matrices por matrices hasta el final.
+
+con
+$$D\mathcal{L} \in \mathbb{R}^{1 \times p}$$
+$$D\mathcal{g_m} \in \mathbb{R}^{1 \times d_{m-1}}$$
+$$D\mathcal{g_{m-1}} \in \mathbb{R}^{d_{m-1}\times d_{m-2}}$$ $$D\mathcal{g_1} \in \mathbb{R}^{d_1\times p}$$
+
+
+Podemos observar que en este caso el cálculo del lado derecho de la ecuación mediante un método *backward* corresponde a la propagación de derivadas en sentido inverso sobre el grafo computacional, lo cual es equivalente a la evaluación de productos vector–Jacobian (VJP). Este enfoque resulta especialmente eficiente cuando la dimensión de la salida es pequeña, en particular cuando $d_m = 1$.
+
+En cambio, el método *forward* corresponde a la evaluación de productos Jacobian–vector (JVP), en los cuales se propagan direcciones desde las entradas hacia la salida. Este enfoque es más eficiente cuando la dimensión de entrada es pequeña, es decir, cuando $d_0 = p$ no es grande.
 
 Para calcular $AB$ con $A\in \mathbb R^{n\times r}$ y $B\in \mathbb R^{r\times m}$ se requieren $n\times m$ productos internos, cada uno de $r$ términos, el costo de calcular $AB$ será de orden $\mathcal O(mnr)$. En general, en un caso en que tenemos una función de costo $\mathcal L:\mathbb R^{p}\to \mathbb R^q$ con $m$ pasos intermedios, el número de operaciones a realizar en modo forward va como $\mathcal O(pm+q)$, mientras que en el modo backward irá como $\mathcal O(mq+p)$.
 
 Esto, junto al mayor costo en memoria de aplicar metodos backwards, sugieren que esto es únicamente conveniente si $p>q$.
-|       | Forward | Reverse |
-| ----- | ------- | ------- |
-| $p<q$ | ✓       | X       |
-| $p=q$ | ✓       | X       |
-| $p>q$ | X       | ✓       |
+
+
+| Caso          | Forward (JVP) | Reverse (VJP) |
+|---------------|---------------| ------------- |
+| $p \ll q$     | ✓             | X             |
+| $p \approx q$ | ✓             | X             |
+| $p \gg q$     | X             | ✓             |
 
 
 Para dar números más concretos. Dada una ODE de $n$ variables, con $q=1$, para $n+p\gtrsim 50$, convene utilizar métodos reverse, mientras que en el caso contrario conviene utilizar métodos forward.
+
+
+
 
 ## Método del adjunto
 
