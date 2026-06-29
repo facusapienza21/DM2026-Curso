@@ -7,7 +7,7 @@
 | Fecha final para asignar proyecto | 06/05/2026 |
 | Fecha final de validación de proyectos | 13/05/2026 |
 | Fecha de exposición de posters | 17/06/2026 12:00-14hrs |
-| Fecha de entrega | 19/06/2026 |
+| Fecha de entrega | 23/06/2026 |
 | | |
 <!-- ::: -->
 
