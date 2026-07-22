@@ -30,18 +30,19 @@ Poster del proyecto.
 
 ## Proyectos 2026
 
-### Proyecto 11
+### SINDy-XAI: Identificación de Dinámicas Dispersas en Explicaciones de Audio
 
-**Autores:**
+**Autores:** Cecilia Bolaños (`@ceciliabolanos`)
 
-**Resumen:**
+**Resumen:** Este trabajo estudia si las explicaciones en formato de audio generadas por una red neuronal para contar kicks comparten una dinámica matemática según la clase predicha. Para ello, modelamos estas señales mediante SINDy-c, utilizando la energía de la explicación y una señal de control para representar los impactos transitorios. Los resultados muestran que una biblioteca polinomial describe mejor la dinámica y permite descubrir ecuaciones diferenciales características de cada clase, revelando similitudes y diferencias en la forma en que la red procesa distintas categorías de sonidos.
 
-:::{figure} ../assets/proyectos/11/poster.png
+:::{figure} ../assets/proyectos/SINDy-XAI-Identificación-de-dinámicas-dispersas-en-explicaciones-de-audio/poster.jpg
 :width: 80%
 :align: center
 :::
 
 **Links:**
+- [Repositorio](https://github.com/ceciliabolanos/sindyxai)
 
 ---
 
