@@ -300,18 +300,20 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 46
+### Reconstrucción física de curvas de luz para transientes del LSST
 
-**Autores:**
+**Autores:** Giuliana Barbieri (`@giulianabarbieri`)
+**Resumen:** Este proyecto implementa una PINN (Physics-Informed Neural Network) para reconstruir curvas de luz de Supernovas Tipo Ia a partir de datos fotométricos del ZTF y estimar simultáneamente parámetros físicos de la explosión (masa de Níquel-56, tiempo de explosión y opacidad dinámica) guiada exclusivamente por la ecuación diferencial de Arnett (1982). La arquitectura dual combina una red neuronal para el flujo y otra para la opacidad, con restricciones fuertes (hard PINNs), grilla de colocación adaptativa (importance sampling) y entrenamiento causal. El resultado principal es que la PINN estima M_Ni0 dentro del rango de literatura en 2 de 3 objetos sin conocer la relación de Phillips, supera por poco a los Gaussian Processes en escenarios realistas con huecos continuos, y descubre de forma independiente un valor de opacidad κ̄ ≈ 0.10 días⁻¹ consistente con el consenso astrofísico.
 
-**Resumen:**
-
-:::{figure} ../assets/proyectos/46/poster.png
+:::{figure} assets/proyectos/Reconstrucción_física_de_curvas_de_luz_para_transientes_del_LSST/poster.png
 :width: 80%
 :align: center
+Poster del proyecto.
 :::
 
 **Links:**
+- [Repositorio](https://github.com/giulianabarbieri/SNIa-PINN)
+- [Slides / Informe](https://github.com/giulianabarbieri/SNIa-PINN/blob/main/Informe.pdf)
 
 ---
 
