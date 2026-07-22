@@ -13,7 +13,7 @@ Esta página reúne los proyectos finales del curso. Cada grupo puede abrir un *
 
 **Resumen:** Breve descripción del proyecto (2–4 oraciones). Qué problema aborda, qué métodos usa y cuál es el resultado principal.
 
-<!-- Las imágenes del poster deben incluirse en la carpeta proyectos/assets/<nombre-del-proyecto>/ del repositorio -->
+<!-- Las imágenes del poster deben incluirse en la carpeta assets/proyectos/<nombre-del-proyecto>/ del repositorio -->
 :::{figure} ../assets/proyectos/nombre-del-proyecto/poster.png
 :width: 80%
 :align: center
