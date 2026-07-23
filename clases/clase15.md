@@ -98,28 +98,30 @@ En la práctica la integral se aproxima con una suma sobre los $t_i$. A diferenc
 
 ## 5. SINDy (Sparse Identification of Nonlinear Dynamics)
 
-Método (familia gradient matching) para descubrir ecuaciones dinámicas simples a partir de datos. Muy usado para sistemas caóticos (mínimo 3 ODEs para tener caos).
-
-## 5. SINDy (Sparse Identification of Nonlinear Dynamics)
 
 Método (familia gradient matching) para descubrir ecuaciones dinámicas simples a partir de datos. Muy usado para sistemas caóticos (mínimo 3 ODEs para tener caos).
 
-*   **Idea:** en los sistemas de ODEs típicos, los términos de $f$ son simples (lineales, productos $u_i u_j$, senos...) y la dinámica es **esparsa**: no aparecen todos los términos posibles, solo unos pocos. Se propone $f$ como combinación lineal de un **diccionario de funciones base** $\Phi(u) = [1,\ u_1,\ u_2,\ u_3,\ u_1 u_2,\ u_1 u_3,\ \ldots]^\top \in \mathbb{R}^M$ ($M$ = tamaño del diccionario), con una matriz de coeficientes $\theta \in \mathbb{R}^{n \times M}$ ($n$ = número de ODEs) mayormente nula:
+*   **Idea:** en los sistemas de ODEs típicos, los términos de $f$ son simples (lineales, productos $u_i u_j$, senos...) y la dinámica es **esparsa**: no aparecen todos los términos posibles, solo unos pocos. Se propone $f$ como combinación lineal de un **diccionario de $M$ funciones base** ($1,\ u_1,\ u_2,\ u_3,\ u_1 u_2,\ u_1 u_3,\ \ldots$), con coeficientes $\theta \in \mathbb{R}^{n \times M}$ ($n$ = número de ODEs) mayormente nulos:
 
-$$\dot{u} = f(u, \theta) = \theta\, \Phi(u), \qquad \text{es decir} \qquad \dot{u}_k = \sum_{j=1}^{M} \theta_{kj}\, \phi_j(u)$$
+$$\frac{du}{dt} = f(u, \theta) = \begin{bmatrix} \theta_{11} + \theta_{12}\,u_1 + \theta_{13}\,u_2 + \theta_{14}\,u_3 + \theta_{15}\,u_1 u_2 + \theta_{16}\,u_1 u_3 + \cdots \\ \theta_{21} + \theta_{22}\,u_1 + \theta_{23}\,u_2 + \cdots \\ \vdots \end{bmatrix}$$
 
-    La fila $k$ de $\theta$ son los coeficientes de la ecuación $k$. Ejemplo: la primera componente es $\theta_{11} + \theta_{12} u_1 + \theta_{13} u_2 + \theta_{14} u_3 + \theta_{15} u_1 u_2 + \theta_{16} u_1 u_3 + \cdots$. La no-linealidad está toda en $\Phi(u)$: en $\theta$ el problema es **lineal**.
+    La fila $k$ de $\theta$ son los coeficientes de la ecuación $k$; todas las filas usan las mismas funciones base. La no-linealidad está toda en el diccionario: en $\theta$ el problema es **lineal**.
 
 *   **Optimización con regularización $L_1$ (Lasso)** para forzar esparsidad:
 
-$$\min_{\theta}\ \sum_i \big\| \dot{\hat{u}}(t_i) - \theta\, \Phi(\hat{u}(t_i)) \big\|^2 \;+\; \lambda \sum_{k,j} |\theta_{kj}|$$
+$$\min_{\theta}\ \sum_i \left\| \frac{d\hat{u}}{dt}(t_i) - f(\hat{u}(t_i), \theta) \right\|^2 \;+\; \lambda \sum_{k,j} |\theta_{kj}|$$
 
     Cuanto más grande $\lambda$, más esparsidad → menos coeficientes activos → ecuaciones más simples. El primer término es cuadrático en $\theta$; el término $L_1$ no es diferenciable en cero pero se resuelve bien numéricamente.
 
-*   **Pre-procesamiento — normalizar:** los términos del diccionario tienen **unidades diferentes** (adimensional, metros, metros cuadrados...), así que sus coeficientes no son comparables y penalizarlos juntos está mal. Hay que escalar las columnas de $\Phi$ (dividir por el desvío). Sutileza: los términos no son independientes ($u_1 u_2$ vs. $u_1$ y $u_2$), lo que genera además mucha colinealidad en el diccionario.
+*   **Pre-procesamiento — normalizar:** los términos del diccionario tienen **unidades diferentes** (adimensional, metros, metros cuadrados...), así que sus coeficientes no son comparables y penalizarlos juntos está mal. Hay que escalar cada función base (dividir por su desvío). Sutileza: los términos no son independientes ($u_1 u_2$ vs. $u_1$ y $u_2$), lo que genera además mucha colinealidad en el diccionario.
 
 *   **Ventajas de que el problema sea Lasso clásico:**
-    *   La **selección de $\lambda$** tiene teoría: los grados de libertad efectivos son el número de coeficientes
+    *   La **selección de $\lambda$** tiene teoría: los grados de libertad efectivos son el número de coeficientes no nulos, con lo cual se puede estimar el error de generalización y elegir $\lambda$ de manera fundada (a diferencia de una NODE regularizada, donde uno está más a ciegas).
+    *   La **cuantificación de incertidumbre viene gratis**: al ser cuadrático en los coeficientes activos, se puede dar la incertidumbre de cada $\theta_{kj}$ analíticamente.
+    *   Agrandar el diccionario no daña mucho: la esparsidad filtra los términos importantes, incluso con más features que observaciones.
+
+*   **El gran desafío:** todo lo anterior asume el paso 1 (suavizado) resuelto, pero las derivadas $\frac{d\hat{u}}{dt}$ son muy sensibles al ruido de observación. Con datos sintéticos sin ruido las diferencias finitas funcionan; con ruido real lo amplifican y el método sufre. Si el suavizador es analíticamente diferenciable (ej. cubic splines), conviene derivar el suavizado en vez de los datos.
+
 * 
 ## 6. Generalizaciones a PDEs y SDEs
 
