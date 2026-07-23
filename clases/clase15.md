@@ -154,17 +154,27 @@ $$\min_{\theta}\ \sum_i \left\| \frac{d\hat{u}}{dt}(t_i) - f(\hat{u}(t_i), \thet
 
 ### Ecuaciones en Derivadas Parciales (PDEs)
 
-Es el caso de interés en gran parte de la física y la geofísica (atmósfera, océanos, glaciares, manto terrestre): variables independientes de tiempo *y* espacio.
-Son más difíciles de resolver que las ODEs: en lugar de multistep/Runge-Kutta aparecen **diferencias finitas** y **elementos finitos**, con el problema adicional de cómo mallar/triangular el dominio espacial.
+Es el caso de interés en gran parte de la física y la geofísica (atmósfera, océanos, glaciares, manto terrestre): por lo general relacionan variables independientes como tiempo y espacio, y son más difíciles de resolver que las ODEs.
+Los métodos usados pueden ser **diferencias finitas** y **elementos finitos**, y en general aparece el problema adicional de cómo mallar el dominio espacial.
 
-Lo importante: **los métodos del curso se generalizan naturalmente.**
+Lo importante: **los métodos del curso se generalizan naturalmente** a PDEs.
 
-*   El **método del adjunto** se traslada vía integración por partes.
-    Cada operador diferencial tiene su adjunto (análogo a la transpuesta conjugada de una matriz).
-    *Ejemplo:* la ecuación del calor $\partial_t u = \nabla \cdot (\nabla u)$ tiene operador autoadjunto, así que la variable adjunta satisface también una ecuación de calor.
-*   La ecuación adjunta tiene **condición final** y se resuelve hacia atrás.
-    Al invertir el tiempo ($t \to -t$) la ecuación de calor se vuelve de **anti-difusión** (lo desparramado se quiere concentrar), que es más difícil de resolver numéricamente — análogo a integrar una exponencial creciente.
-*   **Costo de memoria:** almacenar la trayectoria de un campo con $x, y, z, t$ es mucho más pesado que la de una ODE; los checkpointing/adjuntos se vuelven imprescindibles en alta dimensión.
+*   **El método del adjunto se traslada directo.**
+    Recordar el caso ODE lineal: si la dinámica es $\frac{du}{dt} = A u$, la variable adjunta satisface $\frac{d\lambda}{dt} = A^\top \lambda$ con condición **final** $\lambda(t_1) = \lambda_1$ — la misma dinámica pero con la matriz transpuesta, integrada hacia atrás.
+    En PDEs el rol de "transponer la matriz" lo cumple tomar el **adjunto del operador diferencial**, que se obtiene por integración por partes.
+    *Ejemplo (ecuación del calor):* si $\frac{\partial u}{\partial t} = \nabla \cdot (D \nabla u)$, el operador $\nabla \cdot (D \nabla\,\cdot)$ es **autoadjunto** (es su propia "transpuesta"), así que la ecuación adjunta es otra ecuación de calor: $\frac{\partial \lambda}{\partial t} = \nabla \cdot (D \nabla \lambda)$, con condición final $\lambda(t_1, x) = \lambda_1(x)$.
+
+*   **Resolver hacia atrás = anti-difusión.**
+    Como la ecuación adjunta tiene condición final, hay que integrarla hacia atrás en el tiempo.
+    Haciendo el cambio de variable $t \to -t$ para escribirla como ecuación hacia adelante, el signo se invierte: $\frac{\partial \lambda}{\partial t} = -\nabla \cdot (D \nabla \lambda)$.
+    Eso es una ecuación de **anti-difusión**: en vez de desparramar, concentra.
+    Numéricamente es mucho más delicada que la difusión — el análogo en ODEs de integrar una exponencial creciente en vez de una decreciente.
+
+*   **Por qué el adjunto es crítico en PDEs:** los parámetros suelen ser **campos** ($D(x)$, la condición inicial $u_0(x)$, forzantes), o sea millones de parámetros tras discretizar la malla.
+    Calcular el gradiente perturbando costaría una resolución de la PDE *por parámetro*; con el adjunto cuesta **dos resoluciones en total**, independiente del número de parámetros.
+    Es la diferencia entre imposible y factible (así funciona la asimilación de datos en meteorología, e.g. 4D-Var).
+
+*   **Costo de memoria:** almacenar la trayectoria de un campo con $x, y, z, t$ es mucho más pesado que la de una ODE; checkpointing y adjuntos se vuelven imprescindibles en alta dimensión.
 
 ### Ecuaciones Diferenciales Estocásticas (SDEs)
 
