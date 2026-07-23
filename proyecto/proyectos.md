@@ -51,7 +51,7 @@ Poster del proyecto.
 
 **Resumen:** En este proyecto se utilizaron Redes Neuronales restringidas por la física (PINNs) para resolver la evolución cosmológica. En el modelo directo se aproxima el factor de escala y el parámetro de Hubble según la ecuación diferencial de Friedmann simplificada. En el modelo inverso se estiman los parámetros cosmológicos, usando simulaciones con ruido gaussiano y datos observacionales reales del telescopio de Planck. Los resultados finales demuestran la eficiencia de las PINNs para la inferencia cosmológica combinando teoría y datos con dispersión.
 
-:::{figure} ../assets/proyectos/13/poster.png
+:::{figure} assets/proyectos/Estimacion_de_Parametros_Cosmologicos_y_Resolucion_de_la_Ecuación_de_Friedmann_Mediante_Redes_Neuronales_Restringidas_por_la_Física_(PINNs)/poster.png
 :width: 80%
 :align: center
 Poster del proyecto.
