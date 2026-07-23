@@ -170,10 +170,6 @@ Lo importante: **los métodos del curso se generalizan naturalmente** a PDEs.
     Eso es una ecuación de **anti-difusión**: en vez de desparramar, concentra.
     Numéricamente es mucho más delicada que la difusión — el análogo en ODEs de integrar una exponencial creciente en vez de una decreciente.
 
-:::{note}
-Ojo con la convención de signos: en otras referencias la ecuación adjunta aparece como $\frac{\partial \lambda}{\partial t} = -\nabla\cdot(D\nabla\lambda)$ con condición final, que es la misma ecuación del pizarrón tras el cambio $t \to -t$.
-:::
-
 *   **Por qué el adjunto es crítico en PDEs:** los parámetros suelen ser **campos** ($D(x)$, la condición inicial $u_0(x)$, forzantes), o sea millones de parámetros tras discretizar la malla.
     Calcular el gradiente perturbando costaría una resolución de la PDE *por parámetro*; con el adjunto cuesta **dos resoluciones en total**, independiente del número de parámetros.
     Es la diferencia entre imposible y factible (así funciona la asimilación de datos en meteorología, e.g. 4D-Var).
