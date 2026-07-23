@@ -45,18 +45,21 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 13
+### Estimación de Parámetros Cosmológicos y Resolución de la Ecuación de Friedmann Mediante Redes Neuronales Restringidas por la Física (PINNs)
 
-**Autores:**
+**Autores:** Camila Luciana Prieto (`@Camila15987`)
 
-**Resumen:**
+**Resumen:** En este proyecto se utilizaron Redes Neuronales restringidas por la física (PINNs) para resolver la evolución cosmológica. En el modelo directo se aproxima el factor de escala y el parámetro de Hubble según la ecuación diferencial de Friedmann simplificada. En el modelo inverso se estiman los parámetros cosmológicos, usando simulaciones con ruido gaussiano y datos observacionales reales del telescopio de Planck. Los resultados finales demuestran la eficiencia de las PINNs para la inferencia cosmológica combinando teoría y datos con dispersión.
 
 :::{figure} ../assets/proyectos/13/poster.png
 :width: 80%
 :align: center
+Poster del proyecto.
 :::
 
 **Links:**
+[Repositorio](https://github.com/Camila15987/Estimacion_de_Parametros_cosmologicos_com_PINNs), 
+[Slides / Informe](https://github.com/Camila15987/Estimacion_de_Parametros_cosmologicos_com_PINNs/blob/main/PROYECTO/Estimacion_de_Parametros_Cosmologicos_con_PINNS.pdf)
 
 ---
 
