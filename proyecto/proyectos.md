@@ -75,18 +75,24 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 16
+### Modelado de dinámica de contagio de SARS-CoV-2 en EE. UU.
 
-**Autores:**
+**Autores:** Zappala Carolina (`@carozappala`), Gesualdi Santiago (`@SantiiiGesualdi`)
 
-**Resumen:**
 
-:::{figure} ../assets/proyectos/16/poster.png
+
+**Resumen:** El modelado de una epidemia, tal como lo fue el virus SARS-CoV-2, resulta de gran inter teniendo en cuenta las distintas lecturas posibles de sus efectos. Para ello, se postula un modelo SEIRVD con retardo aplicando redes neuronales, en
+particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de comportamiento poblacional ante estas situaciones. El modelo propuesto en el presente trabajo resulta de ayuda a dicho fin y consigue explicar, en general, la dinámica del sistema.
+
+:::{figure} assets/proyectos/modelado_de_dinamica_de_contagio_de_sarscov2_en_eeuu/poster.png
 :width: 80%
 :align: center
 :::
 
 **Links:**
+
+- [Repositorio](https://github.com/SantiiiGesualdi/COVID-19-Transmission-Dynamics-in-the-US)
+- [Informe](https://github.com/SantiiiGesualdi/COVID-19-Transmission-Dynamics-in-the-US/blob/main/extras/Report.pdf)
 
 ---
 
