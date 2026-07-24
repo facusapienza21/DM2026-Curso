@@ -150,18 +150,21 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 23
+### Análisis del comportamiento epidemiológico del COVID-19 en Argentina
 
-**Autores:**
+**Autores:** Ema Sapirstein (@emasapirstein), Ingrid von Foerster (@ingruvf)
 
-**Resumen:**
+**Resumen:** El objetivo del presente proyecto es analizar los datos de COVID-19 en Argentina con herramientas de Physics Informed Machine Learning. Se utilizaron Universal Differential Equations (UDEs) para predecir el comportamiento epidemiológico del virus y estudiar la utilidad del método a la hora de hacer análisis en tiempo real. Se observó que la misma depende tanto del modelo físico elegido como del lugar que se les da a las redes neuronales dentro del este. 
 
-:::{figure} ../assets/proyectos/23/poster.png
+:::{figure} ../assets/proyectos/analisis_del_comportamiento_epidemiologico_del_COVID_19_en_Argentina/poster.jpeg
 :width: 80%
 :align: center
 :::
 
 **Links:**
+- [Repositorio](https://github.com/emasapirstein/COVID_UDE_1B2026.git)
+- [Informe](https://github.com/emasapirstein/COVID_UDE_1B2026/blob/main/Informe.pdf)
+- [Poster](https://github.com/emasapirstein/COVID_UDE_1B2026/blob/main/Poster.pdf)
 
 ---
 
