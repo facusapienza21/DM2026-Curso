@@ -161,7 +161,7 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ### Análisis del comportamiento epidemiológico del COVID-19 en Argentina
 
-**Autores:** Ema Sapirstein (@emasapirstein), Ingrid von Foerster (@ingruvf)
+**Autores:** Ema Sapirstein (`@emasapirstein`), Ingrid von Foerster (`@ingruvf`)
 
 **Resumen:** El objetivo del presente proyecto es analizar los datos de COVID-19 en Argentina con herramientas de Physics Informed Machine Learning. Se utilizaron Universal Differential Equations (UDEs) para predecir el comportamiento epidemiológico del virus y estudiar la utilidad del método a la hora de hacer análisis en tiempo real. Se observó que la misma depende tanto del modelo físico elegido como del lugar que se les da a las redes neuronales dentro del este. 
 
