@@ -28,3 +28,4 @@ A continuación, una lista de los estudiantes que contribuyeron a cada clase.
 | No12          | Demián Elnecavé ([@demianelnecave](https://github.com/demianelnecave)), Agustín Rabinowicz ([@agusraba05](https://github.com/Agusraba)), Leonardo Dominguez ([@leodomingue](https://github.com/leodomingue))|
 | No13          | Cyntia Bonomi ([@cyntiab](https://github.com/cyntiab)), Agustín Agote ([@Nitsuga01](https://github.com/Nitsuga01))|
 | No14          | Felipe Cignoli ([@fcignoli](https://github.com/fcignoli)), Martín Sinnona([@martinsinnona](https://github.com/martinsinnona)), Noé Hsueh([@noehsueh](https://github.com/noehsueh))|
+| No15          | Juan Ignacio Tollo ([@JuaniTollo](https://github.com/JuaniTollo)) |
