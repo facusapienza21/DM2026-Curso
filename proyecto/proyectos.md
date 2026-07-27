@@ -284,19 +284,20 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 43
+### Reconstrucción de SDFs y Medial Axis mediante Ecuaciones Diferenciales y Aprendizaje Profundo
 
-**Autores:**
+**Autores:** Martín Sinnona (`@martinsinnona`)
 
-**Resumen:**
+**Resumen:** Se estudia la reconstrucción de funciones de distancia con signo y la extracción del medial axis en geometrías 2D sintéticas. Se comparan Fast Marching, un método basado en difusión de calor y MLPs, incluyendo una variante con regularización geométrica. Los resultados muestran que el MLP regularizado alcanza la mayor precisión en la reconstrucción de la SDF y mejora la recuperación del medial axis en formas complejas.
 
-:::{figure} ../assets/proyectos/43/poster.png
+:::{figure} ../assets/proyectos/reconstruccion_sdf_medial_axis/poster.jpg
 :width: 80%
 :align: center
 :::
 
 **Links:**
-
+- [Repositorio](https://github.com/martinsinnona/medialaxis-dedia)
+  
 ---
 
 ### Proyecto 44
