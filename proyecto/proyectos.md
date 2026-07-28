@@ -323,7 +323,7 @@ Estos resultados sugieren que las PINNsconstituyen una herramienta prometedora p
 
 [Repositorio](https://github.com/fedemosca/PINN_SW)
 
-[Informe/Poster](../assets/proyectos/44/)
+[Informe/Poster](../proyecto/assets/proyectos/44/)
 
 ---
 
