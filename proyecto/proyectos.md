@@ -239,13 +239,14 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 32
+### Análisis de voces patológicas mediante patrones ordinales y el plano Complexity–Entropy
 
 **Autores:** Cyntia Bonomi
 
-**Resumen:** Las señales de habla son series temporales de variaciones de presión acústica generadas por la dinámica fisiológica y neuromotora del sistema de producción vocal humano. En el paper “Ordinal patterns-based methodologies for distinguishing chaos from noise in discrete time series” se propone una metodología para el análisis de series temporales basada en patrones ordinales y el plano Complexity–Entropy.
-
-En este trabajo se propone aplicar estas ideas al análisis de voces patológicas, explorando si voces sanas y patológicas presentan dinámicas distintas en términos de entropía y complejidad.
+**Resumen:** Las señales de voz pueden representarse de múltiples formas, pero no está claro qué descriptores
+capturan mejor las diferencias entre sujetos sanos y patológicos. En este trabajo se explora el
+espacio entropı́a–complejidad como representación compacta de la dinámica de la señal, con el
+objetivo de caracterizar posibles patrones diferenciales entre ambos grupos.
 
 :::{figure} ../assets/proyectos/32/poster_analisis_de_voces_patologicas.pdf
 :width: 80%
@@ -253,7 +254,7 @@ En este trabajo se propone aplicar estas ideas al análisis de voces patológica
 :::
 
 **Links:**
-- [Slides / Informe](../assets/proyectos/32/informe_Analisis_de_voces_patologicas.pdf)
+- [Informe](../assets/proyectos/32/informe_Analisis_de_voces_patologicas.pdf)
 ---
 
 ### Proyecto 33
