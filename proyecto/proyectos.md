@@ -309,19 +309,23 @@ PINNs).
 Para ello, se generan datos sintéticos resolviendo numéricamente las ecuaciones
 de aguas someras unidimensionales sobre una topografía compleja y se utilizan únicamente
 observaciones del campo de altura para entrenar la red.
-La metodología propuesta emplea dosredes neuronales acopladas: una destinada a aproximar los campos dinámicos de velocidad y altura, y otra encargada de reconstruir la topografía del fondo.
+La metodología propuesta emplea dos redes neuronales acopladas: una destinada a aproximar los campos dinámicos de velocidad y altura, y otra encargada de reconstruir la topografía del fondo.
 El entrenamiento se realiza combinando información observacional con los residuos de las ecuaciones diferenciales que gobiernan el sistema, permitiendo incorporar conocimiento físico de manera explícita dentro del proceso de optimización.
 Los resultados muestran que la técnica es capaz de recuperar satisfactoriamente la geometría del fondo utilizando exclusivamente mediciones superficiales, incluso con una cantidad reducida de observaciones.
 Estos resultados sugieren que las PINNsconstituyen una herramienta prometedora para abordar problemas de inferencia batimétrica a partir de observaciones parciales del flujo.
 
-:::{figure} ../assets/proyectos/Inferencia Batimétrica con PINNs/poster.pdf
+:::{figure} ../assets/proyectos/Inferencia Batimétrica con PINNs/poster.png
 :width: 80%
 :align: center
 :::
 
 **Links:**
-../assets/proyectos/Inferencia Batimétrica con PINNs/Informe.pdf
-../assets/proyectos/Inferencia Batimétrica con PINNs/Poster.pdf
+
+[Repositorio](https://github.com/fedemosca/PINN_SW)
+
+[Informe](../assets/proyectos/44/Informe.pdf)
+
+[Poster](../assets/proyectos/44/Poster.pdf)
 
 ---
 
