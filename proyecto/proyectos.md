@@ -314,7 +314,7 @@ El entrenamiento se realiza combinando información observacional con los residu
 Los resultados muestran que la técnica es capaz de recuperar satisfactoriamente la geometría del fondo utilizando exclusivamente mediciones superficiales, incluso con una cantidad reducida de observaciones.
 Estos resultados sugieren que las PINNsconstituyen una herramienta prometedora para abordar problemas de inferencia batimétrica a partir de observaciones parciales del flujo.
 
-:::{figure} ../assets/proyectos/44/Poster.png
+:::{figure} ../proyecto/assets/proyectos/44/Poster.png
 :width: 80%
 :align: center
 :::
