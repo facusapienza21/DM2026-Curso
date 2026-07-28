@@ -325,7 +325,7 @@ Estos resultados sugieren que las PINNsconstituyen una herramienta prometedora p
 
 [Informe](../assets/proyectos/44/Informe.pdf)
 
-[Poster](../assets/proyectos/44/Poster.pdf)
+[Poster](../assets/proyectos/44/Poster.png)
 
 ---
 
