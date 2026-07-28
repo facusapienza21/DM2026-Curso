@@ -239,19 +239,22 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 32
+### Análisis de voces patológicas mediante patrones ordinales y el plano Complexity–Entropy
 
-**Autores:**
+**Autores:** Cyntia Bonomi
 
-**Resumen:**
+**Resumen:** Las señales de voz pueden representarse de múltiples formas, pero no está claro qué descriptores
+capturan mejor las diferencias entre sujetos sanos y patológicos. En este trabajo se explora el
+espacio entropı́a–complejidad como representación compacta de la dinámica de la señal, con el
+objetivo de caracterizar posibles patrones diferenciales entre ambos grupos.
 
-:::{figure} ../assets/proyectos/32/poster.png
+:::{figure} ../assets/proyectos/32/poster_analisis_de_voces_patologicas.pdf
 :width: 80%
 :align: center
 :::
 
 **Links:**
-
+- [Informe](../assets/proyectos/32/informe_Analisis_de_voces_patologicas.pdf)
 ---
 
 ### Proyecto 33
