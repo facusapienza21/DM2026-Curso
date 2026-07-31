@@ -114,19 +114,21 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 19
+### BUSDE: Un Marco Bayesiano Físico-Neural para la Dinámica y Predicción Probabilística del ENSO
 
-**Autores:**
+**Autores:** Mathías Rolando (`@mathyrolando`)
 
-**Resumen:**
+**Resumen:** El fenómeno de El Niño–Oscilación del Sur (ENSO) es el modo dominante de variabilidad climática interanual, pero los modelos lineales clásicos como el Oscilador de Recarga de Jin no logran capturar sus no-linealidades ni su irregularidad temporal. Este proyecto propone BUSDE, un marco de Ecuaciones Diferenciales Estocásticas Universales Bayesianas que combina ese esqueleto físico con correcciones aprendidas por redes neuronales, inferencia variacional sobre los parámetros y ruido heteroscedástico dependiente del estado. Entrenado con datos mensuales de SST (Niño 3.4) y volumen de agua cálida (WWV) entre 1980–2010 y evaluado fuera de muestra en 2011–2021, el modelo supera a los baselines de persistencia, climatología y OLS con correlaciones r > 0.5 hasta 6 meses de horizonte, y sus correcciones neuronales recuperan patrones físicamente interpretables consistentes con la literatura oceanográfica.
 
-:::{figure} ../assets/proyectos/19/poster.png
+:::{figure} ../assets/proyectos/busde-enso/poster.png
 :width: 80%
 :align: center
+Poster del proyecto BUSDE: Marco Bayesiano Físico-Neural para el ENSO.
 :::
 
 **Links:**
-
+- [Repositorio](https://github.com/mathyrolando/enso-busde)
+- [Monografía](https://github.com/mathyrolando/enso-busde/blob/main/paper/monografia.pdf)
 ---
 
 ### Proyecto 20
