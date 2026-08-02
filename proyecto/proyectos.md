@@ -192,19 +192,21 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 26
+### Modelado dinámico de degradación de motores turbofan mediante NODEs y UDEs
 
-**Autores:**
+**Autores:** Sebastian Souto (`@SoutoSebastian`), Gian Lucca Sanza (`@xGiannis`)
 
-**Resumen:**
+**Resumen:** En este trabajo se estudia la predicción de fallas en motores turbofan utilizando el dataset C-MAPSS de la NASA. Se modela la degradación del motor mediante Neural Ordinary Differential Equations (NODEs) y Universal Differential Equations (UDEs), formulando el problema desde una perspectiva de análisis de supervivencia para estimar probabilidades de falla. Se comparan distintas variantes de entrenamiento y se analizan sus capacidades de detección temprana de fallas. Los resultados muestran que los modelos dinámicos constituyen una alternativa prometedora para representar el proceso de degradación y anticipar fallas en motores aeronáuticos.
 
-:::{figure} ../assets/proyectos/26/poster.png
+:::{figure} /assets/proyectos/Modelado_dinamico_de_degradacion_de_motores_turbofan_mediante_NODEs_y_UDEs/poster.jpg
 :width: 80%
 :align: center
 :::
 
 **Links:**
-
+- [Repositorio](https://github.com/SoutoSebastian/TP-DegradacionDeMotores.git)
+- [Informe](https://github.com/SoutoSebastian/TP-DegradacionDeMotores/blob/main/Motores_Informe.pdf)
+- [Poster](https://github.com/SoutoSebastian/TP-DegradacionDeMotores/blob/main/Poster_Motores.pdf)
 ---
 
 ### Adaptive Integration Time (AIT) para Neural ODEs
