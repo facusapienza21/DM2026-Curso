@@ -144,18 +144,21 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 21
+### Estudio en la disipación y modelado en una trampa armónica en el régimen cuántico
 
-**Autores:**
+**Autores:** Agustín Agote (`@Nitsuga01`), Maximiliano Murgia (`@maximurgia`)
 
-**Resumen:**
+**Resumen:** En el trabajo presente, se estudió la dinámica de una nanopartícula levitada en equilibrio térmico en una trampa óptica rotante. La misma fue modelada mediante una ecuación de Lindblad que incorpora la interacción con el entorno y los mecanismos de disipación relevantes. A partir de aquí, se desarrolló una implementación numérica para simular la evolución temporal de los momentos de posición e impulso de la partícula. Se generó un conjunto de datos sintéticos y se entrenó una red neuronal para resolver el problema inverso de identificación de parámetros a partir de observables accesibles experimentalmente. Los resultados revelan que la red es capaz de estimar con buena precisión los parámetros dinámicos del sistema, incluso en presencia de fluctuaciones estocásticas en la frecuencia de rotación. Un segundo estudio sobre el mismo sistema incorporó sistemas de retroalimentación a la trampa. La dinámica resultante para los momentos de las distribuciones de posición y momento pudo ser modelada mediante filtros de Kalman extendidos. Se pudieron afrontar diferentes problemas de optimización basados en funcionalidad directa e inversa de estos modelos, pudiendo realizar inferencia de parámetros y predecir caracteristicas de la dinámica del sistema.
 
-:::{figure} ../assets/proyectos/21/poster.png
+:::{figure} ../assets/proyectos/Estudio_en_la_disipación_y_modelado_en_una_trampa_armónica_en_el_régimen_cuántico/poster.png
 :width: 80%
 :align: center
+Poster del proyecto.
 :::
 
 **Links:**
+- [Repositorio](https://github.com/Nitsuga01/Proyecto-Final-DEDyIA)
+- [Informe](https://github.com/Nitsuga01/Proyecto-Final-DEDyIA/blob/main/Informe.pdf)
 
 ---
 
