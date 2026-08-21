@@ -114,19 +114,21 @@ particular el enfoque UDE, para parametrizar esta diámica e inferir nociones de
 
 ---
 
-### Proyecto 19
+### BUSDE: Un Marco Bayesiano Físico-Neural para la Dinámica y Predicción Probabilística del ENSO
 
-**Autores:**
+**Autores:** Mathías Rolando (`@mathyrolando`)
 
-**Resumen:**
+**Resumen:** El fenómeno de El Niño–Oscilación del Sur (ENSO) es el modo dominante de variabilidad climática interanual, pero los modelos lineales clásicos como el Oscilador de Recarga de Jin no logran capturar sus no-linealidades ni su irregularidad temporal. Este proyecto propone BUSDE, un marco de Ecuaciones Diferenciales Estocásticas Universales Bayesianas que combina ese esqueleto físico con correcciones aprendidas por redes neuronales, inferencia variacional sobre los parámetros y ruido heteroscedástico dependiente del estado. Entrenado con datos mensuales de SST (Niño 3.4) y volumen de agua cálida (WWV) entre 1980–2010 y evaluado fuera de muestra en 2011–2021, el modelo supera a los baselines de persistencia, climatología y OLS con correlaciones r > 0.5 hasta 6 meses de horizonte, y sus correcciones neuronales recuperan patrones físicamente interpretables consistentes con la literatura oceanográfica.
 
-:::{figure} ../assets/proyectos/19/poster.png
+:::{figure} ../assets/proyectos/busde-enso/poster.png
 :width: 80%
 :align: center
+Poster del proyecto BUSDE: Marco Bayesiano Físico-Neural para el ENSO.
 :::
 
 **Links:**
-
+- [Repositorio](https://github.com/mathyrolando/enso-busde)
+- [Monografía](https://github.com/mathyrolando/enso-busde/blob/main/paper/monografia.pdf)
 ---
 
 ### Proyecto 20
@@ -164,7 +166,7 @@ Poster del proyecto.
 
 ### Análisis del comportamiento epidemiológico del COVID-19 en Argentina
 
-**Autores:** Ema Sapirstein (@emasapirstein), Ingrid von Foerster (@ingruvf)
+**Autores:** Ema Sapirstein (`@emasapirstein`), Ingrid von Foerster (`@ingruvf`)
 
 **Resumen:** El objetivo del presente proyecto es analizar los datos de COVID-19 en Argentina con herramientas de Physics Informed Machine Learning. Se utilizaron Universal Differential Equations (UDEs) para predecir el comportamiento epidemiológico del virus y estudiar la utilidad del método a la hora de hacer análisis en tiempo real. Se observó que la misma depende tanto del modelo físico elegido como del lugar que se les da a las redes neuronales dentro del este. 
 
@@ -180,11 +182,14 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 25
+### Trayectorias del espacio latente de frames de videos de sistemas dinámicos a partir de una NODE
 
-**Autores:**
+**Autores:** Demián Elnecavé (`@demianelnecave`), Agustín Rabinowicz (`@agusraba05`)
 
-**Resumen:**
+**Resumen:** Buscamos, partiendo de una VAE entrenada sobre frames de videos sintéticos de algún sistema dinámico simple (en nuestro caso, una pelota rebotando), calcular la trayectoria del espacio latente de los frames. Con esto, intentamos usar esa trayectoria para:
+- Comparar los frames generados por la VAE con sus correspondientes de la trayectoria y debatir si pueden mejorar la performance del modelo
+- Aumentar la fluidez del video y predecir frames faltantes
+- Averiguar si la NODE aprende la dinámica que subyace en el video, esto es si hay algún tipo de semejanza entre el espacio latente de trayectorias de embeddings y las trayectorias del sistema
 
 :::{figure} ../assets/proyectos/25/poster.png
 :width: 80%
@@ -192,22 +197,25 @@ Poster del proyecto.
 :::
 
 **Links:**
-
+- [Repositorio](https://github.com/demianelnecave/TP-Datos-EDs-IA.git)
+- [Informe](https://github.com/demianelnecave/TP-Datos-EDs-IA/blob/main/Informe%20TP%20NODES.pdf)
 ---
 
-### Proyecto 26
+### Modelado dinámico de degradación de motores turbofan mediante NODEs y UDEs
 
-**Autores:**
+**Autores:** Sebastian Souto (`@SoutoSebastian`), Gian Lucca Sanza (`@xGiannis`)
 
-**Resumen:**
+**Resumen:** En este trabajo se estudia la predicción de fallas en motores turbofan utilizando el dataset C-MAPSS de la NASA. Se modela la degradación del motor mediante Neural Ordinary Differential Equations (NODEs) y Universal Differential Equations (UDEs), formulando el problema desde una perspectiva de análisis de supervivencia para estimar probabilidades de falla. Se comparan distintas variantes de entrenamiento y se analizan sus capacidades de detección temprana de fallas. Los resultados muestran que los modelos dinámicos constituyen una alternativa prometedora para representar el proceso de degradación y anticipar fallas en motores aeronáuticos.
 
-:::{figure} ../assets/proyectos/26/poster.png
+:::{figure} /assets/proyectos/Modelado_dinamico_de_degradacion_de_motores_turbofan_mediante_NODEs_y_UDEs/poster.jpg
 :width: 80%
 :align: center
 :::
 
 **Links:**
-
+- [Repositorio](https://github.com/SoutoSebastian/TP-DegradacionDeMotores.git)
+- [Informe](https://github.com/SoutoSebastian/TP-DegradacionDeMotores/blob/main/Motores_Informe.pdf)
+- [Poster](https://github.com/SoutoSebastian/TP-DegradacionDeMotores/blob/main/Poster_Motores.pdf)
 ---
 
 ### Adaptive Integration Time (AIT) para Neural ODEs
@@ -242,19 +250,22 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 32
+### Análisis de voces patológicas mediante patrones ordinales y el plano Complexity–Entropy
 
-**Autores:**
+**Autores:** Cyntia Bonomi
 
-**Resumen:**
+**Resumen:** Las señales de voz pueden representarse de múltiples formas, pero no está claro qué descriptores
+capturan mejor las diferencias entre sujetos sanos y patológicos. En este trabajo se explora el
+espacio entropı́a–complejidad como representación compacta de la dinámica de la señal, con el
+objetivo de caracterizar posibles patrones diferenciales entre ambos grupos.
 
-:::{figure} ../assets/proyectos/32/poster.png
+:::{figure} ../assets/proyectos/32/poster_analisis_de_voces_patologicas.pdf
 :width: 80%
 :align: center
 :::
 
 **Links:**
-
+- [Informe](../assets/proyectos/32/informe_Analisis_de_voces_patologicas.pdf)
 ---
 
 ### Proyecto 33
@@ -302,18 +313,31 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 44
+### Inferencia Batimétrica con PINNs
 
-**Autores:**
+**Autores:** Federico Mosca.
 
-**Resumen:**
+**Resumen:** La reconstrucción de la topografía del fondo a partir de mediciones superficiales constituye un problema inverso de interés en oceanografía, hidrología y geofísica.
+En este trabajo se estudia la inferencia batimétrica en flujos descritos por las ecuaciones de aguas someras mediante Redes Neuronales Informadas por la Física (Physics-Informed Neural Networks,
+PINNs).
+Para ello, se generan datos sintéticos resolviendo numéricamente las ecuaciones
+de aguas someras unidimensionales sobre una topografía compleja y se utilizan únicamente
+observaciones del campo de altura para entrenar la red.
+La metodología propuesta emplea dos redes neuronales acopladas: una destinada a aproximar los campos dinámicos de velocidad y altura, y otra encargada de reconstruir la topografía del fondo.
+El entrenamiento se realiza combinando información observacional con los residuos de las ecuaciones diferenciales que gobiernan el sistema, permitiendo incorporar conocimiento físico de manera explícita dentro del proceso de optimización.
+Los resultados muestran que la técnica es capaz de recuperar satisfactoriamente la geometría del fondo utilizando exclusivamente mediciones superficiales, incluso con una cantidad reducida de observaciones.
+Estos resultados sugieren que las PINNsconstituyen una herramienta prometedora para abordar problemas de inferencia batimétrica a partir de observaciones parciales del flujo.
 
-:::{figure} ../assets/proyectos/44/poster.png
+:::{figure} ../proyecto/assets/proyectos/44/Poster.png
 :width: 80%
 :align: center
 :::
 
 **Links:**
+
+[Repositorio](https://github.com/fedemosca/PINN_SW)
+
+[Informe/Poster](../proyecto/assets/proyectos/44/)
 
 ---
 
