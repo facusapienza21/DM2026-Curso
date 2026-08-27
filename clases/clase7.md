@@ -19,16 +19,20 @@ Caso general (frecuentista):
 
 $$\min_{\theta} \mathcal{L}(\theta, y)+\mathcal{R}(\theta)$$
 
-Aquí, $\mathcal{L}(\theta, y)$ es la función de costo, que tiene un término empírico y otro con parámetros. $\mathcal{R}(\theta)$ el término de regularización. 
+Aquí, $\mathcal{L}(\theta, y)$ es la función de costo, que tiene un término empírico y otro con parámetros. 
+$\mathcal{R}(\theta)$ es el término de regularización. 
 Regularizar es, en términos generales, agregar un sesgo inductivo ({term}`inductive bias`) para aportar información de manera intencional y condicionar el resultado a conocimientos previos. 
 Por ejemplo, considerando los métodos vistos, podemos pensar en resultados condicionados a obtener un vector esparso o de norma chica. 
 El early stopping también es una forma de regularización. 
 Todas ellas impiden el overfitting y permiten generalizar a datos nuevos.  
 
-# Estadistica Bayesiana
-Para el caso de Estadistica Bayesiana hay dos funciones importantes que debemos tener en cuenta:
-* **Verosimilitud:** $\mathbb{P}(Y \mid \theta)$  Es lo que en estadistica frecuentista conocíamos como likelihood, es decir, la función $\mathcal{L}(\theta \mid x)$.
-* **Prior:**  $\mathbb{P}(\theta)$ es la función del parámetro, lo que en estadistica frecuentista conocíamos como el término de regularización $R(\theta)$.
+# Estadística Bayesiana
+Para el caso de Estadística Bayesiana hay dos funciones importantes que debemos tener en cuenta:
+* **Verosimilitud:** $\mathbb{P}(Y \mid \theta)$  Es lo que en estadística frecuentista conocíamos como likelihood, es decir, la función $\mathcal{L}(\theta \mid x)$.
+No hay que perder de vista que debe pensarse como una función del parámetro, y no de los datos.
+Mide la compatibilidad del parámetro $\theta$ con los datos observados $Y$.
+* **Prior:**  $\mathbb{P}(\theta)$ es la distribución del parámetro, lo que en estadística frecuentista conocíamos como el término de regularización $\mathcal{R}(\theta)$.
+Esta distribución resume nuestro conocimiento previo sobre el parámetro a estimar $\theta$.
 
 A continuación recordemos el **Teorema de Bayes**, el cual nos dice:
 
@@ -37,9 +41,9 @@ $$P(\theta \mid Y) = \frac{P(Y \mid \theta)P(\theta)}{P(Y)}$$
 Como la distribución de los datos no depende de $\theta$, podemos escribir a $\frac{1}{\mathbb{P}(Y)}$ como una constante cuyo valor desconocemos. 
 Por lo tanto, obtenemos:
 
-$$P(\theta \mid Y) = \propto \cdot P(Y \mid \theta)P(\theta)$$
+$$P(\theta \mid Y) \propto P(Y \mid \theta)P(\theta)$$
 
-En este caso, queremos calcular $\mathbb{P}(\theta \mid Y)$, es decir, la distribución del Posteriori. 
+En este caso, queremos calcular $\mathbb{P}(\theta \mid Y)$, es decir, la distribución del Posterior. 
 No estamos interesados en la estimación puntual de $\theta$ sino que nos interesa **estimar una distribución**.
 
 :::{figure} ./figures/clase_7_01.JPG 
@@ -52,20 +56,21 @@ Ubicación de $\theta_{MLE}$ respecto de su distribución
 Queremos hallar el **Maximum a Posteriori**, es decir
 
 $$\theta_{MAP} = \max_{\theta} P(\theta \mid Y) = \max_{\theta} P(Y \mid \theta) P(\theta)$$
-Podemos tomar logaritmo pues es una función creciente.
+Podemos tomar logaritmo pues es una función creciente, y aplicar una función creciente no cambia el valor de $\theta$ que maximiza la expresión.
 Por otro lado, sabiendo que el problema es de maximización, podemos reformularlo como un problema de minimización considerando la función objetivo multiplicada por $- 1$.
 Finalmente, obtenemos:
  $$\theta_{MAP} =  \min_{\theta} [ - \log(P(Y \mid \theta)) - \log(P(\theta)) ]$$
 
-Observemos que podemos asociar $- \log(P(Y \mid \theta))$ con la **función de costo empírica** $\mathcal{L}_{EMP}(\theta \mid Y)$ y, a su vez, podemos asociar $- \log(P(\theta))$ con el **término de Regularización** $R(\theta)$.
+Observemos que podemos asociar $- \log(P(Y \mid \theta))$ con la **función de costo empírica** $\mathcal{L}_{EMP}(\theta \mid Y)$ y, a su vez, podemos asociar $- \log(P(\theta))$ con el **término de Regularización** $\mathcal{R}(\theta)$.
 
 :::{note} Observación
-Tanto en el caso frecuentista como en el Bayesiano, cuando el numero de observaciones $n \to \infty$ tenemos que 
+Tanto en el caso frecuentista como en el Bayesiano, cuando el número de observaciones $n \to \infty$ tenemos que 
 
 $$\theta_{MAP} \to \theta_{0}$$ 
 $$\theta_{MLE} \to \theta_{0}$$
 
-Siendo $\theta_{0}$ el verdadero valor de $\theta$. :::
+Siendo $\theta_{0}$ el verdadero valor de $\theta$. 
+Esto ocurre porque, a medida que $n$ crece, la verosimilitud concentra cada vez más información sobre $\theta$ y termina dominando al prior, que queda con una influencia relativamente cada vez menor. :::
 
 :::{note} Observación: cuantificación de incertidumbre
 
@@ -101,13 +106,13 @@ $\hat{Y}_k=\{Y^k_1, ..., Y^k_N\} \curvearrowright \theta^*_k$
 Si bootstrap se comporta bien, en ciertos casos particulares se obtiene el posterior. :::
 
 # Estimar el posterior
-Hallar el valor exacto del Posterior es computacionalmente costoso, lo que nos obliga a utilizar algoritmos de simulación para reconstruir la distribución de los parámetros
+Hallar el valor exacto del Posterior es computacionalmente costoso, lo que nos obliga a utilizar algoritmos de simulación para reconstruir la distribución de los parámetros.
 Hasta ahora definimos el Posterior como
 $$P(\theta \mid Y) = \frac{P(Y \mid \theta)P(\theta)}{P(Y)}$$
 
 Sin embargo, en la práctica, calcular esta expresión tiene una gran dificultad:
 
-Para calcular el denominador $P(Y)$,  debemos integrar sobre todo el espacio de parámetos $\Theta$
+Para calcular el denominador $P(Y)$,  debemos integrar sobre todo el espacio de parámetros $\Theta$
 
 $$P(Y)=\int_{\Theta} P(Y \mid \theta) P(\theta) d\theta$$
 
@@ -121,10 +126,10 @@ $$\{\theta_1, \theta_2, \dots, \theta_k\} \sim \mathbb{P}(\theta \mid Y)$$
 
 Pasamos de un problema de **Cálculo** (resolver la integral) a uno de **Búsqueda** (diseñar algoritmos que exploren el espacio y dediquen el tiempo de cálculo solo a las zonas de alta densidad).
 
-A continuación veamos cuales son estos algoritmos
+A continuación veamos cuáles son estos algoritmos.
 
 
-## Algortimos
+## Algoritmos
 
 **MCMC (Markov Chain Monte Carlo)**
 
@@ -143,19 +148,20 @@ Así exploran el espacio los algoritmos MCMC
 :::
 
 Esta cadena se corta en un $k$ determinado tal que el algoritmo está encaminado y se encuentra en el soporte de $\theta$.
+Este proceso de descartar los primeros valores de la cadena, antes de que haya convergido a la distribución estacionaria, se conoce como **burn-in**.
 
 $\theta = \{\theta_k, \theta_{k+1},...,\theta_{k+m}\} \; k, m\in \mathbb{N}$ 
 
-$\Theta \thicksim \mathbb{P}(\theta|Y)$
+$\theta \thicksim \mathbb{P}(\theta|Y)$
 
 Con infinitos puntos, es posible describir la densidad.
 
-# Aproximación de Laplace
+# Aproximación de Metropolis-Hastings
 Es aproximar el posterior con una distribución conocida. Hacen falta dos cosas:
 
 * $\theta_k \curvearrowright$ proponer $\theta_{k+1}^*$
 
-Por ejemplo, $\theta^*_{k+1} \thicksim N(\theta_k, \sigma_k^2)$, con ruido gaussiano que lo pereturba.
+Por ejemplo, $\theta^*_{k+1} \thicksim N(\theta_k, \sigma_k^2)$, con ruido gaussiano que lo perturba.
 
 * Aceptar o rechazar cada $\theta_k$.
 Para esto, definimos 
@@ -163,7 +169,7 @@ $$\alpha_k=\frac{\mathbb{P}(\theta^*_{k+1}|Y)}{\mathbb{P}(\theta^*_k|Y)} = \frac
 
 Observemos que se cancela $\mathbb{P}(Y)$, que es lo difícil de calcular, reduciéndose el cálculo a términos conocidos. 
 
-Si $\theta^*_{k+1} > \theta^*_{k}$, entonces $\alpha_k>1$.
+Si $\mathbb{P}(\theta^*_{k+1}|Y) > \mathbb{P}(\theta^*_{k}|Y)$, entonces $\alpha_k>1$.
 
 **Método de Metropolis-Hastings (M-H)**
 
@@ -187,7 +193,8 @@ Bajo este supuesto, la estimación por máxima verosimilitud (MLE) de los parám
 
 $$\min_{\theta} \sum_{i=1}^{n} \left(Y_i - X(t_i;\theta)\right)^2$$
 
-En general, $\sigma^2$ también es un parámetro desconocido del modelo y debe ser estimado. Su estimador de Máxima Verosimilitud es:
+En general, $\sigma^2$ también es un parámetro desconocido del modelo y debe ser estimado. 
+Su estimador de Máxima Verosimilitud es:
 
 $$\hat{\sigma}^2_{MLE} = \frac{1}{n} \sum_{i=1}^{n} (Y_i - X(t_i;\theta))^2$$
 
@@ -230,8 +237,5 @@ Esto nos induce a una **Estrategia de Optimización Alternada**, que se traduce 
 
  **Algoritmo de Optimización Alternada** 
  1. **Paso $\theta$:** Dado $\hat{\sigma}_i$ actual, estimamos $\theta$ minimizando la suma pesada. 
- 2. **Paso $\sigma$:** Dado $\hat{\theta}$ actual, estimamos los nuevos $\sigma_i$. 
+ 2. **Paso $\sigma$:** Dado $\hat{\theta}$ actual, estimamos los nuevos $\sigma_i$, usando la misma fórmula de máxima verosimilitud de antes pero calculada por separado para cada componente $i$. 
  3. **Repetir** ambos pasos hasta alcanzar la convergencia.
-
-
-
