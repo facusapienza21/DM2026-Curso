@@ -235,11 +235,11 @@ Poster del proyecto.
 
 ---
 
-### Proyecto 29
+### Descubrimiento de viscosidad turbulenta y parámetros efectivos en perfiles alares 2D mediante Inverse PINNs
 
-**Autores:**
+**Autores:** Constanza Nicolás (`@coco3511`), Luca Emilio Petrarca (`@lucapetrarca`)
 
-**Resumen:**
+**Resumen:** Se estudió el comportamiento del campo de velocidades del aire en torno a un perfil alar bidimensional, utilizando la ecuación de Burgers en estado estacionario como modelo físico aproximado. A través de una Inverse PINN, se logró reconstruir las componentes espaciales del flujo y la viscosidad efectiva del sistema.
 
 :::{figure} ../assets/proyectos/29/poster.png
 :width: 80%
@@ -247,6 +247,7 @@ Poster del proyecto.
 :::
 
 **Links:**
+- [Repositorio](https://github.com/lucapetrarca/InversePINN-Airfoils)
 
 ---
 
